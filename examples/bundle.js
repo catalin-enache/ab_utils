@@ -15,21 +15,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Application = _react2.default.createClass({
     displayName: 'Application',
+    getInitialState: function getInitialState() {
+        return {
+            value: -25
+        };
+    },
+    handleOnChange: function handleOnChange(value) {
+        this.setState({ value: value });
+    },
     render: function render() {
         return _react2.default.createElement(
             'div',
             null,
-            this.props.children
+            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.value, start: -100, end: 0, onChange: this.handleOnChange }),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.value, start: -100, end: 0, onChange: function onChange(value) {
+                    return console.log('---');
+                } })
         );
     }
 });
 
-_reactDom2.default.render(_react2.default.createElement(
-    Application,
-    null,
-    _react2.default.createElement(_src.Slider, null),
-    _react2.default.createElement(_src.TextField, null)
-), document.getElementById('content'));
+_reactDom2.default.render(_react2.default.createElement(Application, null), document.getElementById('content'));
 
 },{"../src":162,"react":159,"react-dom":30}],2:[function(require,module,exports){
 (function (process){
@@ -19060,25 +19067,101 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _style = require('../style');
+
+var _style2 = _interopRequireDefault(_style);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Slider = _react2.default.createClass({
-    displayName: 'Slider',
+var Horizontal = _react2.default.createClass({
+    displayName: 'Horizontal',
 
-    propTypes: {},
+    propTypes: {
+        value: _react2.default.PropTypes.number.isRequired,
+        start: _react2.default.PropTypes.number.isRequired,
+        end: _react2.default.PropTypes.number.isRequired,
+        onChange: _react2.default.PropTypes.func.isRequired,
 
+        width: _react2.default.PropTypes.string,
+
+        step: _react2.default.PropTypes.number
+    },
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            width: '100%',
+            step: null
+        };
+    },
+    getInitialState: function getInitialState() {
+        return {
+            offsetLeft: 0,
+            outerWidth: 0,
+            innerWidth: 0
+        };
+    },
+    componentDidMount: function componentDidMount() {
+        var boundingClientRect = this.refs.outer.getBoundingClientRect();
+
+        var offsetLeft = parseInt(boundingClientRect.left);
+        var outerWidth = parseInt(boundingClientRect.width);
+
+        var range = this.props.end - this.props.start;
+        var position = this.props.value - this.props.start;
+        var percent = position / range;
+        var innerWidth = outerWidth * percent;
+
+        this.setState({ offsetLeft: offsetLeft, innerWidth: innerWidth, outerWidth: outerWidth });
+    },
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
+        console.log('Slider ' + this.props.value);
+
+        var range = this.props.end - this.props.start;
+        var position = nextProps.value - this.props.start;
+        var percent = position / range;
+        var innerWidth = this.state.outerWidth * percent;
+
+        this.setState({ innerWidth: innerWidth });
+    },
+    handleOnClick: function handleOnClick(e) {
+        var positionX = e.pageX - this.state.offsetLeft;
+
+        var percent = positionX / this.state.outerWidth;
+        var innerWidth = this.state.outerWidth * percent;
+
+        var newValue = (this.props.end - this.props.start) * percent + this.props.start;
+
+        this.props.onChange(newValue);
+
+        //this.setState({innerWidth: innerWidth});
+    },
     render: function render() {
+
+        var backgroundStyle = Object.assign({}, _style2.default.horizontalSlider.background, {
+            width: this.props.width
+        });
+
+        var foregroundStyle = Object.assign({}, _style2.default.horizontalSlider.foreground, {
+            width: this.state.innerWidth + 'px'
+        });
+
         return _react2.default.createElement(
             'div',
             null,
-            'Slider'
+            _react2.default.createElement(
+                'div',
+                { ref: 'outer', style: backgroundStyle, onClick: this.handleOnClick },
+                _react2.default.createElement('div', { style: foregroundStyle })
+            )
         );
     }
 });
 
-exports.default = Slider;
+exports.default = {
+    Horizontal: Horizontal
+};
 
-},{"react":159}],161:[function(require,module,exports){
+},{"../style":163,"react":159}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19128,4 +19211,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.Slider = _Slider2.default;
 exports.TextField = _TextField2.default;
 
-},{"./components/Slider":160,"./components/TextField":161}]},{},[1]);
+},{"./components/Slider":160,"./components/TextField":161}],163:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var horizontalSliderCommon = {
+    height: '4px'
+};
+
+var sliderCommon = {
+    background: {
+        backgroundColor: 'gray',
+        cursor: 'pointer'
+    },
+
+    foreground: {
+        backgroundColor: 'indianred'
+    }
+};
+
+exports.default = {
+    horizontalSlider: {
+        background: Object.assign({}, horizontalSliderCommon, sliderCommon.background, {}),
+        foreground: Object.assign({}, horizontalSliderCommon, sliderCommon.foreground, {})
+    }
+};
+
+},{}]},{},[1]);
