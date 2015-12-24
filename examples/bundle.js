@@ -9,7 +9,7 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _index = require('../src/index');
+var _src = require('../src');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27,11 +27,11 @@ var Application = _react2.default.createClass({
 _reactDom2.default.render(_react2.default.createElement(
     Application,
     null,
-    _react2.default.createElement(_index.Slider, null),
-    _react2.default.createElement(_index.TextField, null)
+    _react2.default.createElement(_src.Slider, null),
+    _react2.default.createElement(_src.TextField, null)
 ), document.getElementById('content'));
 
-},{"../src/index":162,"react":159,"react-dom":30}],2:[function(require,module,exports){
+},{"../src":162,"react":159,"react-dom":30}],2:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.

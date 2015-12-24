@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {Slider, TextField} from '../src/index';
+import {Slider, TextField} from '../src';
 
 const Application = React.createClass({
     render() {
