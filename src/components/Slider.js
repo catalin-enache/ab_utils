@@ -10,72 +10,58 @@ const Horizontal = React.createClass({
         end: React.PropTypes.number.isRequired,
         onChange: React.PropTypes.func.isRequired,
 
-        width:	React.PropTypes.string,
-
+        size:	React.PropTypes.string,
         step: React.PropTypes.number
     },
 
     getDefaultProps() {
         return {
-            width: '100%',
+            size: '100%',
             step: null
         };
     },
 
-    getInitialState() {
-        return {
-            offsetLeft: 0,
-            outerWidth: 0,
-            innerWidth: 0
-        };
-    },
+    //getInitialState() {
+    //    return {
+    //        percent: 0
+    //    };
+    //},
 
     componentDidMount() {
-        let boundingClientRect = this.refs.outer.getBoundingClientRect();
-
-        let offsetLeft = parseInt(boundingClientRect.left);
-        let outerWidth = parseInt(boundingClientRect.width);
-
-        let range = this.props.end - this.props.start;
-        let position = this.props.value - this.props.start;
-        let percent = position/range;
-        let innerWidth = outerWidth * percent;
-
-        this.setState({offsetLeft: offsetLeft, innerWidth: innerWidth, outerWidth: outerWidth});
+        console.log(`componentDidMount`);
+        this._updateVars();
+        //this.setState({percent: this._valueToPercent(this.props.value)});
+        this.forceUpdate();
     },
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        console.log(`Slider ${this.props.value}`);
-
-        let range = this.props.end - this.props.start;
-        let position = nextProps.value - this.props.start;
-        let percent = position/range;
-        let innerWidth = this.state.outerWidth * percent;
-
-        this.setState({innerWidth: innerWidth});
-    },
+    //componentWillReceiveProps(nextProps) {
+    //    console.log(`componentWillReceiveProps`);
+    //    this.setState({percent: this._valueToPercent(nextProps.value)});
+    //},
 
     handleOnClick(e) {
-        let positionX = e.pageX - this.state.offsetLeft;
+        this._updateVars();
 
-        let percent = positionX/this.state.outerWidth;
-        let innerWidth = this.state.outerWidth * percent;
+        let percent = this._eventToPercent(e);
+        let newValue = this._percentToValue(percent);
 
-        let newValue = (this.props.end - this.props.start) * percent + this.props.start;
+        //this.setState({percent: percent});
 
         this.props.onChange(newValue);
-
-        //this.setState({innerWidth: innerWidth});
     },
 
     render() {
+        console.log(`render: ${this.props.value}`);
+
+        //let innerWidth = this._outerWidth * this.state.percent;
+        let innerWidth = this._outerWidth * this._valueToPercent(this.props.value);
 
         let backgroundStyle = Object.assign({}, Style.horizontalSlider.background, {
-            width: this.props.width
+            width: this.props.size
         });
 
         let foregroundStyle = Object.assign({}, Style.horizontalSlider.foreground, {
-            width: `${this.state.innerWidth}px`
+            width: `${innerWidth}px`
         });
 
         return (
@@ -85,6 +71,29 @@ const Horizontal = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    _updateVars() {
+        let boundingClientRect = this.refs.outer.getBoundingClientRect();
+
+        this._offsetLeft = parseInt(boundingClientRect.left);
+        this._outerWidth = parseInt(boundingClientRect.width);
+    },
+
+    _eventToPercent(e) {
+        let positionX = e.pageX - this._offsetLeft;
+        return positionX/this._outerWidth;
+    },
+
+    _valueToPercent(value) {
+        let range = this.props.end - this.props.start;
+        let position = value - this.props.start;
+        return position/range;
+    },
+
+    _percentToValue(percent) {
+        let range = this.props.end - this.props.start;
+        return range * percent + this.props.start;
     }
 });
 

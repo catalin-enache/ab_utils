@@ -17,20 +17,24 @@ var Application = _react2.default.createClass({
     displayName: 'Application',
     getInitialState: function getInitialState() {
         return {
-            value: -25
+            sliderValue: 0.25
         };
     },
-    handleOnChange: function handleOnChange(value) {
-        this.setState({ value: value });
+    sliderOnChange: function sliderOnChange(value) {
+        console.log('handleOnChange: ' + value);
+        this.setState({ sliderValue: value });
     },
+
+    //<Slider.Horizontal value={this.state.value} start={-1} end={1} onChange={this.handleOnChange} size={'50%'} />
+
     render: function render() {
         return _react2.default.createElement(
             'div',
             null,
-            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.value, start: -100, end: 0, onChange: this.handleOnChange }),
+            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.sliderValue, start: -1, end: 1, onChange: this.sliderOnChange, size: '50%' }),
             _react2.default.createElement('br', null),
-            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.value, start: -100, end: 0, onChange: function onChange(value) {
-                    return console.log('---');
+            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.sliderValue, start: -1, end: 1, onChange: function onChange(value) {
+                    console.log(value);
                 } })
         );
     }
@@ -19082,67 +19086,57 @@ var Horizontal = _react2.default.createClass({
         end: _react2.default.PropTypes.number.isRequired,
         onChange: _react2.default.PropTypes.func.isRequired,
 
-        width: _react2.default.PropTypes.string,
-
+        size: _react2.default.PropTypes.string,
         step: _react2.default.PropTypes.number
     },
 
     getDefaultProps: function getDefaultProps() {
         return {
-            width: '100%',
+            size: '100%',
             step: null
         };
     },
-    getInitialState: function getInitialState() {
-        return {
-            offsetLeft: 0,
-            outerWidth: 0,
-            innerWidth: 0
-        };
-    },
+
+    //getInitialState() {
+    //    return {
+    //        percent: 0
+    //    };
+    //},
+
     componentDidMount: function componentDidMount() {
-        var boundingClientRect = this.refs.outer.getBoundingClientRect();
-
-        var offsetLeft = parseInt(boundingClientRect.left);
-        var outerWidth = parseInt(boundingClientRect.width);
-
-        var range = this.props.end - this.props.start;
-        var position = this.props.value - this.props.start;
-        var percent = position / range;
-        var innerWidth = outerWidth * percent;
-
-        this.setState({ offsetLeft: offsetLeft, innerWidth: innerWidth, outerWidth: outerWidth });
+        console.log('componentDidMount');
+        this._updateVars();
+        //this.setState({percent: this._valueToPercent(this.props.value)});
+        this.forceUpdate();
     },
-    componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-        console.log('Slider ' + this.props.value);
 
-        var range = this.props.end - this.props.start;
-        var position = nextProps.value - this.props.start;
-        var percent = position / range;
-        var innerWidth = this.state.outerWidth * percent;
+    //componentWillReceiveProps(nextProps) {
+    //    console.log(`componentWillReceiveProps`);
+    //    this.setState({percent: this._valueToPercent(nextProps.value)});
+    //},
 
-        this.setState({ innerWidth: innerWidth });
-    },
     handleOnClick: function handleOnClick(e) {
-        var positionX = e.pageX - this.state.offsetLeft;
+        this._updateVars();
 
-        var percent = positionX / this.state.outerWidth;
-        var innerWidth = this.state.outerWidth * percent;
+        var percent = this._eventToPercent(e);
+        var newValue = this._percentToValue(percent);
 
-        var newValue = (this.props.end - this.props.start) * percent + this.props.start;
+        //this.setState({percent: percent});
 
         this.props.onChange(newValue);
-
-        //this.setState({innerWidth: innerWidth});
     },
     render: function render() {
+        console.log('render: ' + this.props.value);
+
+        //let innerWidth = this._outerWidth * this.state.percent;
+        var innerWidth = this._outerWidth * this._valueToPercent(this.props.value);
 
         var backgroundStyle = Object.assign({}, _style2.default.horizontalSlider.background, {
-            width: this.props.width
+            width: this.props.size
         });
 
         var foregroundStyle = Object.assign({}, _style2.default.horizontalSlider.foreground, {
-            width: this.state.innerWidth + 'px'
+            width: innerWidth + 'px'
         });
 
         return _react2.default.createElement(
@@ -19154,6 +19148,25 @@ var Horizontal = _react2.default.createClass({
                 _react2.default.createElement('div', { style: foregroundStyle })
             )
         );
+    },
+    _updateVars: function _updateVars() {
+        var boundingClientRect = this.refs.outer.getBoundingClientRect();
+
+        this._offsetLeft = parseInt(boundingClientRect.left);
+        this._outerWidth = parseInt(boundingClientRect.width);
+    },
+    _eventToPercent: function _eventToPercent(e) {
+        var positionX = e.pageX - this._offsetLeft;
+        return positionX / this._outerWidth;
+    },
+    _valueToPercent: function _valueToPercent(value) {
+        var range = this.props.end - this.props.start;
+        var position = value - this.props.start;
+        return position / range;
+    },
+    _percentToValue: function _percentToValue(percent) {
+        var range = this.props.end - this.props.start;
+        return range * percent + this.props.start;
     }
 });
 

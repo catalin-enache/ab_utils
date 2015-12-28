@@ -9,20 +9,22 @@ const Application = React.createClass({
 
     getInitialState() {
         return {
-            value: -25
+            sliderValue: 0.25
         };
     },
 
-    handleOnChange(value) {
-        this.setState({value: value});
+    sliderOnChange(value) {
+        console.log(`handleOnChange: ${value}`);
+        this.setState({sliderValue: value});
     },
+    //<Slider.Horizontal value={this.state.value} start={-1} end={1} onChange={this.handleOnChange} size={'50%'} />
 
     render() {
         return (
             <div>
-                <Slider.Horizontal value={this.state.value} start={-100} end={0} onChange={this.handleOnChange} />
+                <Slider.Horizontal value={this.state.sliderValue} start={-1} end={1} onChange={this.sliderOnChange} size={'50%'} />
                 <br />
-                <Slider.Horizontal value={this.state.value} start={-100} end={0} onChange={(value) => console.log('---')} />
+                <Slider.Horizontal value={this.state.sliderValue} start={-1} end={1} onChange={(value)=>{console.log(value)}} />
             </div>
         );
     }
