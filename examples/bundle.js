@@ -17,25 +17,23 @@ var Application = _react2.default.createClass({
     displayName: 'Application',
     getInitialState: function getInitialState() {
         return {
-            sliderValue: 0.25
+            sliderValue: 0.50
         };
     },
     sliderOnChange: function sliderOnChange(value) {
-        console.log('handleOnChange: ' + value);
+        console.log('Application handleOnChange: ' + value);
         this.setState({ sliderValue: value });
     },
 
-    //<Slider.Horizontal value={this.state.value} start={-1} end={1} onChange={this.handleOnChange} size={'50%'} />
+    //<Slider.Horizontal name="slider_2" defaultValue={-1} start={-2} end={2} onChange={this.sliderOnChange} />
 
     render: function render() {
         return _react2.default.createElement(
             'div',
             null,
-            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.sliderValue, start: -1, end: 1, onChange: this.sliderOnChange, size: '50%' }),
+            _react2.default.createElement(_src.Slider.Horizontal, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange }),
             _react2.default.createElement('br', null),
-            _react2.default.createElement(_src.Slider.Horizontal, { value: this.state.sliderValue, start: -1, end: 1, onChange: function onChange(value) {
-                    console.log(value);
-                } })
+            _react2.default.createElement(_src.Slider.Horizontal, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true })
         );
     }
 });
@@ -19075,61 +19073,103 @@ var _style = require('../style');
 
 var _style2 = _interopRequireDefault(_style);
 
+var _mixin_generic_component = require('../mixins/mixin_generic_component');
+
+var _mixin_generic_component2 = _interopRequireDefault(_mixin_generic_component);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+TODO: make tests
+*/
+
+// ============================ Custom Validators =================================
+
+function startEndPropType(props, propName, componentName) {
+    var error = _react2.default.PropTypes.number(props, propName, componentName);
+    if (error !== null) return error;
+
+    if (props.start >= props.end) {
+        var errorMsg = propName === 'start' ? 'start should be less than end' : 'end should be greater than start';
+        return new Error(errorMsg);
+    }
+}
+
+function valueInRangePropType(props, propName, componentName) {
+    var error = _react2.default.PropTypes.number(props, propName, componentName);
+    if (error !== null) return error;
+
+    var value = props[propName];
+    if (value < props.start || value > props.end) {
+        return new Error(propName + ' should be within the range specified by start and end');
+    }
+}
+
+// =============================== Component =============================
 
 var Horizontal = _react2.default.createClass({
     displayName: 'Horizontal',
 
-    propTypes: {
-        value: _react2.default.PropTypes.number.isRequired,
-        start: _react2.default.PropTypes.number.isRequired,
-        end: _react2.default.PropTypes.number.isRequired,
-        onChange: _react2.default.PropTypes.func.isRequired,
+    // ======================= Vars ===================================
 
+    _outerWidth: 0,
+    _offsetLeft: 0,
+
+    // ======================= Mixins ===================================
+
+    mixins: [_mixin_generic_component2.default],
+
+    // ======================= React APIs ===================================
+
+    propTypes: {
+        // optional with defaults
+        start: startEndPropType,
+        end: startEndPropType,
         size: _react2.default.PropTypes.string,
-        step: _react2.default.PropTypes.number
+        step: _react2.default.PropTypes.number,
+
+        // optional no defaults
+        value: valueInRangePropType,
+        defaultValue: valueInRangePropType,
+        onChange: _react2.default.PropTypes.func
     },
 
     getDefaultProps: function getDefaultProps() {
         return {
+            start: -1,
+            end: 1,
             size: '100%',
             step: null
         };
     },
-
-    //getInitialState() {
-    //    return {
-    //        percent: 0
-    //    };
-    //},
-
+    getInitialState: function getInitialState() {
+        return {
+            percent: 0
+        };
+    },
     componentDidMount: function componentDidMount() {
-        console.log('componentDidMount');
+        this._log('componentDidMount');
         this._updateVars();
-        //this.setState({percent: this._valueToPercent(this.props.value)});
-        this.forceUpdate();
+        var value = this._getValue();
+        var percent = this._valueToPercent(value);
+        this._setPercentState(percent);
     },
 
-    //componentWillReceiveProps(nextProps) {
-    //    console.log(`componentWillReceiveProps`);
-    //    this.setState({percent: this._valueToPercent(nextProps.value)});
-    //},
+    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+        return nextState.percent !== this.state.percent;
+    },
 
-    handleOnClick: function handleOnClick(e) {
-        this._updateVars();
-
-        var percent = this._eventToPercent(e);
-        var newValue = this._percentToValue(percent);
-
-        //this.setState({percent: percent});
-
-        this.props.onChange(newValue);
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if (this._isControlledComponent()) {
+            var percent = this._valueToPercent(nextProps.value);
+            this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
+            this._setPercentState(percent);
+        }
     },
     render: function render() {
-        console.log('render: ' + this.props.value);
+        var innerWidth = this._outerWidth * this.state.percent;
 
-        //let innerWidth = this._outerWidth * this.state.percent;
-        var innerWidth = this._outerWidth * this._valueToPercent(this.props.value);
+        this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
 
         var backgroundStyle = Object.assign({}, _style2.default.horizontalSlider.background, {
             width: this.props.size
@@ -19149,6 +19189,21 @@ var Horizontal = _react2.default.createClass({
             )
         );
     },
+
+    // ============================= Handlers ========================================
+
+    handleOnClick: function handleOnClick(e) {
+        var percent = this._eventToPercent(e);
+        var newValue = this._percentToValue(percent);
+        if (!this._isControlledComponent()) {
+            this._setPercentStateAndEmitValueChangedEvent(percent, newValue);
+        } else {
+            this._emitValueChangeEvent(newValue);
+        }
+    },
+
+    // ============================ Helpers ===========================================
+
     _updateVars: function _updateVars() {
         var boundingClientRect = this.refs.outer.getBoundingClientRect();
 
@@ -19157,16 +19212,41 @@ var Horizontal = _react2.default.createClass({
     },
     _eventToPercent: function _eventToPercent(e) {
         var positionX = e.pageX - this._offsetLeft;
-        return positionX / this._outerWidth;
+        return parseFloat((positionX / this._outerWidth).toFixed(2));
     },
     _valueToPercent: function _valueToPercent(value) {
         var range = this.props.end - this.props.start;
         var position = value - this.props.start;
-        return position / range;
+        return parseFloat((position / range).toFixed(2));
     },
     _percentToValue: function _percentToValue(percent) {
         var range = this.props.end - this.props.start;
-        return range * percent + this.props.start;
+        return parseFloat((range * percent + this.props.start).toFixed(2));
+    },
+    _getValue: function _getValue() {
+        return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
+    },
+    _emitValueChangeEvent: function _emitValueChangeEvent(value) {
+        if (this.props.onChange !== undefined) {
+            this._log('_emitValueChangeEvent => value: ' + value);
+            this.props.onChange(value);
+        }
+    },
+    _setPercentState: function _setPercentState(percent) {
+        var callback = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+        if (this.state.percent === percent) {
+            return;
+        }
+        this._log('_setPercentState => percent from: ' + this.state.percent + ' to: ' + percent);
+        this.setState({ percent: percent }, callback);
+    },
+    _setPercentStateAndEmitValueChangedEvent: function _setPercentStateAndEmitValueChangedEvent(percent, value) {
+        var _this = this;
+
+        this._setPercentState(percent, function () {
+            _this._emitValueChangeEvent(value);
+        });
     }
 });
 
@@ -19174,7 +19254,7 @@ exports.default = {
     Horizontal: Horizontal
 };
 
-},{"../style":163,"react":159}],161:[function(require,module,exports){
+},{"../mixins/mixin_generic_component":163,"../style":164,"react":159}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19225,6 +19305,49 @@ exports.Slider = _Slider2.default;
 exports.TextField = _TextField2.default;
 
 },{"./components/Slider":160,"./components/TextField":161}],163:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MixinGenericComponent = {
+    propTypes: {
+        // required
+        name: _react2.default.PropTypes.string.isRequired,
+
+        // optional with defaults
+        debug: _react2.default.PropTypes.bool
+    },
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            debug: false
+        };
+    },
+    componentDidMount: function componentDidMount() {
+        this.isMounted = true;
+    },
+    componentWillUnmount: function componentWillUnmount() {
+        this.isMounted = false;
+    },
+    _log: function _log(msg) {
+        this.props.debug && console.log(this.props.name + ' > ' + msg);
+    },
+    _isControlledComponent: function _isControlledComponent() {
+        return this.props.value !== undefined;
+    }
+};
+
+exports.default = MixinGenericComponent;
+
+},{"react":159}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
