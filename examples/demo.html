@@ -4,10 +4,47 @@
     <meta charset="UTF-8" />
     <title>Hello React!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" media="all" href="cssreset.css" />
+    <style>
+        .clearfix:before, .clearfix:after { content: ""; display: table; }
+        .clearfix:after { clear: both; }
+        .clearfix { zoom: 1; }
+
+        #content {
+            width: 800px;
+            margin: 0px auto;
+            background-color: white;
+        }
+        .sliders {
+            height: 100px;
+        }
+        .sliders > .horizontalSliders,
+        .sliders > .verticalSliders
+        {
+            background-color: #eee;
+            float: left;
+            height: 100%;
+            padding: 10px;
+        }
+        .horizontalSliders {
+            width: 80%;
+        }
+        .verticalSliders {
+            width: 20%;
+        }
+        .horizontalSliderWrapper {
+            padding: 10px 0px 10px 0px;
+        }
+        .verticalSliderWrapper {
+            float: left;
+            height: 100%;
+            width: 50%;
+        }
+    </style>
 </head>
 <body>
 
-<div id="content" style="width: 400px; margin: 0px auto;"></div>
+<div id="content"></div>
 
 </body>
 <script type="text/javascript" src="bundle.js"></script>

@@ -17,26 +17,53 @@ var Application = _react2.default.createClass({
     displayName: 'Application',
     getInitialState: function getInitialState() {
         return {
-            sliderValue: 0.50
+            sliderValue: 0
         };
     },
     sliderOnChange: function sliderOnChange(value) {
         console.log('Application handleOnChange: ' + value);
         this.setState({ sliderValue: value });
     },
-
-    //<Slider.Horizontal name="slider_2" defaultValue={-1} start={-2} end={2} onChange={this.sliderOnChange} />
-
     render: function render() {
         return _react2.default.createElement(
             'div',
-            { style: { border: '1px solid black' } },
-            _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true }),
-            _react2.default.createElement('br', null),
+            null,
+            _react2.default.createElement(
+                'h3',
+                null,
+                'Sliders'
+            ),
             _react2.default.createElement(
                 'div',
-                { style: { height: '200px', backgroundColor: 'bisque', paddingTop: '10px', paddingBottom: '10px' } },
-                _react2.default.createElement(_src.Slider, { name: 'slider_2', cStyle: { thickness: '30px', size: '50%' }, value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true, orientation: 'vertical' })
+                { className: 'sliders clearfix' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'horizontalSliders' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'horizontalSliderWrapper' },
+                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'horizontalSliderWrapper' },
+                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange })
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'verticalSliders clearfix' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'verticalSliderWrapper' },
+                        _react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'verticalSliderWrapper' },
+                        _react2.default.createElement(_src.Slider, { name: 'slider_4', cStyle: { size: '75%' }, value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical' })
+                    )
+                )
             )
         );
     }

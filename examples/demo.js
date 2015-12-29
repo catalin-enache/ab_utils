@@ -9,7 +9,7 @@ const Application = React.createClass({
 
     getInitialState() {
         return {
-            sliderValue: 0.50
+            sliderValue: 0
         };
     },
 
@@ -17,16 +17,32 @@ const Application = React.createClass({
         console.log(`Application handleOnChange: ${value}`);
         this.setState({sliderValue: value});
     },
-    //<Slider.Horizontal name="slider_2" defaultValue={-1} start={-2} end={2} onChange={this.sliderOnChange} />
+
+
 
     render() {
         return (
-            <div style={{border: '1px solid black'}}>
-                <Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} debug={true} />
-                <br />
-                <div style={{ height: '200px', backgroundColor: 'bisque', paddingTop: '10px', paddingBottom: '10px'}}>
-                    <Slider name="slider_2" cStyle={{thickness: '30px', size: '50%'}}  value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} debug={true} orientation="vertical" />
+            <div>
+                <h3>Sliders</h3>
+                <div className="sliders clearfix">
+                    <div className="horizontalSliders">
+                        <div className="horizontalSliderWrapper">
+                            <Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} />
+                        </div>
+                        <div className="horizontalSliderWrapper">
+                            <Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} />
+                        </div>
+                    </div>
+                    <div className="verticalSliders clearfix">
+                        <div className="verticalSliderWrapper">
+                            <Slider name="slider_3"  defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} orientation="vertical" />
+                        </div>
+                        <div className="verticalSliderWrapper">
+                            <Slider name="slider_4" cStyle={{size: '75%'}}  value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} orientation="vertical" />
+                        </div>
+                    </div>
                 </div>
+
             </div>
         );
     }
