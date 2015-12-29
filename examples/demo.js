@@ -21,11 +21,12 @@ const Application = React.createClass({
 
     render() {
         return (
-            <div>
-                <Slider.Horizontal name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange}  />
+            <div style={{border: '1px solid black'}}>
+                <Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} debug={true} />
                 <br />
-                <Slider.Horizontal name="slider_2" value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} debug={true} />
-
+                <div style={{ height: '200px', backgroundColor: 'bisque', paddingTop: '10px', paddingBottom: '10px'}}>
+                    <Slider name="slider_2" cStyle={{thickness: '30px', size: '50%'}}  value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} debug={true} orientation="vertical" />
+                </div>
             </div>
         );
     }

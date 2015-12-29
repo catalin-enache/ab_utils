@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import Style from '../style';
 
 var MixinGenericComponent = {
     propTypes: {
@@ -8,7 +9,10 @@ var MixinGenericComponent = {
         name: React.PropTypes.string.isRequired,
 
         // optional with defaults
-        debug: React.PropTypes.bool
+        debug: React.PropTypes.bool,
+
+        // optional no defaults
+        cStyle: React.PropTypes.object
     },
 
     getDefaultProps() {
@@ -32,6 +36,13 @@ var MixinGenericComponent = {
     _isControlledComponent() {
         return this.props.value !== undefined;
     },
+
+    _style(key) {
+        if (!this.__style) {
+            this.__style = Object.assign({}, Style[this.constructor.displayName], (this.props.cStyle || {}));
+        }
+        return this.__style[key];
+    }
 };
 
 export default MixinGenericComponent;

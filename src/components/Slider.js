@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import Style from '../style';
 import MixinGenericComponent from '../mixins/mixin_generic_component';
 
 /*
@@ -32,12 +31,14 @@ function valueInRangePropType (props, propName, componentName) {
 
 // =============================== Component =============================
 
-const Horizontal = React.createClass({
+const Slider = React.createClass({
 
     // ======================= Vars ===================================
 
     _outerWidth: 0,
+    _outerHeight: 0,
     _offsetLeft: 0,
+    _offsetTop: 0,
 
     // ======================= Mixins ===================================
 
@@ -49,21 +50,21 @@ const Horizontal = React.createClass({
         // optional with defaults
         start: startEndPropType,
         end: startEndPropType,
-        size:	React.PropTypes.string,
         step: React.PropTypes.number,
+        orientation: React.PropTypes.string,
 
         // optional no defaults
         value: valueInRangePropType,
         defaultValue: valueInRangePropType,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
     },
 
     getDefaultProps() {
         return {
             start: -1,
             end: 1,
-            size: '100%',
-            step: null
+            step: null,
+            orientation: 'horizontal'
         };
     },
 
@@ -94,20 +95,56 @@ const Horizontal = React.createClass({
     },
 
     render() {
-        let innerWidth = this._outerWidth * this.state.percent;
 
         this._log(`render => state: ${JSON.stringify(this.state)} | props: ${JSON.stringify(this.props)}`);
 
-        let backgroundStyle = Object.assign({}, Style.horizontalSlider.background, {
-            width: this.props.size
+        if (this.props.orientation == 'horizontal') {
+
+            let innerWidth = this._outerWidth * this.state.percent;
+
+            var wrapperStyle =  {
+                width: '100%'
+            };
+
+            var backgroundStyle = {
+                width: this._style('size'),
+                height: this._style('thickness'),
+            };
+
+            var foregroundStyle = {
+                width: `${innerWidth}px`,
+                height: this._style('thickness'),
+            };
+        } else {
+
+            let innerHeight = this._outerHeight * this.state.percent;
+
+            var wrapperStyle =  {
+                height: '100%'
+            };
+
+            var backgroundStyle = {
+                height: this._style('size'),
+                width: this._style('thickness'),
+            };
+
+            var foregroundStyle = {
+                height: `${innerHeight}px`,
+                width: this._style('thickness'),
+            };
+        }
+
+        backgroundStyle = Object.assign(backgroundStyle, {
+            cursor: 'pointer',
+            backgroundColor: this._style('bgColor'),
         });
 
-        let foregroundStyle = Object.assign({}, Style.horizontalSlider.foreground, {
-            width: `${innerWidth}px`
+        foregroundStyle = Object.assign(foregroundStyle, {
+            backgroundColor: this._style('fgColor'),
         });
 
         return (
-            <div>
+            <div style={wrapperStyle}>
                 <div ref="outer" style={backgroundStyle} onClick={this.handleOnClick}>
                     <div style={foregroundStyle}></div>
                 </div>
@@ -132,13 +169,22 @@ const Horizontal = React.createClass({
     _updateVars() {
         let boundingClientRect = this.refs.outer.getBoundingClientRect();
 
-        this._offsetLeft = parseInt(boundingClientRect.left);
         this._outerWidth = parseInt(boundingClientRect.width);
+        this._outerHeight = parseInt(boundingClientRect.height);
+        this._offsetLeft = parseInt(boundingClientRect.left);
+        this._offsetTop = parseInt(boundingClientRect.top);
+
+        this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
     },
 
     _eventToPercent(e) {
-        let positionX = e.pageX - this._offsetLeft;
-        return parseFloat((positionX/this._outerWidth).toFixed(2));
+        if (this.props.orientation == 'horizontal') {
+            let positionX = e.pageX - this._offsetLeft;
+            return parseFloat((positionX/this._outerWidth).toFixed(2));
+        } else {
+            let positionY = e.pageY - this._offsetTop;
+            return parseFloat((positionY/this._outerHeight).toFixed(2));
+        }
     },
 
     _valueToPercent(value) {
@@ -178,9 +224,7 @@ const Horizontal = React.createClass({
         this._setPercentState(percent, () => {
             this._emitValueChangeEvent(value);
         });
-    }
+    },
 });
 
-export default {
-    Horizontal
-};
+export default Slider;

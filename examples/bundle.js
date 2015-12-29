@@ -30,10 +30,14 @@ var Application = _react2.default.createClass({
     render: function render() {
         return _react2.default.createElement(
             'div',
-            null,
-            _react2.default.createElement(_src.Slider.Horizontal, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange }),
+            { style: { border: '1px solid black' } },
+            _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true }),
             _react2.default.createElement('br', null),
-            _react2.default.createElement(_src.Slider.Horizontal, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true })
+            _react2.default.createElement(
+                'div',
+                { style: { height: '200px', backgroundColor: 'bisque', paddingTop: '10px', paddingBottom: '10px' } },
+                _react2.default.createElement(_src.Slider, { name: 'slider_2', cStyle: { thickness: '30px', size: '50%' }, value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true, orientation: 'vertical' })
+            )
         );
     }
 });
@@ -19069,10 +19073,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _style = require('../style');
-
-var _style2 = _interopRequireDefault(_style);
-
 var _mixin_generic_component = require('../mixins/mixin_generic_component');
 
 var _mixin_generic_component2 = _interopRequireDefault(_mixin_generic_component);
@@ -19107,13 +19107,15 @@ function valueInRangePropType(props, propName, componentName) {
 
 // =============================== Component =============================
 
-var Horizontal = _react2.default.createClass({
-    displayName: 'Horizontal',
+var Slider = _react2.default.createClass({
+    displayName: 'Slider',
 
     // ======================= Vars ===================================
 
     _outerWidth: 0,
+    _outerHeight: 0,
     _offsetLeft: 0,
+    _offsetTop: 0,
 
     // ======================= Mixins ===================================
 
@@ -19125,8 +19127,8 @@ var Horizontal = _react2.default.createClass({
         // optional with defaults
         start: startEndPropType,
         end: startEndPropType,
-        size: _react2.default.PropTypes.string,
         step: _react2.default.PropTypes.number,
+        orientation: _react2.default.PropTypes.string,
 
         // optional no defaults
         value: valueInRangePropType,
@@ -19138,8 +19140,8 @@ var Horizontal = _react2.default.createClass({
         return {
             start: -1,
             end: 1,
-            size: '100%',
-            step: null
+            step: null,
+            orientation: 'horizontal'
         };
     },
     getInitialState: function getInitialState() {
@@ -19167,21 +19169,57 @@ var Horizontal = _react2.default.createClass({
         }
     },
     render: function render() {
-        var innerWidth = this._outerWidth * this.state.percent;
 
         this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
 
-        var backgroundStyle = Object.assign({}, _style2.default.horizontalSlider.background, {
-            width: this.props.size
+        if (this.props.orientation == 'horizontal') {
+
+            var innerWidth = this._outerWidth * this.state.percent;
+
+            var wrapperStyle = {
+                width: '100%'
+            };
+
+            var backgroundStyle = {
+                width: this._style('size'),
+                height: this._style('thickness')
+            };
+
+            var foregroundStyle = {
+                width: innerWidth + 'px',
+                height: this._style('thickness')
+            };
+        } else {
+
+            var innerHeight = this._outerHeight * this.state.percent;
+
+            var wrapperStyle = {
+                height: '100%'
+            };
+
+            var backgroundStyle = {
+                height: this._style('size'),
+                width: this._style('thickness')
+            };
+
+            var foregroundStyle = {
+                height: innerHeight + 'px',
+                width: this._style('thickness')
+            };
+        }
+
+        backgroundStyle = Object.assign(backgroundStyle, {
+            cursor: 'pointer',
+            backgroundColor: this._style('bgColor')
         });
 
-        var foregroundStyle = Object.assign({}, _style2.default.horizontalSlider.foreground, {
-            width: innerWidth + 'px'
+        foregroundStyle = Object.assign(foregroundStyle, {
+            backgroundColor: this._style('fgColor')
         });
 
         return _react2.default.createElement(
             'div',
-            null,
+            { style: wrapperStyle },
             _react2.default.createElement(
                 'div',
                 { ref: 'outer', style: backgroundStyle, onClick: this.handleOnClick },
@@ -19207,12 +19245,21 @@ var Horizontal = _react2.default.createClass({
     _updateVars: function _updateVars() {
         var boundingClientRect = this.refs.outer.getBoundingClientRect();
 
-        this._offsetLeft = parseInt(boundingClientRect.left);
         this._outerWidth = parseInt(boundingClientRect.width);
+        this._outerHeight = parseInt(boundingClientRect.height);
+        this._offsetLeft = parseInt(boundingClientRect.left);
+        this._offsetTop = parseInt(boundingClientRect.top);
+
+        this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
     },
     _eventToPercent: function _eventToPercent(e) {
-        var positionX = e.pageX - this._offsetLeft;
-        return parseFloat((positionX / this._outerWidth).toFixed(2));
+        if (this.props.orientation == 'horizontal') {
+            var positionX = e.pageX - this._offsetLeft;
+            return parseFloat((positionX / this._outerWidth).toFixed(2));
+        } else {
+            var positionY = e.pageY - this._offsetTop;
+            return parseFloat((positionY / this._outerHeight).toFixed(2));
+        }
     },
     _valueToPercent: function _valueToPercent(value) {
         var range = this.props.end - this.props.start;
@@ -19250,11 +19297,9 @@ var Horizontal = _react2.default.createClass({
     }
 });
 
-exports.default = {
-    Horizontal: Horizontal
-};
+exports.default = Slider;
 
-},{"../mixins/mixin_generic_component":163,"../style":164,"react":159}],161:[function(require,module,exports){
+},{"../mixins/mixin_generic_component":163,"react":159}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19315,6 +19360,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _style2 = require('../style');
+
+var _style3 = _interopRequireDefault(_style2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var MixinGenericComponent = {
@@ -19323,7 +19372,10 @@ var MixinGenericComponent = {
         name: _react2.default.PropTypes.string.isRequired,
 
         // optional with defaults
-        debug: _react2.default.PropTypes.bool
+        debug: _react2.default.PropTypes.bool,
+
+        // optional no defaults
+        cStyle: _react2.default.PropTypes.object
     },
 
     getDefaultProps: function getDefaultProps() {
@@ -19342,36 +19394,29 @@ var MixinGenericComponent = {
     },
     _isControlledComponent: function _isControlledComponent() {
         return this.props.value !== undefined;
+    },
+    _style: function _style(key) {
+        if (!this.__style) {
+            this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.cStyle || {});
+        }
+        return this.__style[key];
     }
 };
 
 exports.default = MixinGenericComponent;
 
-},{"react":159}],164:[function(require,module,exports){
+},{"../style":164,"react":159}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var horizontalSliderCommon = {
-    height: '4px'
-};
-
-var sliderCommon = {
-    background: {
-        backgroundColor: 'gray',
-        cursor: 'pointer'
-    },
-
-    foreground: {
-        backgroundColor: 'indianred'
-    }
-};
-
 exports.default = {
-    horizontalSlider: {
-        background: Object.assign({}, horizontalSliderCommon, sliderCommon.background, {}),
-        foreground: Object.assign({}, horizontalSliderCommon, sliderCommon.foreground, {})
+    Slider: {
+        bgColor: 'gray',
+        fgColor: 'indianred',
+        size: '100%',
+        thickness: '5px'
     }
 };
 
