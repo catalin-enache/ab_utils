@@ -30,7 +30,7 @@ const Application = React.createClass({
                             <Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} />
                         </div>
                         <div className="horizontalSliderWrapper">
-                            <Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} />
+                            <Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} cStyle={{size: '75%', bgColor: '#003366'}} />
                         </div>
                     </div>
                     <div className="verticalSliders clearfix">
@@ -38,7 +38,7 @@ const Application = React.createClass({
                             <Slider name="slider_3"  defaultValue={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} orientation="vertical" />
                         </div>
                         <div className="verticalSliderWrapper">
-                            <Slider name="slider_4" cStyle={{size: '75%'}}  value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} orientation="vertical" />
+                            <Slider name="slider_4"  value={this.state.sliderValue} start={-2} end={2} onChange={this.sliderOnChange} orientation="vertical" cStyle={{size: '75%', bgColor: '#003366', thickness: '8px'}}  />
                         </div>
                     </div>
                 </div>

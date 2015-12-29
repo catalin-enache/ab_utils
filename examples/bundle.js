@@ -47,7 +47,7 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, cStyle: { size: '75%', bgColor: '#003366' } })
                     )
                 ),
                 _react2.default.createElement(
@@ -61,7 +61,7 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_4', cStyle: { size: '75%' }, value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical' })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical', cStyle: { size: '75%', bgColor: '#003366', thickness: '8px' } })
                     )
                 )
             )
