@@ -42,7 +42,7 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -61,7 +61,7 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box', opacity: '.5' } })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, disabled: true, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' }, debug: true })
                     )
                 )
             )
@@ -19134,6 +19134,9 @@ function valueInRangePropType(props, propName, componentName) {
 
 // =============================== Component =============================
 
+var DEFAULT_SIZE = '100px';
+var DEFAULT_THICKNESS = '5px';
+
 var Slider = _react2.default.createClass({
     displayName: 'Slider',
 
@@ -19156,6 +19159,7 @@ var Slider = _react2.default.createClass({
         end: startEndPropType,
         step: _react2.default.PropTypes.number,
         orientation: _react2.default.PropTypes.string,
+        disabled: _react2.default.PropTypes.bool,
 
         // optional no defaults
         value: valueInRangePropType,
@@ -19168,7 +19172,8 @@ var Slider = _react2.default.createClass({
             start: -1,
             end: 1,
             step: null,
-            orientation: 'horizontal'
+            orientation: 'horizontal',
+            disabled: false
         };
     },
     getInitialState: function getInitialState() {
@@ -19197,9 +19202,6 @@ var Slider = _react2.default.createClass({
         }
     },
     render: function render() {
-
-        var DEFAULT_SIZE = '100px';
-        var DEFAULT_THICKNESS = '5px';
 
         this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
 
@@ -19236,6 +19238,8 @@ var Slider = _react2.default.createClass({
             backgroundColor: this._style('bgColor')
         });
 
+        this.props.disabled && (backgroundStyle['opacity'] = 0.5);
+
         foregroundStyle = Object.assign(foregroundStyle, {
             backgroundColor: this._style('fgColor')
         });
@@ -19244,13 +19248,16 @@ var Slider = _react2.default.createClass({
             'div',
             { ref: 'outer', style: backgroundStyle, onClick: this.handleOnClick },
             _react2.default.createElement('div', { style: foregroundStyle }),
-            _react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value })
+            _react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
         );
     },
 
     // ============================= Handlers ========================================
 
     handleOnClick: function handleOnClick(e) {
+        if (this.props.disabled) {
+            return;
+        }
         var percent = this._eventToPercent(e);
         var newValue = this._percentToValue(percent);
         if (!this._isControlledComponent()) {

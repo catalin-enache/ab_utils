@@ -55,6 +55,7 @@ const Slider = React.createClass({
         end: startEndPropType,
         step: React.PropTypes.number,
         orientation: React.PropTypes.string,
+        disabled: React.PropTypes.bool,
 
         // optional no defaults
         value: valueInRangePropType,
@@ -67,7 +68,8 @@ const Slider = React.createClass({
             start: -1,
             end: 1,
             step: null,
-            orientation: 'horizontal'
+            orientation: 'horizontal',
+            disabled: false
         };
     },
 
@@ -135,6 +137,8 @@ const Slider = React.createClass({
             backgroundColor: this._style('bgColor')
         });
 
+        this.props.disabled && (backgroundStyle['opacity'] = 0.5);
+
         foregroundStyle = Object.assign(foregroundStyle, {
             backgroundColor: this._style('fgColor')
         });
@@ -142,7 +146,7 @@ const Slider = React.createClass({
         return (
             <div ref="outer" style={backgroundStyle} onClick={this.handleOnClick}>
                 <div style={foregroundStyle}></div>
-                <input type="hidden" name={this.props.name} value={this.state.value} />
+                <input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
             </div>
         );
     },
@@ -150,6 +154,7 @@ const Slider = React.createClass({
     // ============================= Handlers ========================================
 
     handleOnClick(e) {
+        if (this.props.disabled) { return; }
         let percent = this._eventToPercent(e);
         let newValue = this._percentToValue(percent);
         if (!this._isControlledComponent()) {
