@@ -31,6 +31,9 @@ function valueInRangePropType (props, propName, componentName) {
 
 // =============================== Component =============================
 
+const DEFAULT_SIZE = '100px';
+const DEFAULT_THICKNESS = '5px';
+
 const Slider = React.createClass({
 
     // ======================= Vars ===================================
@@ -70,7 +73,8 @@ const Slider = React.createClass({
 
     getInitialState() {
         return {
-            percent: 0
+            percent: 0,
+            value: this._getValue()
         };
     },
 
@@ -79,7 +83,7 @@ const Slider = React.createClass({
         this._updateVars();
         let value = this._getValue();
         let percent = this._valueToPercent(value);
-        this._setPercentState(percent);
+        this._setPercentValueState(percent, value);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -90,7 +94,7 @@ const Slider = React.createClass({
         if (this._isControlledComponent()) {
             let percent = this._valueToPercent(nextProps.value);
             this._log(`componentWillReceiveProps => nextProps: ${JSON.stringify(nextProps)}`);
-            this._setPercentState(percent);
+            this._setPercentValueState(percent, nextProps.value);
         }
     },
 
@@ -102,52 +106,43 @@ const Slider = React.createClass({
 
             let innerWidth = this._outerWidth * this.state.percent;
 
-            var wrapperStyle =  {
-                width: '100%'
-            };
-
             var backgroundStyle = {
-                width: this._style('size'),
-                height: this._style('thickness'),
+                width: this._style('width', DEFAULT_SIZE),
+                height: this._style('height', DEFAULT_THICKNESS)
             };
 
             var foregroundStyle = {
                 width: `${innerWidth}px`,
-                height: this._style('thickness'),
+                height: '100%'
             };
         } else {
 
             let innerHeight = this._outerHeight * this.state.percent;
 
-            var wrapperStyle =  {
-                height: '100%'
-            };
-
             var backgroundStyle = {
-                height: this._style('size'),
-                width: this._style('thickness'),
+                height: this._style('height', DEFAULT_SIZE),
+                width: this._style('width', DEFAULT_THICKNESS)
             };
 
             var foregroundStyle = {
                 height: `${innerHeight}px`,
-                width: this._style('thickness'),
+                width: '100%'
             };
         }
 
-        backgroundStyle = Object.assign(backgroundStyle, {
+        backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
             cursor: 'pointer',
-            backgroundColor: this._style('bgColor'),
+            backgroundColor: this._style('bgColor')
         });
 
         foregroundStyle = Object.assign(foregroundStyle, {
-            backgroundColor: this._style('fgColor'),
+            backgroundColor: this._style('fgColor')
         });
 
         return (
-            <div style={wrapperStyle}>
-                <div ref="outer" style={backgroundStyle} onClick={this.handleOnClick}>
-                    <div style={foregroundStyle}></div>
-                </div>
+            <div ref="outer" style={backgroundStyle} onClick={this.handleOnClick}>
+                <div style={foregroundStyle}></div>
+                <input type="hidden" name={this.props.name} value={this.state.value} />
             </div>
         );
     },
@@ -158,7 +153,7 @@ const Slider = React.createClass({
         let percent = this._eventToPercent(e);
         let newValue = this._percentToValue(percent);
         if (!this._isControlledComponent()) {
-            this._setPercentStateAndEmitValueChangedEvent(percent, newValue);
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
         } else {
             this._emitValueChangeEvent(newValue);
         }
@@ -214,14 +209,14 @@ const Slider = React.createClass({
         }
     },
 
-    _setPercentState(percent, callback=null) {
+    _setPercentValueState(percent, value, callback=null) {
         if (this.state.percent === percent) { return; }
-        this._log(`_setPercentState => percent from: ${this.state.percent} to: ${percent}`);
-        this.setState({percent: percent}, callback);
+        this._log(`_setPercentValueState => percent from: ${this.state.percent}, ${this.state.value} to: ${percent}, ${value}`);
+        this.setState({percent: percent, value: value}, callback);
     },
 
-    _setPercentStateAndEmitValueChangedEvent(percent, value) {
-        this._setPercentState(percent, () => {
+    _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
+        this._setPercentValueState(percent, value, () => {
             this._emitValueChangeEvent(value);
         });
     },

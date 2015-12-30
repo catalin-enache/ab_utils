@@ -42,12 +42,12 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, debug: true })
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, cStyle: { size: '75%', bgColor: '#003366' } })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, style: { width: '75%', bgColor: '#003366' } })
                     )
                 ),
                 _react2.default.createElement(
@@ -56,12 +56,12 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical' })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '100%' } })
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical', cStyle: { size: '75%', bgColor: '#003366', thickness: '8px' } })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box', opacity: '.5' } })
                     )
                 )
             )
@@ -19173,7 +19173,8 @@ var Slider = _react2.default.createClass({
     },
     getInitialState: function getInitialState() {
         return {
-            percent: 0
+            percent: 0,
+            value: this._getValue()
         };
     },
     componentDidMount: function componentDidMount() {
@@ -19181,7 +19182,7 @@ var Slider = _react2.default.createClass({
         this._updateVars();
         var value = this._getValue();
         var percent = this._valueToPercent(value);
-        this._setPercentState(percent);
+        this._setPercentValueState(percent, value);
     },
 
     shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
@@ -19192,10 +19193,13 @@ var Slider = _react2.default.createClass({
         if (this._isControlledComponent()) {
             var percent = this._valueToPercent(nextProps.value);
             this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
-            this._setPercentState(percent);
+            this._setPercentValueState(percent, nextProps.value);
         }
     },
     render: function render() {
+
+        var DEFAULT_SIZE = '100px';
+        var DEFAULT_THICKNESS = '5px';
 
         this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
 
@@ -19203,39 +19207,31 @@ var Slider = _react2.default.createClass({
 
             var innerWidth = this._outerWidth * this.state.percent;
 
-            var wrapperStyle = {
-                width: '100%'
-            };
-
             var backgroundStyle = {
-                width: this._style('size'),
-                height: this._style('thickness')
+                width: this._style('width', DEFAULT_SIZE),
+                height: this._style('height', DEFAULT_THICKNESS)
             };
 
             var foregroundStyle = {
                 width: innerWidth + 'px',
-                height: this._style('thickness')
+                height: '100%'
             };
         } else {
 
             var innerHeight = this._outerHeight * this.state.percent;
 
-            var wrapperStyle = {
-                height: '100%'
-            };
-
             var backgroundStyle = {
-                height: this._style('size'),
-                width: this._style('thickness')
+                height: this._style('height', DEFAULT_SIZE),
+                width: this._style('width', DEFAULT_THICKNESS)
             };
 
             var foregroundStyle = {
                 height: innerHeight + 'px',
-                width: this._style('thickness')
+                width: '100%'
             };
         }
 
-        backgroundStyle = Object.assign(backgroundStyle, {
+        backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
             cursor: 'pointer',
             backgroundColor: this._style('bgColor')
         });
@@ -19246,12 +19242,9 @@ var Slider = _react2.default.createClass({
 
         return _react2.default.createElement(
             'div',
-            { style: wrapperStyle },
-            _react2.default.createElement(
-                'div',
-                { ref: 'outer', style: backgroundStyle, onClick: this.handleOnClick },
-                _react2.default.createElement('div', { style: foregroundStyle })
-            )
+            { ref: 'outer', style: backgroundStyle, onClick: this.handleOnClick },
+            _react2.default.createElement('div', { style: foregroundStyle }),
+            _react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value })
         );
     },
 
@@ -19261,7 +19254,7 @@ var Slider = _react2.default.createClass({
         var percent = this._eventToPercent(e);
         var newValue = this._percentToValue(percent);
         if (!this._isControlledComponent()) {
-            this._setPercentStateAndEmitValueChangedEvent(percent, newValue);
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
         } else {
             this._emitValueChangeEvent(newValue);
         }
@@ -19306,19 +19299,19 @@ var Slider = _react2.default.createClass({
             this.props.onChange(value);
         }
     },
-    _setPercentState: function _setPercentState(percent) {
-        var callback = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+    _setPercentValueState: function _setPercentValueState(percent, value) {
+        var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
 
         if (this.state.percent === percent) {
             return;
         }
-        this._log('_setPercentState => percent from: ' + this.state.percent + ' to: ' + percent);
-        this.setState({ percent: percent }, callback);
+        this._log('_setPercentValueState => percent from: ' + this.state.percent + ', ' + this.state.value + ' to: ' + percent + ', ' + value);
+        this.setState({ percent: percent, value: value }, callback);
     },
-    _setPercentStateAndEmitValueChangedEvent: function _setPercentStateAndEmitValueChangedEvent(percent, value) {
+    _setPercentValueStateAndEmitValueChangedEvent: function _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
         var _this = this;
 
-        this._setPercentState(percent, function () {
+        this._setPercentValueState(percent, value, function () {
             _this._emitValueChangeEvent(value);
         });
     }
@@ -19422,11 +19415,11 @@ var MixinGenericComponent = {
     _isControlledComponent: function _isControlledComponent() {
         return this.props.value !== undefined;
     },
-    _style: function _style(key) {
+    _style: function _style(key, _default) {
         if (!this.__style) {
-            this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.cStyle || {});
+            this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.style || {});
         }
-        return this.__style[key];
+        return this.__style[key] !== undefined ? this.__style[key] : _default;
     }
 };
 
@@ -19441,9 +19434,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     Slider: {
         bgColor: 'gray',
-        fgColor: 'indianred',
-        size: '100%',
-        thickness: '5px'
+        fgColor: 'indianred'
     }
 };
 

@@ -17,7 +17,7 @@ var MixinGenericComponent = {
 
     getDefaultProps() {
         return {
-            debug: false,
+            debug: false
         };
     },
 
@@ -37,11 +37,11 @@ var MixinGenericComponent = {
         return this.props.value !== undefined;
     },
 
-    _style(key) {
+    _style(key, _default) {
         if (!this.__style) {
-            this.__style = Object.assign({}, Style[this.constructor.displayName], (this.props.cStyle || {}));
+            this.__style = Object.assign({}, Style[this.constructor.displayName], (this.props.style || {}));
         }
-        return this.__style[key];
+        return this.__style[key] !== undefined ? this.__style[key] : _default;
     }
 };
 
