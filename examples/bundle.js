@@ -19196,8 +19196,8 @@ var Slider = _react2.default.createClass({
 
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
         if (this._isControlledComponent()) {
-            var percent = this._valueToPercent(nextProps.value);
             this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
+            var percent = this._valueToPercent(nextProps.value);
             this._setPercentValueState(percent, nextProps.value);
         }
     },
@@ -19233,6 +19233,7 @@ var Slider = _react2.default.createClass({
             };
         }
 
+        // also let props.style pass through
         backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
             cursor: 'pointer',
             backgroundColor: this._style('bgColor')
@@ -19260,10 +19261,10 @@ var Slider = _react2.default.createClass({
         }
         var percent = this._eventToPercent(e);
         var newValue = this._percentToValue(percent);
-        if (!this._isControlledComponent()) {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
-        } else {
+        if (this._isControlledComponent()) {
             this._emitValueChangeEvent(newValue);
+        } else {
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
         }
     },
 

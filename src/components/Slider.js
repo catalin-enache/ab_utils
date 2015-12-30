@@ -60,7 +60,7 @@ const Slider = React.createClass({
         // optional no defaults
         value: valueInRangePropType,
         defaultValue: valueInRangePropType,
-        onChange: React.PropTypes.func,
+        onChange: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -94,8 +94,8 @@ const Slider = React.createClass({
 
     componentWillReceiveProps(nextProps) {
         if (this._isControlledComponent()) {
-            let percent = this._valueToPercent(nextProps.value);
             this._log(`componentWillReceiveProps => nextProps: ${JSON.stringify(nextProps)}`);
+            let percent = this._valueToPercent(nextProps.value);
             this._setPercentValueState(percent, nextProps.value);
         }
     },
@@ -132,6 +132,7 @@ const Slider = React.createClass({
             };
         }
 
+        // also let props.style pass through
         backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
             cursor: 'pointer',
             backgroundColor: this._style('bgColor')
@@ -157,10 +158,10 @@ const Slider = React.createClass({
         if (this.props.disabled) { return; }
         let percent = this._eventToPercent(e);
         let newValue = this._percentToValue(percent);
-        if (!this._isControlledComponent()) {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
-        } else {
+        if (this._isControlledComponent()) {
             this._emitValueChangeEvent(newValue);
+        } else {
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
         }
     },
 
@@ -224,7 +225,7 @@ const Slider = React.createClass({
         this._setPercentValueState(percent, value, () => {
             this._emitValueChangeEvent(value);
         });
-    },
+    }
 });
 
 export default Slider;
