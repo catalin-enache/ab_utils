@@ -204,17 +204,17 @@ const Slider = React.createClass({
     _eventToPercent(e) {
         if (this.props.orientation == 'horizontal') {
             let positionX = e.pageX - this._offsetLeft;
-            return parseFloat((positionX/this._outerWidth).toFixed(2));
+            return this._stepping(parseFloat((positionX/this._outerWidth).toFixed(2)));
         } else {
             let positionY = e.pageY - this._offsetTop;
-            return parseFloat((positionY/this._outerHeight).toFixed(2));
+            return this._stepping(parseFloat((positionY/this._outerHeight).toFixed(2)));
         }
     },
 
     _valueToPercent(value) {
         let range = this.props.end - this.props.start;
         let position = value - this.props.start;
-        return parseFloat((position/range).toFixed(2));
+        return this._stepping(parseFloat((position/range).toFixed(2)));
     },
 
     _percentToValue(percent) {
@@ -231,24 +231,28 @@ const Slider = React.createClass({
                 );
     },
 
+    _stepping(percent) {
+        return percent;
+    },
+
     _update(e) {
         let percent = this._eventToPercent(e);
-        let newValue = this._percentToValue(percent);
+        let value = this._percentToValue(percent);
         let start = this.props.start;
         let end = this.props.end;
 
-        newValue = newValue < start ? start : newValue > end ? end : newValue;
+        value = value < start ? start : value > end ? end : value;
         percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
 
-        if (this._isControlledComponent()) {
-            this._emitValueChangeEvent(newValue);
+        if (this._isControlledComponent() && this.state.value !== value) {
+            this._emitValueChangeEvent(value);
         } else {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
         }
     },
 
     _emitValueChangeEvent(value) {
-        if (this.state.value === value || this.props.onChange === undefined) { return; }
+        if (this.props.onChange === undefined) { return; }
         this._log(`_emitValueChangeEvent => value: ${value}`);
         this.props.onChange(value);
     },

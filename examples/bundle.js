@@ -19269,21 +19269,6 @@ var Slider = _react2.default.createClass({
 
     // ============================= Handlers ========================================
 
-    _update: function _update(e) {
-        var percent = this._eventToPercent(e);
-        var newValue = this._percentToValue(percent);
-        var start = this.props.start;
-        var end = this.props.end;
-
-        newValue = newValue < start ? start : newValue > end ? end : newValue;
-        percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
-
-        if (this._isControlledComponent()) {
-            this._emitValueChangeEvent(newValue);
-        } else {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
-        }
-    },
     _handleMouseDown: function _handleMouseDown(e) {
         if (this.props.disabled) {
             return;
@@ -19325,16 +19310,16 @@ var Slider = _react2.default.createClass({
     _eventToPercent: function _eventToPercent(e) {
         if (this.props.orientation == 'horizontal') {
             var positionX = e.pageX - this._offsetLeft;
-            return parseFloat((positionX / this._outerWidth).toFixed(2));
+            return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(2)));
         } else {
             var positionY = e.pageY - this._offsetTop;
-            return parseFloat((positionY / this._outerHeight).toFixed(2));
+            return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(2)));
         }
     },
     _valueToPercent: function _valueToPercent(value) {
         var range = this.props.end - this.props.start;
         var position = value - this.props.start;
-        return parseFloat((position / range).toFixed(2));
+        return this._stepping(parseFloat((position / range).toFixed(2)));
     },
     _percentToValue: function _percentToValue(percent) {
         var range = this.props.end - this.props.start;
@@ -19343,8 +19328,26 @@ var Slider = _react2.default.createClass({
     _getValue: function _getValue() {
         return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
     },
+    _stepping: function _stepping(percent) {
+        return percent;
+    },
+    _update: function _update(e) {
+        var percent = this._eventToPercent(e);
+        var value = this._percentToValue(percent);
+        var start = this.props.start;
+        var end = this.props.end;
+
+        value = value < start ? start : value > end ? end : value;
+        percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+
+        if (this._isControlledComponent() && this.state.value !== value) {
+            this._emitValueChangeEvent(value);
+        } else {
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
+        }
+    },
     _emitValueChangeEvent: function _emitValueChangeEvent(value) {
-        if (this.state.value === value || this.props.onChange === undefined) {
+        if (this.props.onChange === undefined) {
             return;
         }
         this._log('_emitValueChangeEvent => value: ' + value);
