@@ -61,7 +61,7 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, disabled: true, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' }, debug: true })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, disabled: true, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' } })
                     )
                 )
             )
@@ -604,15 +604,11 @@ module.exports = focusNode;
  * Same as document.activeElement but wraps in a try-catch block. In IE it is
  * not safe to call document.activeElement if there is nothing focused.
  *
- * The activeElement will be null only if the document or document body is not yet defined.
+ * The activeElement will be null only if the document body is not yet defined.
  */
-'use strict';
+"use strict";
 
 function getActiveElement() /*?DOMElement*/{
-  if (typeof document === 'undefined') {
-    return null;
-  }
-
   try {
     return document.activeElement || document.body;
   } catch (e) {
@@ -858,7 +854,7 @@ module.exports = hyphenateStyleName;
  * will remain to ensure logic does not differ in production.
  */
 
-var invariant = function (condition, format, a, b, c, d, e, f) {
+function invariant(condition, format, a, b, c, d, e, f) {
   if (process.env.NODE_ENV !== 'production') {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
@@ -872,15 +868,16 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
     } else {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
-      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+      error = new Error(format.replace(/%s/g, function () {
         return args[argIndex++];
       }));
+      error.name = 'Invariant Violation';
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
     throw error;
   }
-};
+}
 
 module.exports = invariant;
 }).call(this,require('_process'))
@@ -1145,18 +1142,23 @@ module.exports = performance || {};
 'use strict';
 
 var performance = require('./performance');
-var curPerformance = performance;
+
+var performanceNow;
 
 /**
  * Detect if we can use `window.performance.now()` and gracefully fallback to
  * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
  * because of Facebook's testing infrastructure.
  */
-if (!curPerformance || !curPerformance.now) {
-  curPerformance = Date;
+if (performance.now) {
+  performanceNow = function () {
+    return performance.now();
+  };
+} else {
+  performanceNow = function () {
+    return Date.now();
+  };
 }
-
-var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
 },{"./performance":24}],26:[function(require,module,exports){
@@ -4749,8 +4751,8 @@ var HTMLDOMPropertyConfig = {
      */
     // autoCapitalize and autoCorrect are supported in Mobile Safari for
     // keyboard hints.
-    autoCapitalize: null,
-    autoCorrect: null,
+    autoCapitalize: MUST_USE_ATTRIBUTE,
+    autoCorrect: MUST_USE_ATTRIBUTE,
     // autoSave allows WebKit/Blink to persist values of input fields on page reloads
     autoSave: null,
     // color is for Safari mask-icon link
@@ -4781,9 +4783,7 @@ var HTMLDOMPropertyConfig = {
     httpEquiv: 'http-equiv'
   },
   DOMPropertyNames: {
-    autoCapitalize: 'autocapitalize',
     autoComplete: 'autocomplete',
-    autoCorrect: 'autocorrect',
     autoFocus: 'autofocus',
     autoPlay: 'autoplay',
     autoSave: 'autosave',
@@ -9226,7 +9226,7 @@ function updateOptionsIfPendingUpdateAndMounted() {
     var value = LinkedValueUtils.getValue(props);
 
     if (value != null) {
-      updateOptions(this, props, value);
+      updateOptions(this, Boolean(props.multiple), value);
     }
   }
 }
@@ -10305,7 +10305,9 @@ var DOM_OPERATION_TYPES = {
   'setValueForProperty': 'update attribute',
   'setValueForAttribute': 'update attribute',
   'deleteValueForProperty': 'remove attribute',
-  'dangerouslyReplaceNodeWithMarkupByID': 'replace'
+  'setValueForStyles': 'update styles',
+  'replaceNodeWithMarkup': 'replace',
+  'updateTextContent': 'set textContent'
 };
 
 function getTotalTime(measurements) {
@@ -15353,7 +15355,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '0.14.3';
+module.exports = '0.14.5';
 },{}],115:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19127,9 +19129,15 @@ function valueInRangePropType(props, propName, componentName) {
     if (error !== null) return error;
 
     var value = props[propName];
-    if (value < props.start || value > props.end) {
+    if (value !== undefined && !valueInRange(value, props)) {
         return new Error(propName + ' should be within the range specified by start and end');
     }
+}
+
+// =============================== Helpers ===============================
+
+function valueInRange(value, props) {
+    return props.start <= value && value <= props.end;
 }
 
 // =============================== Component =============================
@@ -19166,6 +19174,12 @@ var Slider = _react2.default.createClass({
         defaultValue: valueInRangePropType,
         onChange: _react2.default.PropTypes.func
     },
+
+    /*
+    additional API:
+        style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+        any other style property is passed through when not intentionally overridden
+    */
 
     getDefaultProps: function getDefaultProps() {
         return {
@@ -19235,7 +19249,7 @@ var Slider = _react2.default.createClass({
 
         // also let props.style pass through
         backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
-            cursor: 'pointer',
+            cursor: this.props.disabled ? 'not-allowed' : 'pointer',
             backgroundColor: this._style('bgColor')
         });
 
@@ -19247,7 +19261,7 @@ var Slider = _react2.default.createClass({
 
         return _react2.default.createElement(
             'div',
-            { ref: 'outer', style: backgroundStyle, onClick: this.handleOnClick },
+            { ref: 'outer', style: backgroundStyle, onMouseDown: this._handleMouseDown },
             _react2.default.createElement('div', { style: foregroundStyle }),
             _react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
         );
@@ -19255,17 +19269,45 @@ var Slider = _react2.default.createClass({
 
     // ============================= Handlers ========================================
 
-    handleOnClick: function handleOnClick(e) {
-        if (this.props.disabled) {
-            return;
-        }
+    _update: function _update(e) {
         var percent = this._eventToPercent(e);
         var newValue = this._percentToValue(percent);
+        var start = this.props.start;
+        var end = this.props.end;
+
+        newValue = newValue < start ? start : newValue > end ? end : newValue;
+        percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+
         if (this._isControlledComponent()) {
             this._emitValueChangeEvent(newValue);
         } else {
             this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
         }
+    },
+    _handleMouseDown: function _handleMouseDown(e) {
+        if (this.props.disabled) {
+            return;
+        }
+        document.addEventListener('mousemove', this._handleMouseMove, false);
+        document.addEventListener('mouseup', this._handleMouseUp, false);
+        this._update(e);
+    },
+    _handleMouseMove: function _handleMouseMove(e) {
+        var _this = this;
+
+        if (this._dragRunning) {
+            return;
+        }
+        this._dragRunning = true;
+        requestAnimationFrame(function () {
+            _this._update(e);
+            _this._dragRunning = false;
+        });
+    },
+    _handleMouseUp: function _handleMouseUp(e) {
+        document.removeEventListener('mousemove', this._handleMouseMove, false);
+        document.removeEventListener('mouseup', this._handleMouseUp, false);
+        this._update(e);
     },
 
     // ============================ Helpers ===========================================
@@ -19302,10 +19344,11 @@ var Slider = _react2.default.createClass({
         return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
     },
     _emitValueChangeEvent: function _emitValueChangeEvent(value) {
-        if (this.props.onChange !== undefined) {
-            this._log('_emitValueChangeEvent => value: ' + value);
-            this.props.onChange(value);
+        if (this.state.value === value || this.props.onChange === undefined) {
+            return;
         }
+        this._log('_emitValueChangeEvent => value: ' + value);
+        this.props.onChange(value);
     },
     _setPercentValueState: function _setPercentValueState(percent, value) {
         var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
@@ -19317,10 +19360,10 @@ var Slider = _react2.default.createClass({
         this.setState({ percent: percent, value: value }, callback);
     },
     _setPercentValueStateAndEmitValueChangedEvent: function _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
-        var _this = this;
+        var _this2 = this;
 
         this._setPercentValueState(percent, value, function () {
-            _this._emitValueChangeEvent(value);
+            _this2._emitValueChangeEvent(value);
         });
     }
 });

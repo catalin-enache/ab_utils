@@ -56,3 +56,7 @@ html {
 *, *:before, *:after {
     box-sizing: inherit;
 }
+
+*:focus {
+    outline: none;
+}

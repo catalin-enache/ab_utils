@@ -24,9 +24,15 @@ function valueInRangePropType (props, propName, componentName) {
     if (error !== null) return error;
 
     let value = props[propName];
-    if (value < props.start || value > props.end) {
+    if (value !== undefined && !valueInRange(value, props)) {
         return new Error(propName + ' should be within the range specified by start and end');
     }
+}
+
+// =============================== Helpers ===============================
+
+function valueInRange(value, props) {
+    return props.start <= value && value <= props.end;
 }
 
 // =============================== Component =============================
@@ -62,6 +68,12 @@ const Slider = React.createClass({
         defaultValue: valueInRangePropType,
         onChange: React.PropTypes.func
     },
+
+    /*
+    additional API:
+        style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+        any other style property is passed through when not intentionally overridden
+    */
 
     getDefaultProps() {
         return {
@@ -134,7 +146,7 @@ const Slider = React.createClass({
 
         // also let props.style pass through
         backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
-            cursor: 'pointer',
+            cursor: this.props.disabled ? 'not-allowed' : 'pointer',
             backgroundColor: this._style('bgColor')
         });
 
@@ -145,7 +157,7 @@ const Slider = React.createClass({
         });
 
         return (
-            <div ref="outer" style={backgroundStyle} onClick={this.handleOnClick}>
+            <div ref="outer" style={backgroundStyle} onMouseDown={this._handleMouseDown}>
                 <div style={foregroundStyle}></div>
                 <input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
             </div>
@@ -154,15 +166,26 @@ const Slider = React.createClass({
 
     // ============================= Handlers ========================================
 
-    handleOnClick(e) {
+    _handleMouseDown(e) {
         if (this.props.disabled) { return; }
-        let percent = this._eventToPercent(e);
-        let newValue = this._percentToValue(percent);
-        if (this._isControlledComponent()) {
-            this._emitValueChangeEvent(newValue);
-        } else {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
-        }
+        document.addEventListener('mousemove', this._handleMouseMove, false);
+        document.addEventListener('mouseup', this._handleMouseUp, false);
+        this._update(e);
+    },
+
+    _handleMouseMove(e) {
+        if (this._dragRunning) { return; }
+        this._dragRunning = true;
+        requestAnimationFrame(() => {
+            this._update(e);
+            this._dragRunning = false;
+        });
+    },
+
+    _handleMouseUp(e) {
+        document.removeEventListener('mousemove', this._handleMouseMove, false);
+        document.removeEventListener('mouseup', this._handleMouseUp, false);
+        this._update(e);
     },
 
     // ============================ Helpers ===========================================
@@ -208,11 +231,26 @@ const Slider = React.createClass({
                 );
     },
 
-    _emitValueChangeEvent(value) {
-        if(this.props.onChange !== undefined) {
-            this._log(`_emitValueChangeEvent => value: ${value}`);
-            this.props.onChange(value);
+    _update(e) {
+        let percent = this._eventToPercent(e);
+        let newValue = this._percentToValue(percent);
+        let start = this.props.start;
+        let end = this.props.end;
+
+        newValue = newValue < start ? start : newValue > end ? end : newValue;
+        percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+
+        if (this._isControlledComponent()) {
+            this._emitValueChangeEvent(newValue);
+        } else {
+            this._setPercentValueStateAndEmitValueChangedEvent(percent, newValue);
         }
+    },
+
+    _emitValueChangeEvent(value) {
+        if (this.state.value === value || this.props.onChange === undefined) { return; }
+        this._log(`_emitValueChangeEvent => value: ${value}`);
+        this.props.onChange(value);
     },
 
     _setPercentValueState(percent, value, callback=null) {
