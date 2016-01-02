@@ -116,6 +116,13 @@ const Slider = React.createClass({
 
         this._log(`render => state: ${JSON.stringify(this.state)} | props: ${JSON.stringify(this.props)}`);
 
+        let handlers = {};
+        if (!this.props.disabled) {
+            handlers = {
+                onMouseDown: this._handleMouseDown
+            }
+        }
+
         if (this.props.orientation == 'horizontal') {
 
             let innerWidth = this._outerWidth * this.state.percent;
@@ -147,17 +154,16 @@ const Slider = React.createClass({
         // also let props.style pass through
         backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
             cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+            opacity: this.props.disabled ? 0.5 : 1,
             backgroundColor: this._style('bgColor')
         });
-
-        this.props.disabled && (backgroundStyle['opacity'] = 0.5);
 
         foregroundStyle = Object.assign(foregroundStyle, {
             backgroundColor: this._style('fgColor')
         });
 
         return (
-            <div ref="outer" style={backgroundStyle} onMouseDown={this._handleMouseDown}>
+            <div ref="outer" style={backgroundStyle} {...handlers}>
                 <div style={foregroundStyle}></div>
                 <input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
             </div>
@@ -167,7 +173,7 @@ const Slider = React.createClass({
     // ============================= Handlers ========================================
 
     _handleMouseDown(e) {
-        if (this.props.disabled) { return; }
+
         document.addEventListener('mousemove', this._handleMouseMove, false);
         document.addEventListener('mouseup', this._handleMouseUp, false);
         this._update(e);

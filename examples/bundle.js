@@ -19094,6 +19094,8 @@ module.exports = require('./lib/React');
 },{"./lib/React":54}],160:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -19219,6 +19221,13 @@ var Slider = _react2.default.createClass({
 
         this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
 
+        var handlers = {};
+        if (!this.props.disabled) {
+            handlers = {
+                onMouseDown: this._handleMouseDown
+            };
+        }
+
         if (this.props.orientation == 'horizontal') {
 
             var innerWidth = this._outerWidth * this.state.percent;
@@ -19250,10 +19259,9 @@ var Slider = _react2.default.createClass({
         // also let props.style pass through
         backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
             cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+            opacity: this.props.disabled ? 0.5 : 1,
             backgroundColor: this._style('bgColor')
         });
-
-        this.props.disabled && (backgroundStyle['opacity'] = 0.5);
 
         foregroundStyle = Object.assign(foregroundStyle, {
             backgroundColor: this._style('fgColor')
@@ -19261,7 +19269,7 @@ var Slider = _react2.default.createClass({
 
         return _react2.default.createElement(
             'div',
-            { ref: 'outer', style: backgroundStyle, onMouseDown: this._handleMouseDown },
+            _extends({ ref: 'outer', style: backgroundStyle }, handlers),
             _react2.default.createElement('div', { style: foregroundStyle }),
             _react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
         );
@@ -19270,9 +19278,7 @@ var Slider = _react2.default.createClass({
     // ============================= Handlers ========================================
 
     _handleMouseDown: function _handleMouseDown(e) {
-        if (this.props.disabled) {
-            return;
-        }
+
         document.addEventListener('mousemove', this._handleMouseMove, false);
         document.addEventListener('mouseup', this._handleMouseUp, false);
         this._update(e);
