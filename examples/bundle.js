@@ -21,7 +21,6 @@ var Application = _react2.default.createClass({
         };
     },
     sliderOnChange: function sliderOnChange(value) {
-        console.log('Application handleOnChange: ' + value);
         this.setState({ sliderValue: value });
     },
     render: function render() {
@@ -31,7 +30,28 @@ var Application = _react2.default.createClass({
             _react2.default.createElement(
                 'h3',
                 null,
+                'Info'
+            ),
+            _react2.default.createElement(
+                'pre',
+                null,
+                '\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange -> parent updates and pass new prop value -> componentWillReceiveProps -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState -> component emit onChange -> parent receives event -> component ignores defaultValue changes in componentWillReceiveProps\n                '
+            ),
+            _react2.default.createElement(
+                'h3',
+                null,
                 'Sliders'
+            ),
+            _react2.default.createElement(
+                'pre',
+                null,
+                '\n<Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange} style={{}} />\n<Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange}\n    style={{width: \'100%\', bgColor: \'#003366\'}} debug={false} />\n<Slider name="slider_3"  defaultValue={this.state.sliderValue} start={-2} end={2} step={1}\n    onChange={this.sliderOnChange} orientation="vertical" style={{height: \'100%\'}} />\n<Slider name="slider_4"  value={this.state.sliderValue} start={-2} end={2} step={1} disabled={true}\n    onChange={this.sliderOnChange} orientation="vertical"\n    style={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n    debug={false} />\n                    '
+            ),
+            _react2.default.createElement(
+                'p',
+                null,
+                'value: ',
+                this.state.sliderValue
             ),
             _react2.default.createElement(
                 'div',
@@ -42,12 +62,12 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, style: {} })
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, style: { width: '75%', bgColor: '#003366' } })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, style: { width: '100%', bgColor: '#003366' }, debug: false })
                     )
                 ),
                 _react2.default.createElement(
@@ -56,12 +76,12 @@ var Application = _react2.default.createClass({
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '100%' } })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, step: 1, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '100%' } })
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, disabled: true, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' } })
+                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, step: 1, disabled: true, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' }, debug: false })
                     )
                 )
             )
@@ -19136,6 +19156,26 @@ function valueInRangePropType(props, propName, componentName) {
     }
 }
 
+function stepPropType(props, propName, componentName) {
+    var error = _react2.default.PropTypes.number(props, propName, componentName);
+    if (error !== null) {
+        return error;
+    }
+
+    var value = props[propName];
+
+    if (value === null) {
+        return;
+    }
+
+    var range = props.end - props.start;
+    var stepsNum = range / value;
+
+    if (stepsNum != parseInt(stepsNum)) {
+        return new Error(propName + (' (' + value + ') does not fit in range (' + props.start + '..' + props.end + ')'));
+    }
+}
+
 // =============================== Helpers ===============================
 
 function valueInRange(value, props) {
@@ -19167,7 +19207,7 @@ var Slider = _react2.default.createClass({
         // optional with defaults
         start: startEndPropType,
         end: startEndPropType,
-        step: _react2.default.PropTypes.number,
+        step: stepPropType,
         orientation: _react2.default.PropTypes.string,
         disabled: _react2.default.PropTypes.bool,
 
@@ -19180,7 +19220,7 @@ var Slider = _react2.default.createClass({
     /*
     additional API:
         style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
-        any other style property is passed through when not intentionally overridden
+        Any other style property is passed through when not intentionally overridden
     */
 
     getDefaultProps: function getDefaultProps() {
@@ -19278,7 +19318,6 @@ var Slider = _react2.default.createClass({
     // ============================= Handlers ========================================
 
     _handleMouseDown: function _handleMouseDown(e) {
-
         document.addEventListener('mousemove', this._handleMouseMove, false);
         document.addEventListener('mouseup', this._handleMouseUp, false);
         this._update(e);
@@ -19316,26 +19355,48 @@ var Slider = _react2.default.createClass({
     _eventToPercent: function _eventToPercent(e) {
         if (this.props.orientation == 'horizontal') {
             var positionX = e.pageX - this._offsetLeft;
-            return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(2)));
+            return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
         } else {
             var positionY = e.pageY - this._offsetTop;
-            return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(2)));
+            return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
         }
     },
     _valueToPercent: function _valueToPercent(value) {
+        var stepping = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
         var range = this.props.end - this.props.start;
         var position = value - this.props.start;
-        return this._stepping(parseFloat((position / range).toFixed(2)));
+        var percent = parseFloat((position / range).toFixed(5));
+        return stepping ? this._stepping(percent) : percent;
     },
     _percentToValue: function _percentToValue(percent) {
         var range = this.props.end - this.props.start;
-        return parseFloat((range * percent + this.props.start).toFixed(2));
+        return parseFloat((range * percent + this.props.start).toFixed(5));
     },
     _getValue: function _getValue() {
         return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
     },
     _stepping: function _stepping(percent) {
-        return percent;
+        if (this.props.step === null || percent > 1 || percent < 0) {
+            return percent;
+        }
+
+        var stepsNum = (this.props.end - this.props.start) / this.props.step;
+        var stepUnit = 1 / stepsNum;
+        var steps = [];
+        for (var s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
+            steps.push(s);
+        }
+        var halfStep = steps[1] / 2;
+
+        for (var i = stepsNum; i > 0; i--) {
+            if (percent >= steps[i] - halfStep) {
+                return steps[i];
+            } else if (percent > steps[i - 1]) {
+                return steps[i - 1];
+            }
+        }
+        return 0;
     },
     _update: function _update(e) {
         var percent = this._eventToPercent(e);

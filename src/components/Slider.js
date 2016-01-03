@@ -29,6 +29,24 @@ function valueInRangePropType (props, propName, componentName) {
     }
 }
 
+function stepPropType(props, propName, componentName) {
+    let error = React.PropTypes.number(props, propName, componentName);
+    if (error !== null) {
+        return error;
+    }
+
+    let value = props[propName];
+
+    if (value === null) { return; }
+
+    let range = props.end - props.start;
+    let stepsNum = range / value;
+
+    if (stepsNum != parseInt(stepsNum)) {
+        return new Error(propName + ` (${value}) does not fit in range (${props.start}..${props.end})`);
+    }
+}
+
 // =============================== Helpers ===============================
 
 function valueInRange(value, props) {
@@ -59,7 +77,7 @@ const Slider = React.createClass({
         // optional with defaults
         start: startEndPropType,
         end: startEndPropType,
-        step: React.PropTypes.number,
+        step: stepPropType,
         orientation: React.PropTypes.string,
         disabled: React.PropTypes.bool,
 
@@ -72,7 +90,7 @@ const Slider = React.createClass({
     /*
     additional API:
         style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
-        any other style property is passed through when not intentionally overridden
+        Any other style property is passed through when not intentionally overridden
     */
 
     getDefaultProps() {
@@ -136,6 +154,7 @@ const Slider = React.createClass({
                 width: `${innerWidth}px`,
                 height: '100%'
             };
+
         } else {
 
             let innerHeight = this._outerHeight * this.state.percent;
@@ -149,6 +168,7 @@ const Slider = React.createClass({
                 height: `${innerHeight}px`,
                 width: '100%'
             };
+
         }
 
         // also let props.style pass through
@@ -173,7 +193,6 @@ const Slider = React.createClass({
     // ============================= Handlers ========================================
 
     _handleMouseDown(e) {
-
         document.addEventListener('mousemove', this._handleMouseMove, false);
         document.addEventListener('mouseup', this._handleMouseUp, false);
         this._update(e);
@@ -210,22 +229,23 @@ const Slider = React.createClass({
     _eventToPercent(e) {
         if (this.props.orientation == 'horizontal') {
             let positionX = e.pageX - this._offsetLeft;
-            return this._stepping(parseFloat((positionX/this._outerWidth).toFixed(2)));
+            return this._stepping(parseFloat((positionX/this._outerWidth).toFixed(5)));
         } else {
             let positionY = e.pageY - this._offsetTop;
-            return this._stepping(parseFloat((positionY/this._outerHeight).toFixed(2)));
+            return this._stepping(parseFloat((positionY/this._outerHeight).toFixed(5)));
         }
     },
 
-    _valueToPercent(value) {
+    _valueToPercent(value, stepping=true) {
         let range = this.props.end - this.props.start;
         let position = value - this.props.start;
-        return this._stepping(parseFloat((position/range).toFixed(2)));
+        let percent = parseFloat((position/range).toFixed(5));
+        return stepping ? this._stepping(percent) : percent;
     },
 
     _percentToValue(percent) {
         let range = this.props.end - this.props.start;
-        return parseFloat((range * percent + this.props.start).toFixed(2));
+        return parseFloat((range * percent + this.props.start).toFixed(5));
     },
 
     _getValue() {
@@ -238,7 +258,24 @@ const Slider = React.createClass({
     },
 
     _stepping(percent) {
-        return percent;
+        if (this.props.step === null || percent > 1 || percent < 0) { return percent; }
+
+        let stepsNum = (this.props.end - this.props.start) / this.props.step;
+        let stepUnit = 1 / stepsNum;
+        let steps = [];
+        for (let s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
+            steps.push(s);
+        }
+        let halfStep = steps[1] / 2;
+
+        for (let i = stepsNum; i > 0; i--) {
+            if (percent >= steps[i] - halfStep) {
+                return steps[i];
+            } else if (percent > steps[i - 1]) {
+                return steps[i - 1];
+            }
+        }
+        return 0;
     },
 
     _update(e) {
