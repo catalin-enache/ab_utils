@@ -35,7 +35,7 @@ var Application = _react2.default.createClass({
             _react2.default.createElement(
                 'pre',
                 null,
-                '\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange -> parent updates and pass new prop value -> componentWillReceiveProps -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState -> component emit onChange -> parent receives event -> component ignores defaultValue changes in componentWillReceiveProps\n                '
+                '\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange\n    -> parent updates and pass new prop value\n    -> componentWillReceiveProps\n    -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState\n    -> component emit onChange\n    -> parent receives event\n    -> component ignores eventual defaultValue changes in componentWillReceiveProps\n                '
             ),
             _react2.default.createElement(
                 'h3',

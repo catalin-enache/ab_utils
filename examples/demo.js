@@ -23,10 +23,16 @@ const Application = React.createClass({
                 <h3>Info</h3>
                 <pre>{`
 Controlled components (those having 'value') update themselves through their parent via componentWillReceiveProps.
-Flow: component emits onChange -> parent updates and pass new prop value -> componentWillReceiveProps -> component setState
+Flow: component emits onChange
+    -> parent updates and pass new prop value
+    -> componentWillReceiveProps
+    -> component setState
 
 Uncontrolled components (those having 'defaultValue') update themselves by their own, then emit onChange.
-Flow: component setState -> component emit onChange -> parent receives event -> component ignores defaultValue changes in componentWillReceiveProps
+Flow: component setState
+    -> component emit onChange
+    -> parent receives event
+    -> component ignores eventual defaultValue changes in componentWillReceiveProps
                 `}</pre>
                 <h3>Sliders</h3>
                 <pre>
