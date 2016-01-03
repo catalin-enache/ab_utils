@@ -66,6 +66,7 @@ const Slider = React.createClass({
     _outerHeight: 0,
     _offsetLeft: 0,
     _offsetTop: 0,
+    _dragRunning: false,
 
     // ======================= Mixins ===================================
 
