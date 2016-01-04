@@ -14,79 +14,86 @@ var _src = require('../src');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Application = _react2.default.createClass({
-    displayName: 'Application',
-    getInitialState: function getInitialState() {
-        return {
-            sliderValue: 0
-        };
-    },
-    sliderOnChange: function sliderOnChange(value) {
-        this.setState({ sliderValue: value });
-    },
-    render: function render() {
-        return _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-                'h3',
-                null,
-                'Info'
-            ),
-            _react2.default.createElement(
-                'pre',
-                null,
-                '\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange\n    -> parent updates and pass new prop value\n    -> componentWillReceiveProps\n    -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState\n    -> component emit onChange\n    -> parent receives event\n    -> component ignores eventual defaultValue changes in componentWillReceiveProps\n                '
-            ),
-            _react2.default.createElement(
-                'h3',
-                null,
-                'Sliders'
-            ),
-            _react2.default.createElement(
-                'pre',
-                null,
-                '\n<Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange} style={{}} />\n<Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange}\n    style={{width: \'100%\', bgColor: \'#003366\'}} debug={false} />\n<Slider name="slider_3"  defaultValue={this.state.sliderValue} start={-2} end={2} step={1}\n    onChange={this.sliderOnChange} orientation="vertical" style={{height: \'100%\'}} />\n<Slider name="slider_4"  value={this.state.sliderValue} start={-2} end={2} step={1} disabled={true}\n    onChange={this.sliderOnChange} orientation="vertical"\n    style={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n    debug={false} />\n                    '
-            ),
-            _react2.default.createElement(
-                'p',
-                null,
-                'value: ',
-                this.state.sliderValue
-            ),
-            _react2.default.createElement(
-                'div',
-                { className: 'sliders clearfix' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'horizontalSliders' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, style: {} })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'horizontalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2, onChange: this.sliderOnChange, style: { width: '100%', bgColor: '#003366' }, debug: false })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'verticalSliders clearfix' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, step: 1, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '100%' } })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'verticalSliderWrapper' },
-                        _react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, step: 1, disabled: true, onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' }, debug: false })
-                    )
-                )
-            )
-        );
-    }
+	displayName: 'Application',
+	getInitialState: function getInitialState() {
+		return {
+			sliderValue: 0
+		};
+	},
+	sliderOnChange: function sliderOnChange(value) {
+		this.setState({ sliderValue: value });
+	},
+	render: function render() {
+		return _react2.default.createElement(
+			'div',
+			null,
+			_react2.default.createElement(
+				'h3',
+				null,
+				'Info'
+			),
+			_react2.default.createElement(
+				'pre',
+				null,
+				'\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange\n    -> parent updates and pass new prop value\n    -> componentWillReceiveProps\n    -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState\n    -> component emit onChange\n    -> parent receives event\n    -> component ignores eventual defaultValue changes in componentWillReceiveProps\n                '
+			),
+			_react2.default.createElement(
+				'h3',
+				null,
+				'Sliders'
+			),
+			_react2.default.createElement(
+				'pre',
+				null,
+				'\n<Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange} style={{}} />\n<Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange}\n    style={{width: \'100%\', bgColor: \'#003366\'}} debug={false} />\n<Slider name="slider_3"  defaultValue={this.state.sliderValue} start={-2} end={2} step={1}\n    onChange={this.sliderOnChange} orientation="vertical" style={{height: \'100%\'}} />\n<Slider name="slider_4"  value={this.state.sliderValue} start={-2} end={2} step={1} disabled={true}\n    onChange={this.sliderOnChange} orientation="vertical"\n    style={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n    debug={false} />\n                    '
+			),
+			_react2.default.createElement(
+				'p',
+				null,
+				'value: ',
+				this.state.sliderValue
+			),
+			_react2.default.createElement(
+				'div',
+				{ className: 'sliders clearfix' },
+				_react2.default.createElement(
+					'div',
+					{ className: 'horizontalSliders' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'horizontalSliderWrapper' },
+						_react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2,
+							onChange: this.sliderOnChange, style: {} })
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'horizontalSliderWrapper' },
+						_react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2,
+							onChange: this.sliderOnChange, style: { width: '100%', bgColor: '#003366' },
+							debug: false })
+					)
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'verticalSliders clearfix' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'verticalSliderWrapper' },
+						_react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, step: 1,
+							onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '100%' } })
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'verticalSliderWrapper' },
+						_react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, step: 1,
+							disabled: true, onChange: this.sliderOnChange, orientation: 'vertical',
+							style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
+							debug: false })
+					)
+				)
+			)
+		);
+	}
 });
 
 _reactDom2.default.render(_react2.default.createElement(Application, null), document.getElementById('content'));
@@ -624,11 +631,15 @@ module.exports = focusNode;
  * Same as document.activeElement but wraps in a try-catch block. In IE it is
  * not safe to call document.activeElement if there is nothing focused.
  *
- * The activeElement will be null only if the document body is not yet defined.
+ * The activeElement will be null only if the document or document body is not yet defined.
  */
-"use strict";
+'use strict';
 
 function getActiveElement() /*?DOMElement*/{
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
   try {
     return document.activeElement || document.body;
   } catch (e) {
@@ -874,7 +885,7 @@ module.exports = hyphenateStyleName;
  * will remain to ensure logic does not differ in production.
  */
 
-function invariant(condition, format, a, b, c, d, e, f) {
+var invariant = function (condition, format, a, b, c, d, e, f) {
   if (process.env.NODE_ENV !== 'production') {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
@@ -888,16 +899,15 @@ function invariant(condition, format, a, b, c, d, e, f) {
     } else {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
-      error = new Error(format.replace(/%s/g, function () {
+      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
         return args[argIndex++];
       }));
-      error.name = 'Invariant Violation';
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
     throw error;
   }
-}
+};
 
 module.exports = invariant;
 }).call(this,require('_process'))
@@ -1162,23 +1172,18 @@ module.exports = performance || {};
 'use strict';
 
 var performance = require('./performance');
-
-var performanceNow;
+var curPerformance = performance;
 
 /**
  * Detect if we can use `window.performance.now()` and gracefully fallback to
  * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
  * because of Facebook's testing infrastructure.
  */
-if (performance.now) {
-  performanceNow = function () {
-    return performance.now();
-  };
-} else {
-  performanceNow = function () {
-    return Date.now();
-  };
+if (!curPerformance || !curPerformance.now) {
+  curPerformance = Date;
 }
+
+var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
 },{"./performance":24}],26:[function(require,module,exports){
@@ -4771,8 +4776,8 @@ var HTMLDOMPropertyConfig = {
      */
     // autoCapitalize and autoCorrect are supported in Mobile Safari for
     // keyboard hints.
-    autoCapitalize: MUST_USE_ATTRIBUTE,
-    autoCorrect: MUST_USE_ATTRIBUTE,
+    autoCapitalize: null,
+    autoCorrect: null,
     // autoSave allows WebKit/Blink to persist values of input fields on page reloads
     autoSave: null,
     // color is for Safari mask-icon link
@@ -4803,7 +4808,9 @@ var HTMLDOMPropertyConfig = {
     httpEquiv: 'http-equiv'
   },
   DOMPropertyNames: {
+    autoCapitalize: 'autocapitalize',
     autoComplete: 'autocomplete',
+    autoCorrect: 'autocorrect',
     autoFocus: 'autofocus',
     autoPlay: 'autoplay',
     autoSave: 'autosave',
@@ -9246,7 +9253,7 @@ function updateOptionsIfPendingUpdateAndMounted() {
     var value = LinkedValueUtils.getValue(props);
 
     if (value != null) {
-      updateOptions(this, Boolean(props.multiple), value);
+      updateOptions(this, props, value);
     }
   }
 }
@@ -10325,9 +10332,7 @@ var DOM_OPERATION_TYPES = {
   'setValueForProperty': 'update attribute',
   'setValueForAttribute': 'update attribute',
   'deleteValueForProperty': 'remove attribute',
-  'setValueForStyles': 'update styles',
-  'replaceNodeWithMarkup': 'replace',
-  'updateTextContent': 'set textContent'
+  'dangerouslyReplaceNodeWithMarkupByID': 'replace'
 };
 
 function getTotalTime(measurements) {
@@ -15375,7 +15380,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '0.14.5';
+module.exports = '0.14.3';
 },{}],115:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19117,7 +19122,7 @@ module.exports = require('./lib/React');
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
 var _react = require('react');
@@ -19131,55 +19136,55 @@ var _mixin_generic_component2 = _interopRequireDefault(_mixin_generic_component)
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*
-TODO: make tests
-*/
+ TODO: make tests
+ */
 
 // ============================ Custom Validators =================================
 
 function startEndPropType(props, propName, componentName) {
-    var error = _react2.default.PropTypes.number(props, propName, componentName);
-    if (error !== null) return error;
+	var error = _react2.default.PropTypes.number(props, propName, componentName);
+	if (error !== null) return error;
 
-    if (props.start >= props.end) {
-        var errorMsg = propName === 'start' ? 'start should be less than end' : 'end should be greater than start';
-        return new Error(errorMsg);
-    }
+	if (props.start >= props.end) {
+		var errorMsg = propName === 'start' ? 'start should be less than end' : 'end should be greater than start';
+		return new Error(errorMsg);
+	}
 }
 
 function valueInRangePropType(props, propName, componentName) {
-    var error = _react2.default.PropTypes.number(props, propName, componentName);
-    if (error !== null) return error;
+	var error = _react2.default.PropTypes.number(props, propName, componentName);
+	if (error !== null) return error;
 
-    var value = props[propName];
-    if (value !== undefined && !valueInRange(value, props)) {
-        return new Error(propName + ' should be within the range specified by start and end');
-    }
+	var value = props[propName];
+	if (value !== undefined && !valueInRange(value, props)) {
+		return new Error(propName + ' should be within the range specified by start and end');
+	}
 }
 
 function stepPropType(props, propName, componentName) {
-    var error = _react2.default.PropTypes.number(props, propName, componentName);
-    if (error !== null) {
-        return error;
-    }
+	var error = _react2.default.PropTypes.number(props, propName, componentName);
+	if (error !== null) {
+		return error;
+	}
 
-    var value = props[propName];
+	var value = props[propName];
 
-    if (value === null) {
-        return;
-    }
+	if (value === null) {
+		return;
+	}
 
-    var range = props.end - props.start;
-    var stepsNum = range / value;
+	var range = props.end - props.start;
+	var stepsNum = range / value;
 
-    if (stepsNum != parseInt(stepsNum)) {
-        return new Error(propName + (' (' + value + ') does not fit in range (' + props.start + '..' + props.end + ')'));
-    }
+	if (stepsNum != parseInt(stepsNum)) {
+		return new Error(propName + (' (' + value + ') does not fit in range (' + props.start + '..' + props.end + ')'));
+	}
 }
 
 // =============================== Helpers ===============================
 
 function valueInRange(value, props) {
-    return props.start <= value && value <= props.end;
+	return props.start <= value && value <= props.end;
 }
 
 // =============================== Component =============================
@@ -19188,255 +19193,255 @@ var DEFAULT_SIZE = '100px';
 var DEFAULT_THICKNESS = '5px';
 
 var Slider = _react2.default.createClass({
-    displayName: 'Slider',
+	displayName: 'Slider',
 
-    // ======================= Vars ===================================
+	// ======================= Vars ===================================
 
-    _outerWidth: 0,
-    _outerHeight: 0,
-    _offsetLeft: 0,
-    _offsetTop: 0,
-    _dragRunning: false,
+	_outerWidth: 0,
+	_outerHeight: 0,
+	_offsetLeft: 0,
+	_offsetTop: 0,
+	_dragRunning: false,
 
-    // ======================= Mixins ===================================
+	// ======================= Mixins ===================================
 
-    mixins: [_mixin_generic_component2.default],
+	mixins: [_mixin_generic_component2.default],
 
-    // ======================= React APIs ===================================
+	// ======================= React APIs ===================================
 
-    propTypes: {
-        // optional with defaults
-        start: startEndPropType,
-        end: startEndPropType,
-        step: stepPropType,
-        orientation: _react2.default.PropTypes.string,
-        disabled: _react2.default.PropTypes.bool,
+	propTypes: {
+		// optional with defaults
+		start: startEndPropType,
+		end: startEndPropType,
+		step: stepPropType,
+		orientation: _react2.default.PropTypes.string,
+		disabled: _react2.default.PropTypes.bool,
 
-        // optional no defaults
-        value: valueInRangePropType,
-        defaultValue: valueInRangePropType,
-        onChange: _react2.default.PropTypes.func
-    },
+		// optional no defaults
+		value: valueInRangePropType,
+		defaultValue: valueInRangePropType,
+		onChange: _react2.default.PropTypes.func
+	},
 
-    /*
-    additional API:
-        style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
-        Any other style property is passed through when not intentionally overridden
-    */
+	/*
+  additional API:
+  style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+  Any other style property is passed through when not intentionally overridden
+  */
 
-    getDefaultProps: function getDefaultProps() {
-        return {
-            start: -1,
-            end: 1,
-            step: null,
-            orientation: 'horizontal',
-            disabled: false
-        };
-    },
-    getInitialState: function getInitialState() {
-        return {
-            percent: 0,
-            value: this._getValue()
-        };
-    },
-    componentDidMount: function componentDidMount() {
-        this._log('componentDidMount');
-        this._updateVars();
-        var value = this._getValue();
-        var percent = this._valueToPercent(value);
-        this._setPercentValueState(percent, value);
-    },
+	getDefaultProps: function getDefaultProps() {
+		return {
+			start: -1,
+			end: 1,
+			step: null,
+			orientation: 'horizontal',
+			disabled: false
+		};
+	},
+	getInitialState: function getInitialState() {
+		return {
+			percent: 0,
+			value: this._getValue()
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		this._log('componentDidMount');
+		this._updateVars();
+		var value = this._getValue();
+		var percent = this._valueToPercent(value);
+		this._setPercentValueState(percent, value);
+	},
 
-    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-        return nextState.percent !== this.state.percent;
-    },
+	shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+		return nextState.percent !== this.state.percent;
+	},
 
-    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-        if (this._isControlledComponent()) {
-            this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
-            var percent = this._valueToPercent(nextProps.value);
-            this._setPercentValueState(percent, nextProps.value);
-        }
-    },
-    render: function render() {
+	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+		if (this._isControlledComponent()) {
+			this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
+			var percent = this._valueToPercent(nextProps.value);
+			this._setPercentValueState(percent, nextProps.value);
+		}
+	},
+	render: function render() {
 
-        this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
+		this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
 
-        var handlers = {};
-        if (!this.props.disabled) {
-            handlers = {
-                onMouseDown: this._handleMouseDown
-            };
-        }
+		var handlers = {};
+		if (!this.props.disabled) {
+			handlers = {
+				onMouseDown: this._handleMouseDown
+			};
+		}
 
-        if (this.props.orientation == 'horizontal') {
+		if (this.props.orientation == 'horizontal') {
 
-            var innerWidth = this._outerWidth * this.state.percent;
+			var innerWidth = this._outerWidth * this.state.percent;
 
-            var backgroundStyle = {
-                width: this._style('width', DEFAULT_SIZE),
-                height: this._style('height', DEFAULT_THICKNESS)
-            };
+			var backgroundStyle = {
+				width: this._style('width', DEFAULT_SIZE),
+				height: this._style('height', DEFAULT_THICKNESS)
+			};
 
-            var foregroundStyle = {
-                width: innerWidth + 'px',
-                height: '100%'
-            };
-        } else {
+			var foregroundStyle = {
+				width: innerWidth + 'px',
+				height: '100%'
+			};
+		} else {
 
-            var innerHeight = this._outerHeight * this.state.percent;
+			var innerHeight = this._outerHeight * this.state.percent;
 
-            var backgroundStyle = {
-                height: this._style('height', DEFAULT_SIZE),
-                width: this._style('width', DEFAULT_THICKNESS)
-            };
+			var backgroundStyle = {
+				height: this._style('height', DEFAULT_SIZE),
+				width: this._style('width', DEFAULT_THICKNESS)
+			};
 
-            var foregroundStyle = {
-                height: innerHeight + 'px',
-                width: '100%'
-            };
-        }
+			var foregroundStyle = {
+				height: innerHeight + 'px',
+				width: '100%'
+			};
+		}
 
-        // also let props.style pass through
-        backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
-            cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-            opacity: this.props.disabled ? 0.5 : 1,
-            backgroundColor: this._style('bgColor')
-        });
+		// also let props.style pass through
+		backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
+			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+			opacity: this.props.disabled ? 0.5 : 1,
+			backgroundColor: this._style('bgColor')
+		});
 
-        foregroundStyle = Object.assign(foregroundStyle, {
-            backgroundColor: this._style('fgColor')
-        });
+		foregroundStyle = Object.assign(foregroundStyle, {
+			backgroundColor: this._style('fgColor')
+		});
 
-        return _react2.default.createElement(
-            'div',
-            _extends({ ref: 'outer', style: backgroundStyle }, handlers),
-            _react2.default.createElement('div', { style: foregroundStyle }),
-            _react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
-        );
-    },
+		return _react2.default.createElement(
+			'div',
+			_extends({ ref: 'outer', style: backgroundStyle }, handlers),
+			_react2.default.createElement('div', { style: foregroundStyle }),
+			_react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
+		);
+	},
 
-    // ============================= Handlers ========================================
+	// ============================= Handlers ========================================
 
-    _handleMouseDown: function _handleMouseDown(e) {
-        document.addEventListener('mousemove', this._handleMouseMove, false);
-        document.addEventListener('mouseup', this._handleMouseUp, false);
-        this._update(e);
-    },
-    _handleMouseMove: function _handleMouseMove(e) {
-        var _this = this;
+	_handleMouseDown: function _handleMouseDown(e) {
+		document.addEventListener('mousemove', this._handleMouseMove, false);
+		document.addEventListener('mouseup', this._handleMouseUp, false);
+		this._update(e);
+	},
+	_handleMouseMove: function _handleMouseMove(e) {
+		var _this = this;
 
-        if (this._dragRunning) {
-            return;
-        }
-        this._dragRunning = true;
-        requestAnimationFrame(function () {
-            _this._update(e);
-            _this._dragRunning = false;
-        });
-    },
-    _handleMouseUp: function _handleMouseUp(e) {
-        document.removeEventListener('mousemove', this._handleMouseMove, false);
-        document.removeEventListener('mouseup', this._handleMouseUp, false);
-        this._update(e);
-    },
+		if (this._dragRunning) {
+			return;
+		}
+		this._dragRunning = true;
+		requestAnimationFrame(function () {
+			_this._update(e);
+			_this._dragRunning = false;
+		});
+	},
+	_handleMouseUp: function _handleMouseUp(e) {
+		document.removeEventListener('mousemove', this._handleMouseMove, false);
+		document.removeEventListener('mouseup', this._handleMouseUp, false);
+		this._update(e);
+	},
 
-    // ============================ Helpers ===========================================
+	// ============================ Helpers ===========================================
 
-    _updateVars: function _updateVars() {
-        var boundingClientRect = this.refs.outer.getBoundingClientRect();
+	_updateVars: function _updateVars() {
+		var boundingClientRect = this.refs.outer.getBoundingClientRect();
 
-        this._outerWidth = parseInt(boundingClientRect.width);
-        this._outerHeight = parseInt(boundingClientRect.height);
-        this._offsetLeft = parseInt(boundingClientRect.left);
-        this._offsetTop = parseInt(boundingClientRect.top);
+		this._outerWidth = parseInt(boundingClientRect.width);
+		this._outerHeight = parseInt(boundingClientRect.height);
+		this._offsetLeft = parseInt(boundingClientRect.left);
+		this._offsetTop = parseInt(boundingClientRect.top);
 
-        this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
-    },
-    _eventToPercent: function _eventToPercent(e) {
-        if (this.props.orientation == 'horizontal') {
-            var positionX = e.pageX - this._offsetLeft;
-            return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
-        } else {
-            var positionY = e.pageY - this._offsetTop;
-            return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
-        }
-    },
-    _valueToPercent: function _valueToPercent(value) {
-        var stepping = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+		this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
+	},
+	_eventToPercent: function _eventToPercent(e) {
+		if (this.props.orientation == 'horizontal') {
+			var positionX = e.pageX - this._offsetLeft;
+			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+		} else {
+			var positionY = e.pageY - this._offsetTop;
+			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+		}
+	},
+	_valueToPercent: function _valueToPercent(value) {
+		var stepping = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
-        var range = this.props.end - this.props.start;
-        var position = value - this.props.start;
-        var percent = parseFloat((position / range).toFixed(5));
-        return stepping ? this._stepping(percent) : percent;
-    },
-    _percentToValue: function _percentToValue(percent) {
-        var range = this.props.end - this.props.start;
-        return parseFloat((range * percent + this.props.start).toFixed(5));
-    },
-    _getValue: function _getValue() {
-        return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
-    },
-    _stepping: function _stepping(percent) {
-        if (this.props.step === null || percent > 1 || percent < 0) {
-            return percent;
-        }
+		var range = this.props.end - this.props.start;
+		var position = value - this.props.start;
+		var percent = parseFloat((position / range).toFixed(5));
+		return stepping ? this._stepping(percent) : percent;
+	},
+	_percentToValue: function _percentToValue(percent) {
+		var range = this.props.end - this.props.start;
+		return parseFloat((range * percent + this.props.start).toFixed(5));
+	},
+	_getValue: function _getValue() {
+		return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
+	},
+	_stepping: function _stepping(percent) {
+		if (this.props.step === null || percent > 1 || percent < 0) {
+			return percent;
+		}
 
-        var stepsNum = (this.props.end - this.props.start) / this.props.step;
-        var stepUnit = 1 / stepsNum;
-        var steps = [];
-        for (var s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
-            steps.push(s);
-        }
-        var halfStep = steps[1] / 2;
+		var stepsNum = (this.props.end - this.props.start) / this.props.step;
+		var stepUnit = 1 / stepsNum;
+		var steps = [];
+		for (var s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
+			steps.push(s);
+		}
+		var halfStep = steps[1] / 2;
 
-        for (var i = stepsNum; i > 0; i--) {
-            if (percent >= steps[i] - halfStep) {
-                return steps[i];
-            } else if (percent > steps[i - 1]) {
-                return steps[i - 1];
-            }
-        }
-        return 0;
-    },
-    _update: function _update(e) {
-        var percent = this._eventToPercent(e);
-        var value = this._percentToValue(percent);
-        var start = this.props.start;
-        var end = this.props.end;
+		for (var i = stepsNum; i > 0; i--) {
+			if (percent >= steps[i] - halfStep) {
+				return steps[i];
+			} else if (percent > steps[i - 1]) {
+				return steps[i - 1];
+			}
+		}
+		return 0;
+	},
+	_update: function _update(e) {
+		var percent = this._eventToPercent(e);
+		var value = this._percentToValue(percent);
+		var start = this.props.start;
+		var end = this.props.end;
 
-        value = value < start ? start : value > end ? end : value;
-        percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+		value = value < start ? start : value > end ? end : value;
+		percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
 
-        if (this._isControlledComponent() && this.state.value !== value) {
-            this._emitValueChangeEvent(value);
-        } else {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
-        }
-    },
-    _emitValueChangeEvent: function _emitValueChangeEvent(value) {
-        if (this.props.onChange === undefined) {
-            return;
-        }
-        this._log('_emitValueChangeEvent => value: ' + value);
-        this.props.onChange(value);
-    },
-    _setPercentValueState: function _setPercentValueState(percent, value) {
-        var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+		if (this._isControlledComponent() && this.state.value !== value) {
+			this._emitValueChangeEvent(value);
+		} else {
+			this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
+		}
+	},
+	_emitValueChangeEvent: function _emitValueChangeEvent(value) {
+		if (this.props.onChange === undefined) {
+			return;
+		}
+		this._log('_emitValueChangeEvent => value: ' + value);
+		this.props.onChange(value);
+	},
+	_setPercentValueState: function _setPercentValueState(percent, value) {
+		var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
 
-        if (this.state.percent === percent) {
-            return;
-        }
-        this._log('_setPercentValueState => percent from: ' + this.state.percent + ', ' + this.state.value + ' to: ' + percent + ', ' + value);
-        this.setState({ percent: percent, value: value }, callback);
-    },
-    _setPercentValueStateAndEmitValueChangedEvent: function _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
-        var _this2 = this;
+		if (this.state.percent === percent) {
+			return;
+		}
+		this._log('_setPercentValueState => percent from: ' + this.state.percent + ', ' + this.state.value + ' to: ' + percent + ', ' + value);
+		this.setState({ percent: percent, value: value }, callback);
+	},
+	_setPercentValueStateAndEmitValueChangedEvent: function _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
+		var _this2 = this;
 
-        this._setPercentValueState(percent, value, function () {
-            _this2._emitValueChangeEvent(value);
-        });
-    }
+		this._setPercentValueState(percent, value, function () {
+			_this2._emitValueChangeEvent(value);
+		});
+	}
 });
 
 exports.default = Slider;
@@ -19445,7 +19450,7 @@ exports.default = Slider;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
 var _react = require('react');
@@ -19455,17 +19460,17 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var TextField = _react2.default.createClass({
-    displayName: 'TextField',
+	displayName: 'TextField',
 
-    propTypes: {},
+	propTypes: {},
 
-    render: function render() {
-        return _react2.default.createElement(
-            'div',
-            null,
-            'TextField'
-        );
-    }
+	render: function render() {
+		return _react2.default.createElement(
+			'div',
+			null,
+			'TextField'
+		);
+	}
 });
 
 exports.default = TextField;
@@ -19495,7 +19500,7 @@ exports.TextField = _TextField2.default;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
 var _react = require('react');
@@ -19509,40 +19514,40 @@ var _style3 = _interopRequireDefault(_style2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var MixinGenericComponent = {
-    propTypes: {
-        // required
-        name: _react2.default.PropTypes.string.isRequired,
+	propTypes: {
+		// required
+		name: _react2.default.PropTypes.string.isRequired,
 
-        // optional with defaults
-        debug: _react2.default.PropTypes.bool,
+		// optional with defaults
+		debug: _react2.default.PropTypes.bool,
 
-        // optional no defaults
-        cStyle: _react2.default.PropTypes.object
-    },
+		// optional no defaults
+		cStyle: _react2.default.PropTypes.object
+	},
 
-    getDefaultProps: function getDefaultProps() {
-        return {
-            debug: false
-        };
-    },
-    componentDidMount: function componentDidMount() {
-        this.isMounted = true;
-    },
-    componentWillUnmount: function componentWillUnmount() {
-        this.isMounted = false;
-    },
-    _log: function _log(msg) {
-        this.props.debug && console.log(this.props.name + ' > ' + msg);
-    },
-    _isControlledComponent: function _isControlledComponent() {
-        return this.props.value !== undefined;
-    },
-    _style: function _style(key, _default) {
-        if (!this.__style) {
-            this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.style || {});
-        }
-        return this.__style[key] !== undefined ? this.__style[key] : _default;
-    }
+	getDefaultProps: function getDefaultProps() {
+		return {
+			debug: false
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		this.isMounted = true;
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		this.isMounted = false;
+	},
+	_log: function _log(msg) {
+		this.props.debug && console.log(this.props.name + ' > ' + msg);
+	},
+	_isControlledComponent: function _isControlledComponent() {
+		return this.props.value !== undefined;
+	},
+	_style: function _style(key, _default) {
+		if (!this.__style) {
+			this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.style || {});
+		}
+		return this.__style[key] !== undefined ? this.__style[key] : _default;
+	}
 };
 
 exports.default = MixinGenericComponent;

@@ -3,16 +3,15 @@
 import React from 'react';
 
 const TextField = React.createClass({
-    propTypes: {
-    },
+	propTypes: {},
 
-    render() {
-        return (
-            <div>
-                TextField
-            </div>
-        );
-    }
+	render() {
+		return (
+			<div>
+				TextField
+			</div>
+		);
+	}
 });
 
 export default TextField;

@@ -4,53 +4,55 @@ import React from 'react';
 import MixinGenericComponent from '../mixins/mixin_generic_component';
 
 /*
-TODO: make tests
-*/
+ TODO: make tests
+ */
 
 // ============================ Custom Validators =================================
 
-function startEndPropType (props, propName, componentName) {
-    let error = React.PropTypes.number(props, propName, componentName);
-    if (error !== null) return error;
+function startEndPropType(props, propName, componentName) {
+	let error = React.PropTypes.number(props, propName, componentName);
+	if (error !== null) return error;
 
-    if (props.start >= props.end) {
-        let errorMsg = (propName === 'start') ? 'start should be less than end' : 'end should be greater than start';
-        return new Error(errorMsg);
-    }
+	if (props.start >= props.end) {
+		let errorMsg = (propName === 'start') ? 'start should be less than end' : 'end should be greater than start';
+		return new Error(errorMsg);
+	}
 }
 
-function valueInRangePropType (props, propName, componentName) {
-    let error = React.PropTypes.number(props, propName, componentName);
-    if (error !== null) return error;
+function valueInRangePropType(props, propName, componentName) {
+	let error = React.PropTypes.number(props, propName, componentName);
+	if (error !== null) return error;
 
-    let value = props[propName];
-    if (value !== undefined && !valueInRange(value, props)) {
-        return new Error(propName + ' should be within the range specified by start and end');
-    }
+	let value = props[propName];
+	if (value !== undefined && !valueInRange(value, props)) {
+		return new Error(propName + ' should be within the range specified by start and end');
+	}
 }
 
 function stepPropType(props, propName, componentName) {
-    let error = React.PropTypes.number(props, propName, componentName);
-    if (error !== null) {
-        return error;
-    }
+	let error = React.PropTypes.number(props, propName, componentName);
+	if (error !== null) {
+		return error;
+	}
 
-    let value = props[propName];
+	let value = props[propName];
 
-    if (value === null) { return; }
+	if (value === null) {
+		return;
+	}
 
-    let range = props.end - props.start;
-    let stepsNum = range / value;
+	let range = props.end - props.start;
+	let stepsNum = range / value;
 
-    if (stepsNum != parseInt(stepsNum)) {
-        return new Error(propName + ` (${value}) does not fit in range (${props.start}..${props.end})`);
-    }
+	if (stepsNum != parseInt(stepsNum)) {
+		return new Error(propName + ` (${value}) does not fit in range (${props.start}..${props.end})`);
+	}
 }
 
 // =============================== Helpers ===============================
 
 function valueInRange(value, props) {
-    return props.start <= value && value <= props.end;
+	return props.start <= value && value <= props.end;
 }
 
 // =============================== Component =============================
@@ -60,258 +62,266 @@ const DEFAULT_THICKNESS = '5px';
 
 const Slider = React.createClass({
 
-    // ======================= Vars ===================================
+	// ======================= Vars ===================================
 
-    _outerWidth: 0,
-    _outerHeight: 0,
-    _offsetLeft: 0,
-    _offsetTop: 0,
-    _dragRunning: false,
+	_outerWidth: 0,
+	_outerHeight: 0,
+	_offsetLeft: 0,
+	_offsetTop: 0,
+	_dragRunning: false,
 
-    // ======================= Mixins ===================================
+	// ======================= Mixins ===================================
 
-    mixins: [MixinGenericComponent],
+	mixins: [MixinGenericComponent],
 
-    // ======================= React APIs ===================================
+	// ======================= React APIs ===================================
 
-    propTypes: {
-        // optional with defaults
-        start: startEndPropType,
-        end: startEndPropType,
-        step: stepPropType,
-        orientation: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+	propTypes: {
+		// optional with defaults
+		start: startEndPropType,
+		end: startEndPropType,
+		step: stepPropType,
+		orientation: React.PropTypes.string,
+		disabled: React.PropTypes.bool,
 
-        // optional no defaults
-        value: valueInRangePropType,
-        defaultValue: valueInRangePropType,
-        onChange: React.PropTypes.func
-    },
+		// optional no defaults
+		value: valueInRangePropType,
+		defaultValue: valueInRangePropType,
+		onChange: React.PropTypes.func
+	},
 
-    /*
-    additional API:
-        style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
-        Any other style property is passed through when not intentionally overridden
-    */
+	/*
+	 additional API:
+	 style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+	 Any other style property is passed through when not intentionally overridden
+	 */
 
-    getDefaultProps() {
-        return {
-            start: -1,
-            end: 1,
-            step: null,
-            orientation: 'horizontal',
-            disabled: false
-        };
-    },
+	getDefaultProps() {
+		return {
+			start: -1,
+			end: 1,
+			step: null,
+			orientation: 'horizontal',
+			disabled: false
+		};
+	},
 
-    getInitialState() {
-        return {
-            percent: 0,
-            value: this._getValue()
-        };
-    },
+	getInitialState() {
+		return {
+			percent: 0,
+			value: this._getValue()
+		};
+	},
 
-    componentDidMount() {
-        this._log(`componentDidMount`);
-        this._updateVars();
-        let value = this._getValue();
-        let percent = this._valueToPercent(value);
-        this._setPercentValueState(percent, value);
-    },
+	componentDidMount() {
+		this._log(`componentDidMount`);
+		this._updateVars();
+		let value = this._getValue();
+		let percent = this._valueToPercent(value);
+		this._setPercentValueState(percent, value);
+	},
 
-    shouldComponentUpdate: function(nextProps, nextState) {
-        return nextState.percent !== this.state.percent;
-    },
+	shouldComponentUpdate: function (nextProps, nextState) {
+		return nextState.percent !== this.state.percent;
+	},
 
-    componentWillReceiveProps(nextProps) {
-        if (this._isControlledComponent()) {
-            this._log(`componentWillReceiveProps => nextProps: ${JSON.stringify(nextProps)}`);
-            let percent = this._valueToPercent(nextProps.value);
-            this._setPercentValueState(percent, nextProps.value);
-        }
-    },
+	componentWillReceiveProps(nextProps) {
+		if (this._isControlledComponent()) {
+			this._log(`componentWillReceiveProps => nextProps: ${JSON.stringify(nextProps)}`);
+			let percent = this._valueToPercent(nextProps.value);
+			this._setPercentValueState(percent, nextProps.value);
+		}
+	},
 
-    render() {
+	render() {
 
-        this._log(`render => state: ${JSON.stringify(this.state)} | props: ${JSON.stringify(this.props)}`);
+		this._log(`render => state: ${JSON.stringify(this.state)} | props: ${JSON.stringify(this.props)}`);
 
-        let handlers = {};
-        if (!this.props.disabled) {
-            handlers = {
-                onMouseDown: this._handleMouseDown
-            }
-        }
+		let handlers = {};
+		if (!this.props.disabled) {
+			handlers = {
+				onMouseDown: this._handleMouseDown
+			}
+		}
 
-        if (this.props.orientation == 'horizontal') {
+		if (this.props.orientation == 'horizontal') {
 
-            let innerWidth = this._outerWidth * this.state.percent;
+			let innerWidth = this._outerWidth * this.state.percent;
 
-            var backgroundStyle = {
-                width: this._style('width', DEFAULT_SIZE),
-                height: this._style('height', DEFAULT_THICKNESS)
-            };
+			var backgroundStyle = {
+				width: this._style('width', DEFAULT_SIZE),
+				height: this._style('height', DEFAULT_THICKNESS)
+			};
 
-            var foregroundStyle = {
-                width: `${innerWidth}px`,
-                height: '100%'
-            };
+			var foregroundStyle = {
+				width: `${innerWidth}px`,
+				height: '100%'
+			};
 
-        } else {
+		} else {
 
-            let innerHeight = this._outerHeight * this.state.percent;
+			let innerHeight = this._outerHeight * this.state.percent;
 
-            var backgroundStyle = {
-                height: this._style('height', DEFAULT_SIZE),
-                width: this._style('width', DEFAULT_THICKNESS)
-            };
+			var backgroundStyle = {
+				height: this._style('height', DEFAULT_SIZE),
+				width: this._style('width', DEFAULT_THICKNESS)
+			};
 
-            var foregroundStyle = {
-                height: `${innerHeight}px`,
-                width: '100%'
-            };
+			var foregroundStyle = {
+				height: `${innerHeight}px`,
+				width: '100%'
+			};
 
-        }
+		}
 
-        // also let props.style pass through
-        backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
-            cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-            opacity: this.props.disabled ? 0.5 : 1,
-            backgroundColor: this._style('bgColor')
-        });
+		// also let props.style pass through
+		backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
+			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+			opacity: this.props.disabled ? 0.5 : 1,
+			backgroundColor: this._style('bgColor')
+		});
 
-        foregroundStyle = Object.assign(foregroundStyle, {
-            backgroundColor: this._style('fgColor')
-        });
+		foregroundStyle = Object.assign(foregroundStyle, {
+			backgroundColor: this._style('fgColor')
+		});
 
-        return (
-            <div ref="outer" style={backgroundStyle} {...handlers}>
-                <div style={foregroundStyle}></div>
-                <input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
-            </div>
-        );
-    },
+		return (
+			<div ref="outer" style={backgroundStyle} {...handlers}>
+				<div style={foregroundStyle}></div>
+				<input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled}/>
+			</div>
+		);
+	},
 
-    // ============================= Handlers ========================================
+	// ============================= Handlers ========================================
 
-    _handleMouseDown(e) {
-        document.addEventListener('mousemove', this._handleMouseMove, false);
-        document.addEventListener('mouseup', this._handleMouseUp, false);
-        this._update(e);
-    },
+	_handleMouseDown(e) {
+		document.addEventListener('mousemove', this._handleMouseMove, false);
+		document.addEventListener('mouseup', this._handleMouseUp, false);
+		this._update(e);
+	},
 
-    _handleMouseMove(e) {
-        if (this._dragRunning) { return; }
-        this._dragRunning = true;
-        requestAnimationFrame(() => {
-            this._update(e);
-            this._dragRunning = false;
-        });
-    },
+	_handleMouseMove(e) {
+		if (this._dragRunning) {
+			return;
+		}
+		this._dragRunning = true;
+		requestAnimationFrame(() => {
+			this._update(e);
+			this._dragRunning = false;
+		});
+	},
 
-    _handleMouseUp(e) {
-        document.removeEventListener('mousemove', this._handleMouseMove, false);
-        document.removeEventListener('mouseup', this._handleMouseUp, false);
-        this._update(e);
-    },
+	_handleMouseUp(e) {
+		document.removeEventListener('mousemove', this._handleMouseMove, false);
+		document.removeEventListener('mouseup', this._handleMouseUp, false);
+		this._update(e);
+	},
 
-    // ============================ Helpers ===========================================
+	// ============================ Helpers ===========================================
 
-    _updateVars() {
-        let boundingClientRect = this.refs.outer.getBoundingClientRect();
+	_updateVars() {
+		let boundingClientRect = this.refs.outer.getBoundingClientRect();
 
-        this._outerWidth = parseInt(boundingClientRect.width);
-        this._outerHeight = parseInt(boundingClientRect.height);
-        this._offsetLeft = parseInt(boundingClientRect.left);
-        this._offsetTop = parseInt(boundingClientRect.top);
+		this._outerWidth = parseInt(boundingClientRect.width);
+		this._outerHeight = parseInt(boundingClientRect.height);
+		this._offsetLeft = parseInt(boundingClientRect.left);
+		this._offsetTop = parseInt(boundingClientRect.top);
 
-        this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
-    },
+		this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
+	},
 
-    _eventToPercent(e) {
-        if (this.props.orientation == 'horizontal') {
-            let positionX = e.pageX - this._offsetLeft;
-            return this._stepping(parseFloat((positionX/this._outerWidth).toFixed(5)));
-        } else {
-            let positionY = e.pageY - this._offsetTop;
-            return this._stepping(parseFloat((positionY/this._outerHeight).toFixed(5)));
-        }
-    },
+	_eventToPercent(e) {
+		if (this.props.orientation == 'horizontal') {
+			let positionX = e.pageX - this._offsetLeft;
+			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+		} else {
+			let positionY = e.pageY - this._offsetTop;
+			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+		}
+	},
 
-    _valueToPercent(value, stepping=true) {
-        let range = this.props.end - this.props.start;
-        let position = value - this.props.start;
-        let percent = parseFloat((position/range).toFixed(5));
-        return stepping ? this._stepping(percent) : percent;
-    },
+	_valueToPercent(value, stepping = true) {
+		let range = this.props.end - this.props.start;
+		let position = value - this.props.start;
+		let percent = parseFloat((position / range).toFixed(5));
+		return stepping ? this._stepping(percent) : percent;
+	},
 
-    _percentToValue(percent) {
-        let range = this.props.end - this.props.start;
-        return parseFloat((range * percent + this.props.start).toFixed(5));
-    },
+	_percentToValue(percent) {
+		let range = this.props.end - this.props.start;
+		return parseFloat((range * percent + this.props.start).toFixed(5));
+	},
 
-    _getValue() {
-        return (this.props.value !== undefined
-                ? this.props.value
-                : this.props.defaultValue !== undefined
-                    ? this.props.defaultValue
-                    : this.props.start
-                );
-    },
+	_getValue() {
+		return (this.props.value !== undefined
+				? this.props.value
+				: this.props.defaultValue !== undefined
+				? this.props.defaultValue
+				: this.props.start
+		);
+	},
 
-    _stepping(percent) {
-        if (this.props.step === null || percent > 1 || percent < 0) { return percent; }
+	_stepping(percent) {
+		if (this.props.step === null || percent > 1 || percent < 0) {
+			return percent;
+		}
 
-        let stepsNum = (this.props.end - this.props.start) / this.props.step;
-        let stepUnit = 1 / stepsNum;
-        let steps = [];
-        for (let s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
-            steps.push(s);
-        }
-        let halfStep = steps[1] / 2;
+		let stepsNum = (this.props.end - this.props.start) / this.props.step;
+		let stepUnit = 1 / stepsNum;
+		let steps = [];
+		for (let s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
+			steps.push(s);
+		}
+		let halfStep = steps[1] / 2;
 
-        for (let i = stepsNum; i > 0; i--) {
-            if (percent >= steps[i] - halfStep) {
-                return steps[i];
-            } else if (percent > steps[i - 1]) {
-                return steps[i - 1];
-            }
-        }
-        return 0;
-    },
+		for (let i = stepsNum; i > 0; i--) {
+			if (percent >= steps[i] - halfStep) {
+				return steps[i];
+			} else if (percent > steps[i - 1]) {
+				return steps[i - 1];
+			}
+		}
+		return 0;
+	},
 
-    _update(e) {
-        let percent = this._eventToPercent(e);
-        let value = this._percentToValue(percent);
-        let start = this.props.start;
-        let end = this.props.end;
+	_update(e) {
+		let percent = this._eventToPercent(e);
+		let value = this._percentToValue(percent);
+		let start = this.props.start;
+		let end = this.props.end;
 
-        value = value < start ? start : value > end ? end : value;
-        percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+		value = value < start ? start : value > end ? end : value;
+		percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
 
-        if (this._isControlledComponent() && this.state.value !== value) {
-            this._emitValueChangeEvent(value);
-        } else {
-            this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
-        }
-    },
+		if (this._isControlledComponent() && this.state.value !== value) {
+			this._emitValueChangeEvent(value);
+		} else {
+			this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
+		}
+	},
 
-    _emitValueChangeEvent(value) {
-        if (this.props.onChange === undefined) { return; }
-        this._log(`_emitValueChangeEvent => value: ${value}`);
-        this.props.onChange(value);
-    },
+	_emitValueChangeEvent(value) {
+		if (this.props.onChange === undefined) {
+			return;
+		}
+		this._log(`_emitValueChangeEvent => value: ${value}`);
+		this.props.onChange(value);
+	},
 
-    _setPercentValueState(percent, value, callback=null) {
-        if (this.state.percent === percent) { return; }
-        this._log(`_setPercentValueState => percent from: ${this.state.percent}, ${this.state.value} to: ${percent}, ${value}`);
-        this.setState({percent: percent, value: value}, callback);
-    },
+	_setPercentValueState(percent, value, callback = null) {
+		if (this.state.percent === percent) {
+			return;
+		}
+		this._log(`_setPercentValueState => percent from: ${this.state.percent}, ${this.state.value} to: ${percent}, ${value}`);
+		this.setState({percent: percent, value: value}, callback);
+	},
 
-    _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
-        this._setPercentValueState(percent, value, () => {
-            this._emitValueChangeEvent(value);
-        });
-    }
+	_setPercentValueStateAndEmitValueChangedEvent(percent, value) {
+		this._setPercentValueState(percent, value, () => {
+			this._emitValueChangeEvent(value);
+		});
+	}
 });
 
 export default Slider;
