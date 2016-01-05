@@ -45,7 +45,7 @@ var Application = _react2.default.createClass({
 			_react2.default.createElement(
 				'pre',
 				null,
-				'\n<Slider name="slider_1" defaultValue={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange} style={{}} />\n<Slider name="slider_2" value={this.state.sliderValue} start={-2} end={2}\n    onChange={this.sliderOnChange}\n    style={{width: \'100%\', bgColor: \'#003366\'}} debug={false} />\n<Slider name="slider_3"  defaultValue={this.state.sliderValue} start={-2} end={2} step={1}\n    onChange={this.sliderOnChange} orientation="vertical" style={{height: \'100%\'}} />\n<Slider name="slider_4"  value={this.state.sliderValue} start={-2} end={2} step={1} disabled={true}\n    onChange={this.sliderOnChange} orientation="vertical"\n    style={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n    debug={false} />\n                    '
+				'\n<Slider name="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange}\n\t\tstyle={{}} />\n<Slider name="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange}\n\tstyle={{width: \'100%\', bgColor: \'#003366\'}}\n\tdebug={false} />\n<Slider name="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tonChange={this.sliderOnChange}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}} />\n<Slider name="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange}\n\torientation="vertical"\n\tstyle={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false} />\n                    '
 			),
 			_react2.default.createElement(
 				'p',
@@ -62,15 +62,23 @@ var Application = _react2.default.createClass({
 					_react2.default.createElement(
 						'div',
 						{ className: 'horizontalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_1', defaultValue: this.state.sliderValue, start: -2, end: 2,
-							onChange: this.sliderOnChange, style: {} })
+						_react2.default.createElement(_src.Slider, { name: 'slider_1',
+							defaultValue: this.state.sliderValue,
+							start: -2,
+							end: 2,
+							onChange: this.sliderOnChange,
+							style: {} })
 					),
 					_react2.default.createElement(
 						'div',
 						{ className: 'horizontalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_2', value: this.state.sliderValue, start: -2, end: 2,
-							onChange: this.sliderOnChange, style: { width: '100%', bgColor: '#003366' },
-							debug: false })
+						_react2.default.createElement(_src.Slider, { name: 'slider_2',
+							value: this.state.sliderValue,
+							start: -2,
+							end: 2,
+							onChange: this.sliderOnChange,
+							style: { width: '100%', bgColor: '#003366' },
+							debug: true })
 					)
 				),
 				_react2.default.createElement(
@@ -79,14 +87,26 @@ var Application = _react2.default.createClass({
 					_react2.default.createElement(
 						'div',
 						{ className: 'verticalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_3', defaultValue: this.state.sliderValue, start: -2, end: 2, step: 1,
-							onChange: this.sliderOnChange, orientation: 'vertical', style: { height: '100%' } })
+						_react2.default.createElement(_src.Slider, { name: 'slider_3',
+							defaultValue: this.state.sliderValue,
+							start: -2,
+							end: 2,
+							step: 1,
+							onChange: this.sliderOnChange,
+							orientation: 'vertical',
+							style: { height: '100%' } })
 					),
 					_react2.default.createElement(
 						'div',
 						{ className: 'verticalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_4', value: this.state.sliderValue, start: -2, end: 2, step: 1,
-							disabled: true, onChange: this.sliderOnChange, orientation: 'vertical',
+						_react2.default.createElement(_src.Slider, { name: 'slider_4',
+							value: this.state.sliderValue,
+							start: -2,
+							end: 2,
+							step: 1,
+							disabled: true,
+							onChange: this.sliderOnChange,
+							orientation: 'vertical',
 							style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
 							debug: false })
 					)
@@ -98,7 +118,7 @@ var Application = _react2.default.createClass({
 
 _reactDom2.default.render(_react2.default.createElement(Application, null), document.getElementById('content'));
 
-},{"../src":162,"react":159,"react-dom":30}],2:[function(require,module,exports){
+},{"../src":164,"react":159,"react-dom":30}],2:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19119,7 +19139,7 @@ module.exports = require('./lib/React');
 },{"./lib/React":54}],160:[function(require,module,exports){
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -19129,11 +19149,101 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _mixin_generic_component = require('../mixins/mixin_generic_component');
+var _style2 = require('../style');
 
-var _mixin_generic_component2 = _interopRequireDefault(_mixin_generic_component);
+var _style3 = _interopRequireDefault(_style2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var propTypes = {
+	// required
+	name: _react2.default.PropTypes.string.isRequired,
+
+	// optional with defaults
+	debug: _react2.default.PropTypes.bool
+};
+
+var defaultProps = {
+	debug: false
+};
+
+var GenericComponent = (function (_React$Component) {
+	_inherits(GenericComponent, _React$Component);
+
+	function GenericComponent() {
+		_classCallCheck(this, GenericComponent);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(GenericComponent).apply(this, arguments));
+	}
+
+	_createClass(GenericComponent, [{
+		key: '_log',
+		value: function _log(msg) {
+			this.props.debug && console.log(this.props.name + ' > ' + msg);
+		}
+	}, {
+		key: '_isControlledComponent',
+		value: function _isControlledComponent() {
+			return this.props.value !== undefined;
+		}
+
+		// for Style[this.constructor.displayName] to work the child must specify its value
+
+	}, {
+		key: '_style',
+		value: function _style(key, _default) {
+			if (!this.__style) {
+				this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.style || {});
+			}
+			return this.__style[key] !== undefined ? this.__style[key] : _default;
+		}
+	}]);
+
+	return GenericComponent;
+})(_react2.default.Component);
+
+GenericComponent.propTypes = propTypes;
+
+GenericComponent.defaultProps = defaultProps;
+
+exports.default = GenericComponent;
+
+},{"../style":165,"react":159}],161:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _generic_component = require('./generic_component');
+
+var _generic_component2 = _interopRequireDefault(_generic_component);
+
+var _generic_deco = require('../decorators/generic_deco');
+
+var _generic_deco2 = _interopRequireDefault(_generic_deco);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /*
  TODO: make tests
@@ -19192,261 +19302,315 @@ function valueInRange(value, props) {
 var DEFAULT_SIZE = '100px';
 var DEFAULT_THICKNESS = '5px';
 
-var Slider = _react2.default.createClass({
-	displayName: 'Slider',
+var displayName = 'Slider';
 
-	// ======================= Vars ===================================
+var propTypes = {
+	// optional with defaults
+	start: startEndPropType,
+	end: startEndPropType,
+	step: stepPropType,
+	orientation: _react2.default.PropTypes.string,
+	disabled: _react2.default.PropTypes.bool,
 
-	_outerWidth: 0,
-	_outerHeight: 0,
-	_offsetLeft: 0,
-	_offsetTop: 0,
-	_dragRunning: false,
+	// optional no defaults
+	value: valueInRangePropType,
+	defaultValue: valueInRangePropType,
+	onChange: _react2.default.PropTypes.func
+};
 
-	// ======================= Mixins ===================================
+/*
+ additional API:
+ style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+ Any other style property is passed through when not intentionally overridden
+ */
 
-	mixins: [_mixin_generic_component2.default],
+var defaultProps = {
+	start: -1,
+	end: 1,
+	step: null,
+	orientation: 'horizontal',
+	disabled: false
+};
+
+var Slider = (function (_GenericComponent) {
+	_inherits(Slider, _GenericComponent);
 
 	// ======================= React APIs ===================================
 
-	propTypes: {
-		// optional with defaults
-		start: startEndPropType,
-		end: startEndPropType,
-		step: stepPropType,
-		orientation: _react2.default.PropTypes.string,
-		disabled: _react2.default.PropTypes.bool,
+	function Slider(props) {
+		_classCallCheck(this, Slider);
 
-		// optional no defaults
-		value: valueInRangePropType,
-		defaultValue: valueInRangePropType,
-		onChange: _react2.default.PropTypes.func
-	},
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Slider).call(this, props));
 
-	/*
-  additional API:
-  style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
-  Any other style property is passed through when not intentionally overridden
-  */
+		_this._outerWidth = 0;
+		_this._outerHeight = 0;
+		_this._offsetLeft = 0;
+		_this._offsetTop = 0;
+		_this._dragRunning = false;
 
-	getDefaultProps: function getDefaultProps() {
-		return {
-			start: -1,
-			end: 1,
-			step: null,
-			orientation: 'horizontal',
-			disabled: false
-		};
-	},
-	getInitialState: function getInitialState() {
-		return {
+		_this.state = {
 			percent: 0,
-			value: this._getValue()
+			value: _this._getValue()
 		};
-	},
-	componentDidMount: function componentDidMount() {
-		this._log('componentDidMount');
-		this._updateVars();
-		var value = this._getValue();
-		var percent = this._valueToPercent(value);
-		this._setPercentValueState(percent, value);
-	},
+		return _this;
+	}
 
-	shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-		return nextState.percent !== this.state.percent;
-	},
+	_createClass(Slider, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this._log('componentDidMount');
+			this._log('componentDidMount mounted: ' + this.mounted);
 
-	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-		if (this._isControlledComponent()) {
-			this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
-			var percent = this._valueToPercent(nextProps.value);
-			this._setPercentValueState(percent, nextProps.value);
+			this._updateVars();
+			var value = this._getValue();
+			var percent = this._valueToPercent(value);
+			this._setPercentValueState(percent, value);
 		}
-	},
-	render: function render() {
-
-		this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
-
-		var handlers = {};
-		if (!this.props.disabled) {
-			handlers = {
-				onMouseDown: this._handleMouseDown
-			};
+	}, {
+		key: 'shouldComponentUpdate',
+		value: function shouldComponentUpdate(nextProps, nextState) {
+			return nextState.percent !== this.state.percent;
 		}
-
-		if (this.props.orientation == 'horizontal') {
-
-			var innerWidth = this._outerWidth * this.state.percent;
-
-			var backgroundStyle = {
-				width: this._style('width', DEFAULT_SIZE),
-				height: this._style('height', DEFAULT_THICKNESS)
-			};
-
-			var foregroundStyle = {
-				width: innerWidth + 'px',
-				height: '100%'
-			};
-		} else {
-
-			var innerHeight = this._outerHeight * this.state.percent;
-
-			var backgroundStyle = {
-				height: this._style('height', DEFAULT_SIZE),
-				width: this._style('width', DEFAULT_THICKNESS)
-			};
-
-			var foregroundStyle = {
-				height: innerHeight + 'px',
-				width: '100%'
-			};
-		}
-
-		// also let props.style pass through
-		backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
-			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-			opacity: this.props.disabled ? 0.5 : 1,
-			backgroundColor: this._style('bgColor')
-		});
-
-		foregroundStyle = Object.assign(foregroundStyle, {
-			backgroundColor: this._style('fgColor')
-		});
-
-		return _react2.default.createElement(
-			'div',
-			_extends({ ref: 'outer', style: backgroundStyle }, handlers),
-			_react2.default.createElement('div', { style: foregroundStyle }),
-			_react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
-		);
-	},
-
-	// ============================= Handlers ========================================
-
-	_handleMouseDown: function _handleMouseDown(e) {
-		document.addEventListener('mousemove', this._handleMouseMove, false);
-		document.addEventListener('mouseup', this._handleMouseUp, false);
-		this._update(e);
-	},
-	_handleMouseMove: function _handleMouseMove(e) {
-		var _this = this;
-
-		if (this._dragRunning) {
-			return;
-		}
-		this._dragRunning = true;
-		requestAnimationFrame(function () {
-			_this._update(e);
-			_this._dragRunning = false;
-		});
-	},
-	_handleMouseUp: function _handleMouseUp(e) {
-		document.removeEventListener('mousemove', this._handleMouseMove, false);
-		document.removeEventListener('mouseup', this._handleMouseUp, false);
-		this._update(e);
-	},
-
-	// ============================ Helpers ===========================================
-
-	_updateVars: function _updateVars() {
-		var boundingClientRect = this.refs.outer.getBoundingClientRect();
-
-		this._outerWidth = parseInt(boundingClientRect.width);
-		this._outerHeight = parseInt(boundingClientRect.height);
-		this._offsetLeft = parseInt(boundingClientRect.left);
-		this._offsetTop = parseInt(boundingClientRect.top);
-
-		this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
-	},
-	_eventToPercent: function _eventToPercent(e) {
-		if (this.props.orientation == 'horizontal') {
-			var positionX = e.pageX - this._offsetLeft;
-			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
-		} else {
-			var positionY = e.pageY - this._offsetTop;
-			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
-		}
-	},
-	_valueToPercent: function _valueToPercent(value) {
-		var stepping = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-		var range = this.props.end - this.props.start;
-		var position = value - this.props.start;
-		var percent = parseFloat((position / range).toFixed(5));
-		return stepping ? this._stepping(percent) : percent;
-	},
-	_percentToValue: function _percentToValue(percent) {
-		var range = this.props.end - this.props.start;
-		return parseFloat((range * percent + this.props.start).toFixed(5));
-	},
-	_getValue: function _getValue() {
-		return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
-	},
-	_stepping: function _stepping(percent) {
-		if (this.props.step === null || percent > 1 || percent < 0) {
-			return percent;
-		}
-
-		var stepsNum = (this.props.end - this.props.start) / this.props.step;
-		var stepUnit = 1 / stepsNum;
-		var steps = [];
-		for (var s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
-			steps.push(s);
-		}
-		var halfStep = steps[1] / 2;
-
-		for (var i = stepsNum; i > 0; i--) {
-			if (percent >= steps[i] - halfStep) {
-				return steps[i];
-			} else if (percent > steps[i - 1]) {
-				return steps[i - 1];
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			if (this._isControlledComponent()) {
+				this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
+				var percent = this._valueToPercent(nextProps.value);
+				this._setPercentValueState(percent, nextProps.value);
 			}
 		}
-		return 0;
-	},
-	_update: function _update(e) {
-		var percent = this._eventToPercent(e);
-		var value = this._percentToValue(percent);
-		var start = this.props.start;
-		var end = this.props.end;
 
-		value = value < start ? start : value > end ? end : value;
-		percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+		// ============================= Handlers ========================================
 
-		if (this._isControlledComponent() && this.state.value !== value) {
-			this._emitValueChangeEvent(value);
-		} else {
-			this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
+	}, {
+		key: '_handleMouseDown',
+		value: function _handleMouseDown(e) {
+			this._handleMouseMoveBound = this._handleMouseMove.bind(this);
+			this._handleMouseUpBound = this._handleMouseUp.bind(this);
+			document.addEventListener('mousemove', this._handleMouseMoveBound, false);
+			document.addEventListener('mouseup', this._handleMouseUpBound, false);
+			this._update(e);
 		}
-	},
-	_emitValueChangeEvent: function _emitValueChangeEvent(value) {
-		if (this.props.onChange === undefined) {
-			return;
-		}
-		this._log('_emitValueChangeEvent => value: ' + value);
-		this.props.onChange(value);
-	},
-	_setPercentValueState: function _setPercentValueState(percent, value) {
-		var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	}, {
+		key: '_handleMouseMove',
+		value: function _handleMouseMove(e) {
+			var _this2 = this;
 
-		if (this.state.percent === percent) {
-			return;
+			if (this._dragRunning) {
+				return;
+			}
+			this._dragRunning = true;
+			requestAnimationFrame(function () {
+				_this2._update(e);
+				_this2._dragRunning = false;
+			});
 		}
-		this._log('_setPercentValueState => percent from: ' + this.state.percent + ', ' + this.state.value + ' to: ' + percent + ', ' + value);
-		this.setState({ percent: percent, value: value }, callback);
-	},
-	_setPercentValueStateAndEmitValueChangedEvent: function _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
-		var _this2 = this;
+	}, {
+		key: '_handleMouseUp',
+		value: function _handleMouseUp(e) {
+			document.removeEventListener('mousemove', this._handleMouseMoveBound, false);
+			document.removeEventListener('mouseup', this._handleMouseUpBound, false);
+			delete this._handleMouseMoveBound;
+			delete this._handleMouseUpBound;
+			this._update(e);
+		}
 
-		this._setPercentValueState(percent, value, function () {
-			_this2._emitValueChangeEvent(value);
-		});
-	}
-});
+		// ============================ Helpers ===========================================
+
+	}, {
+		key: '_updateVars',
+		value: function _updateVars() {
+			var boundingClientRect = this.refs.outer.getBoundingClientRect();
+
+			this._outerWidth = parseInt(boundingClientRect.width);
+			this._outerHeight = parseInt(boundingClientRect.height);
+			this._offsetLeft = parseInt(boundingClientRect.left);
+			this._offsetTop = parseInt(boundingClientRect.top);
+
+			this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
+		}
+	}, {
+		key: '_eventToPercent',
+		value: function _eventToPercent(e) {
+			if (this.props.orientation == 'horizontal') {
+				var positionX = e.pageX - this._offsetLeft;
+				return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+			} else {
+				var positionY = e.pageY - this._offsetTop;
+				return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+			}
+		}
+	}, {
+		key: '_valueToPercent',
+		value: function _valueToPercent(value) {
+			var stepping = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+			var range = this.props.end - this.props.start;
+			var position = value - this.props.start;
+			var percent = parseFloat((position / range).toFixed(5));
+			return stepping ? this._stepping(percent) : percent;
+		}
+	}, {
+		key: '_percentToValue',
+		value: function _percentToValue(percent) {
+			var range = this.props.end - this.props.start;
+			return parseFloat((range * percent + this.props.start).toFixed(5));
+		}
+	}, {
+		key: '_getValue',
+		value: function _getValue() {
+			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
+		}
+	}, {
+		key: '_stepping',
+		value: function _stepping(percent) {
+			if (this.props.step === null || percent > 1 || percent < 0) {
+				return percent;
+			}
+
+			var stepsNum = (this.props.end - this.props.start) / this.props.step;
+			var stepUnit = 1 / stepsNum;
+			var steps = [];
+			for (var s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
+				steps.push(s);
+			}
+			var halfStep = steps[1] / 2;
+
+			for (var i = stepsNum; i > 0; i--) {
+				if (percent >= steps[i] - halfStep) {
+					return steps[i];
+				} else if (percent > steps[i - 1]) {
+					return steps[i - 1];
+				}
+			}
+			return 0;
+		}
+	}, {
+		key: '_update',
+		value: function _update(e) {
+			var percent = this._eventToPercent(e);
+			var value = this._percentToValue(percent);
+			var start = this.props.start;
+			var end = this.props.end;
+
+			value = value < start ? start : value > end ? end : value;
+			percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+
+			if (this._isControlledComponent() && this.state.value !== value) {
+				this._emitValueChangeEvent(value);
+			} else {
+				this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
+			}
+		}
+	}, {
+		key: '_emitValueChangeEvent',
+		value: function _emitValueChangeEvent(value) {
+			if (this.props.onChange === undefined) {
+				return;
+			}
+			this._log('_emitValueChangeEvent => value: ' + value);
+			this.props.onChange(value);
+		}
+	}, {
+		key: '_setPercentValueState',
+		value: function _setPercentValueState(percent, value) {
+			var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+			if (this.state.percent === percent) {
+				return;
+			}
+			this._log('_setPercentValueState => percent from: ' + this.state.percent + ', ' + this.state.value + ' to: ' + percent + ', ' + value);
+			this.setState({ percent: percent, value: value }, callback);
+		}
+	}, {
+		key: '_setPercentValueStateAndEmitValueChangedEvent',
+		value: function _setPercentValueStateAndEmitValueChangedEvent(percent, value) {
+			var _this3 = this;
+
+			this._setPercentValueState(percent, value, function () {
+				_this3._emitValueChangeEvent(value);
+			});
+		}
+
+		// ============================= Render ===========================================
+
+	}, {
+		key: 'render',
+		value: function render() {
+
+			this._log('render => state: ' + JSON.stringify(this.state) + ' | props: ' + JSON.stringify(this.props));
+
+			var handlers = {};
+			if (!this.props.disabled) {
+				this._handleMouseDownBound = this._handleMouseDown.bind(this);
+				handlers = {
+					onMouseDown: this._handleMouseDownBound
+				};
+			}
+
+			if (this.props.orientation == 'horizontal') {
+
+				var innerWidth = this._outerWidth * this.state.percent;
+
+				var backgroundStyle = {
+					width: this._style('width', DEFAULT_SIZE),
+					height: this._style('height', DEFAULT_THICKNESS)
+				};
+
+				var foregroundStyle = {
+					width: innerWidth + 'px',
+					height: '100%'
+				};
+			} else {
+
+				var innerHeight = this._outerHeight * this.state.percent;
+
+				var backgroundStyle = {
+					height: this._style('height', DEFAULT_SIZE),
+					width: this._style('width', DEFAULT_THICKNESS)
+				};
+
+				var foregroundStyle = {
+					height: innerHeight + 'px',
+					width: '100%'
+				};
+			}
+
+			// also let props.style pass through
+			backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
+				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+				opacity: this.props.disabled ? 0.5 : 1,
+				backgroundColor: this._style('bgColor')
+			});
+
+			foregroundStyle = Object.assign(foregroundStyle, {
+				backgroundColor: this._style('fgColor')
+			});
+
+			return _react2.default.createElement(
+				'div',
+				_extends({ ref: 'outer', style: backgroundStyle }, handlers),
+				_react2.default.createElement('div', { style: foregroundStyle }),
+				_react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
+			);
+		}
+	}]);
+
+	return Slider;
+})(_generic_component2.default);
+
+Slider.displayName = displayName;
+
+Slider.propTypes = propTypes;
+
+Slider.defaultProps = defaultProps;
+
+Slider = (0, _generic_deco2.default)(Slider);
 
 exports.default = Slider;
 
-},{"../mixins/mixin_generic_component":163,"react":159}],161:[function(require,module,exports){
+},{"../decorators/generic_deco":163,"./generic_component":160,"react":159}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19475,7 +19639,61 @@ var TextField = _react2.default.createClass({
 
 exports.default = TextField;
 
-},{"react":159}],162:[function(require,module,exports){
+},{"react":159}],163:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = GenericDeco;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function GenericDeco(Component) {
+	var Decorated = (function (_Component) {
+		_inherits(Decorated, _Component);
+
+		function Decorated() {
+			_classCallCheck(this, Decorated);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Decorated).apply(this, arguments));
+		}
+
+		_createClass(Decorated, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				this.mounted = true;
+				_get(Object.getPrototypeOf(Decorated.prototype), 'componentDidMount', this).call(this);
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				this.mounted = false;
+				_get(Object.getPrototypeOf(Decorated.prototype), 'componentWillUnmount', this).call(this);
+			}
+		}]);
+
+		return Decorated;
+	})(Component);
+
+	return Decorated;
+}
+
+},{"react":159}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19483,76 +19701,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.TextField = exports.Slider = undefined;
 
-var _Slider = require('./components/Slider');
+var _slider = require('./components/slider.jsx');
 
-var _Slider2 = _interopRequireDefault(_Slider);
+var _slider2 = _interopRequireDefault(_slider);
 
-var _TextField = require('./components/TextField');
+var _text_field = require('./components/text_field.jsx');
 
-var _TextField2 = _interopRequireDefault(_TextField);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.Slider = _Slider2.default;
-exports.TextField = _TextField2.default;
-
-},{"./components/Slider":160,"./components/TextField":161}],163:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _style2 = require('../style');
-
-var _style3 = _interopRequireDefault(_style2);
+var _text_field2 = _interopRequireDefault(_text_field);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var MixinGenericComponent = {
-	propTypes: {
-		// required
-		name: _react2.default.PropTypes.string.isRequired,
+exports.Slider = _slider2.default;
+exports.TextField = _text_field2.default;
 
-		// optional with defaults
-		debug: _react2.default.PropTypes.bool,
-
-		// optional no defaults
-		cStyle: _react2.default.PropTypes.object
-	},
-
-	getDefaultProps: function getDefaultProps() {
-		return {
-			debug: false
-		};
-	},
-	componentDidMount: function componentDidMount() {
-		this.isMounted = true;
-	},
-	componentWillUnmount: function componentWillUnmount() {
-		this.isMounted = false;
-	},
-	_log: function _log(msg) {
-		this.props.debug && console.log(this.props.name + ' > ' + msg);
-	},
-	_isControlledComponent: function _isControlledComponent() {
-		return this.props.value !== undefined;
-	},
-	_style: function _style(key, _default) {
-		if (!this.__style) {
-			this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.style || {});
-		}
-		return this.__style[key] !== undefined ? this.__style[key] : _default;
-	}
-};
-
-exports.default = MixinGenericComponent;
-
-},{"../style":164,"react":159}],164:[function(require,module,exports){
+},{"./components/slider.jsx":161,"./components/text_field.jsx":162}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

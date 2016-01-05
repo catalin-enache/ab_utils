@@ -1,7 +1,8 @@
 'use strict';
 
 import React from 'react';
-import MixinGenericComponent from '../mixins/mixin_generic_component';
+import GenericComponent from './generic_component';
+import GenericDeco from '../decorators/generic_deco';
 
 /*
  TODO: make tests
@@ -60,70 +61,68 @@ function valueInRange(value, props) {
 const DEFAULT_SIZE = '100px';
 const DEFAULT_THICKNESS = '5px';
 
-const Slider = React.createClass({
+const displayName = 'Slider';
 
-	// ======================= Vars ===================================
+const propTypes = {
+	// optional with defaults
+	start: startEndPropType,
+	end: startEndPropType,
+	step: stepPropType,
+	orientation: React.PropTypes.string,
+	disabled: React.PropTypes.bool,
 
-	_outerWidth: 0,
-	_outerHeight: 0,
-	_offsetLeft: 0,
-	_offsetTop: 0,
-	_dragRunning: false,
+	// optional no defaults
+	value: valueInRangePropType,
+	defaultValue: valueInRangePropType,
+	onChange: React.PropTypes.func
+};
 
-	// ======================= Mixins ===================================
+/*
+ additional API:
+ style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+ Any other style property is passed through when not intentionally overridden
+ */
 
-	mixins: [MixinGenericComponent],
+const defaultProps = {
+	start: -1,
+	end: 1,
+	step: null,
+	orientation: 'horizontal',
+	disabled: false
+};
+
+class Slider extends GenericComponent {
 
 	// ======================= React APIs ===================================
 
-	propTypes: {
-		// optional with defaults
-		start: startEndPropType,
-		end: startEndPropType,
-		step: stepPropType,
-		orientation: React.PropTypes.string,
-		disabled: React.PropTypes.bool,
+	constructor(props) {
+		super(props);
 
-		// optional no defaults
-		value: valueInRangePropType,
-		defaultValue: valueInRangePropType,
-		onChange: React.PropTypes.func
-	},
+		this._outerWidth = 0;
+		this._outerHeight = 0;
+		this._offsetLeft = 0;
+		this._offsetTop = 0;
+		this._dragRunning = false;
 
-	/*
-	 additional API:
-	 style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
-	 Any other style property is passed through when not intentionally overridden
-	 */
-
-	getDefaultProps() {
-		return {
-			start: -1,
-			end: 1,
-			step: null,
-			orientation: 'horizontal',
-			disabled: false
-		};
-	},
-
-	getInitialState() {
-		return {
+		this.state = {
 			percent: 0,
 			value: this._getValue()
 		};
-	},
+	}
 
 	componentDidMount() {
 		this._log(`componentDidMount`);
+		this._log(`componentDidMount mounted: ${this.mounted}`);
+
 		this._updateVars();
 		let value = this._getValue();
 		let percent = this._valueToPercent(value);
 		this._setPercentValueState(percent, value);
-	},
+	}
 
-	shouldComponentUpdate: function (nextProps, nextState) {
+	shouldComponentUpdate (nextProps, nextState) {
 		return nextState.percent !== this.state.percent;
-	},
+	}
 
 	componentWillReceiveProps(nextProps) {
 		if (this._isControlledComponent()) {
@@ -131,7 +130,143 @@ const Slider = React.createClass({
 			let percent = this._valueToPercent(nextProps.value);
 			this._setPercentValueState(percent, nextProps.value);
 		}
-	},
+	}
+
+	// ============================= Handlers ========================================
+
+	_handleMouseDown(e) {
+		this._handleMouseMoveBound = this._handleMouseMove.bind(this);
+		this._handleMouseUpBound = this._handleMouseUp.bind(this);
+		document.addEventListener('mousemove', this._handleMouseMoveBound, false);
+		document.addEventListener('mouseup', this._handleMouseUpBound, false);
+		this._update(e);
+	}
+
+	_handleMouseMove(e) {
+		if (this._dragRunning) {
+			return;
+		}
+		this._dragRunning = true;
+		requestAnimationFrame(() => {
+			this._update(e);
+			this._dragRunning = false;
+		});
+	}
+
+	_handleMouseUp(e) {
+		document.removeEventListener('mousemove', this._handleMouseMoveBound, false);
+		document.removeEventListener('mouseup', this._handleMouseUpBound, false);
+		delete this._handleMouseMoveBound;
+		delete this._handleMouseUpBound;
+		this._update(e);
+	}
+
+	// ============================ Helpers ===========================================
+
+	_updateVars() {
+		let boundingClientRect = this.refs.outer.getBoundingClientRect();
+
+		this._outerWidth = parseInt(boundingClientRect.width);
+		this._outerHeight = parseInt(boundingClientRect.height);
+		this._offsetLeft = parseInt(boundingClientRect.left);
+		this._offsetTop = parseInt(boundingClientRect.top);
+
+		this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
+	}
+
+	_eventToPercent(e) {
+		if (this.props.orientation == 'horizontal') {
+			let positionX = e.pageX - this._offsetLeft;
+			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+		} else {
+			let positionY = e.pageY - this._offsetTop;
+			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+		}
+	}
+
+	_valueToPercent(value, stepping = true) {
+		let range = this.props.end - this.props.start;
+		let position = value - this.props.start;
+		let percent = parseFloat((position / range).toFixed(5));
+		return stepping ? this._stepping(percent) : percent;
+	}
+
+	_percentToValue(percent) {
+		let range = this.props.end - this.props.start;
+		return parseFloat((range * percent + this.props.start).toFixed(5));
+	}
+
+	_getValue() {
+		return (this.props.value !== undefined
+				? this.props.value
+				: this.props.defaultValue !== undefined
+				? this.props.defaultValue
+				: this.props.start
+		);
+	}
+
+	_stepping(percent) {
+		if (this.props.step === null || percent > 1 || percent < 0) {
+			return percent;
+		}
+
+		let stepsNum = (this.props.end - this.props.start) / this.props.step;
+		let stepUnit = 1 / stepsNum;
+		let steps = [];
+		for (let s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
+			steps.push(s);
+		}
+		let halfStep = steps[1] / 2;
+
+		for (let i = stepsNum; i > 0; i--) {
+			if (percent >= steps[i] - halfStep) {
+				return steps[i];
+			} else if (percent > steps[i - 1]) {
+				return steps[i - 1];
+			}
+		}
+		return 0;
+	}
+
+	_update(e) {
+		let percent = this._eventToPercent(e);
+		let value = this._percentToValue(percent);
+		let start = this.props.start;
+		let end = this.props.end;
+
+		value = value < start ? start : value > end ? end : value;
+		percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
+
+		if (this._isControlledComponent() && this.state.value !== value) {
+			this._emitValueChangeEvent(value);
+		} else {
+			this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
+		}
+	}
+
+	_emitValueChangeEvent(value) {
+		if (this.props.onChange === undefined) {
+			return;
+		}
+		this._log(`_emitValueChangeEvent => value: ${value}`);
+		this.props.onChange(value);
+	}
+
+	_setPercentValueState(percent, value, callback = null) {
+		if (this.state.percent === percent) {
+			return;
+		}
+		this._log(`_setPercentValueState => percent from: ${this.state.percent}, ${this.state.value} to: ${percent}, ${value}`);
+		this.setState({percent: percent, value: value}, callback);
+	}
+
+	_setPercentValueStateAndEmitValueChangedEvent(percent, value) {
+		this._setPercentValueState(percent, value, () => {
+			this._emitValueChangeEvent(value);
+		});
+	}
+
+	// ============================= Render ===========================================
 
 	render() {
 
@@ -139,8 +274,9 @@ const Slider = React.createClass({
 
 		let handlers = {};
 		if (!this.props.disabled) {
+			this._handleMouseDownBound = this._handleMouseDown.bind(this);
 			handlers = {
-				onMouseDown: this._handleMouseDown
+				onMouseDown: this._handleMouseDownBound
 			}
 		}
 
@@ -191,137 +327,16 @@ const Slider = React.createClass({
 				<input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled}/>
 			</div>
 		);
-	},
-
-	// ============================= Handlers ========================================
-
-	_handleMouseDown(e) {
-		document.addEventListener('mousemove', this._handleMouseMove, false);
-		document.addEventListener('mouseup', this._handleMouseUp, false);
-		this._update(e);
-	},
-
-	_handleMouseMove(e) {
-		if (this._dragRunning) {
-			return;
-		}
-		this._dragRunning = true;
-		requestAnimationFrame(() => {
-			this._update(e);
-			this._dragRunning = false;
-		});
-	},
-
-	_handleMouseUp(e) {
-		document.removeEventListener('mousemove', this._handleMouseMove, false);
-		document.removeEventListener('mouseup', this._handleMouseUp, false);
-		this._update(e);
-	},
-
-	// ============================ Helpers ===========================================
-
-	_updateVars() {
-		let boundingClientRect = this.refs.outer.getBoundingClientRect();
-
-		this._outerWidth = parseInt(boundingClientRect.width);
-		this._outerHeight = parseInt(boundingClientRect.height);
-		this._offsetLeft = parseInt(boundingClientRect.left);
-		this._offsetTop = parseInt(boundingClientRect.top);
-
-		this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
-	},
-
-	_eventToPercent(e) {
-		if (this.props.orientation == 'horizontal') {
-			let positionX = e.pageX - this._offsetLeft;
-			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
-		} else {
-			let positionY = e.pageY - this._offsetTop;
-			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
-		}
-	},
-
-	_valueToPercent(value, stepping = true) {
-		let range = this.props.end - this.props.start;
-		let position = value - this.props.start;
-		let percent = parseFloat((position / range).toFixed(5));
-		return stepping ? this._stepping(percent) : percent;
-	},
-
-	_percentToValue(percent) {
-		let range = this.props.end - this.props.start;
-		return parseFloat((range * percent + this.props.start).toFixed(5));
-	},
-
-	_getValue() {
-		return (this.props.value !== undefined
-				? this.props.value
-				: this.props.defaultValue !== undefined
-				? this.props.defaultValue
-				: this.props.start
-		);
-	},
-
-	_stepping(percent) {
-		if (this.props.step === null || percent > 1 || percent < 0) {
-			return percent;
-		}
-
-		let stepsNum = (this.props.end - this.props.start) / this.props.step;
-		let stepUnit = 1 / stepsNum;
-		let steps = [];
-		for (let s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
-			steps.push(s);
-		}
-		let halfStep = steps[1] / 2;
-
-		for (let i = stepsNum; i > 0; i--) {
-			if (percent >= steps[i] - halfStep) {
-				return steps[i];
-			} else if (percent > steps[i - 1]) {
-				return steps[i - 1];
-			}
-		}
-		return 0;
-	},
-
-	_update(e) {
-		let percent = this._eventToPercent(e);
-		let value = this._percentToValue(percent);
-		let start = this.props.start;
-		let end = this.props.end;
-
-		value = value < start ? start : value > end ? end : value;
-		percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
-
-		if (this._isControlledComponent() && this.state.value !== value) {
-			this._emitValueChangeEvent(value);
-		} else {
-			this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
-		}
-	},
-
-	_emitValueChangeEvent(value) {
-		if (this.props.onChange === undefined) {
-			return;
-		}
-		this._log(`_emitValueChangeEvent => value: ${value}`);
-		this.props.onChange(value);
-	},
-
-	_setPercentValueState(percent, value, callback = null) {
-		if (this.state.percent === percent) {
-			return;
-		}
-		this._log(`_setPercentValueState => percent from: ${this.state.percent}, ${this.state.value} to: ${percent}, ${value}`);
-		this.setState({percent: percent, value: value}, callback);
-	},
-
-	_setPercentValueStateAndEmitValueChangedEvent(percent, value) {
-		this._setPercentValueState(percent, value, () => {
-			this._emitValueChangeEvent(value);
-		});
 	}
-});
+}
+
+
+Slider.displayName = displayName;
+
+Slider.propTypes = propTypes;
+
+Slider.defaultProps = defaultProps;
+
+Slider = GenericDeco(Slider);
 
 export default Slider;

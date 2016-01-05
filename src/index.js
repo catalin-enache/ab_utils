@@ -1,7 +1,7 @@
 'use strict';
 
-import Slider from './components/Slider';
-import TextField from './components/TextField';
+import Slider from './components/slider.jsx';
+import TextField from './components/text_field.jsx';
 
 export {Slider};
 export {TextField};
