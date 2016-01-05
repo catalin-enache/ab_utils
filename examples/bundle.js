@@ -117,7 +117,7 @@ var Application = _react2.default.createClass({
 	}
 });
 
-_reactDom2.default.render(_react2.default.createElement(Application, null), document.getElementById('content'));
+_reactDom2.default.render(_react2.default.createElement(Application, null), document.querySelector('#content'));
 
 },{"../src":164,"react":159,"react-dom":30}],2:[function(require,module,exports){
 (function (process){
@@ -19353,6 +19353,10 @@ var Slider = (function (_GenericComponent) {
 			percent: 0,
 			value: _this._getValue()
 		};
+
+		_this._handleMouseMove = _this._handleMouseMove.bind(_this);
+		_this._handleMouseUp = _this._handleMouseUp.bind(_this);
+		_this._handleMouseDown = _this._handleMouseDown.bind(_this);
 		return _this;
 	}
 
@@ -19388,10 +19392,8 @@ var Slider = (function (_GenericComponent) {
 		key: '_handleMouseDown',
 		value: function _handleMouseDown(e) {
 			this._updateVars();
-			this._handleMouseMoveBound = this._handleMouseMove.bind(this);
-			this._handleMouseUpBound = this._handleMouseUp.bind(this);
-			document.addEventListener('mousemove', this._handleMouseMoveBound, false);
-			document.addEventListener('mouseup', this._handleMouseUpBound, false);
+			document.addEventListener('mousemove', this._handleMouseMove, false);
+			document.addEventListener('mouseup', this._handleMouseUp, false);
 			this._update(e);
 		}
 	}, {
@@ -19411,10 +19413,8 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_handleMouseUp',
 		value: function _handleMouseUp(e) {
-			document.removeEventListener('mousemove', this._handleMouseMoveBound, false);
-			document.removeEventListener('mouseup', this._handleMouseUpBound, false);
-			delete this._handleMouseMoveBound;
-			delete this._handleMouseUpBound;
+			document.removeEventListener('mousemove', this._handleMouseMove, false);
+			document.removeEventListener('mouseup', this._handleMouseUp, false);
 			this._update(e);
 		}
 
@@ -19545,9 +19545,8 @@ var Slider = (function (_GenericComponent) {
 
 			var handlers = {};
 			if (!this.props.disabled) {
-				this._handleMouseDownBound = this._handleMouseDown.bind(this);
 				handlers = {
-					onMouseDown: this._handleMouseDownBound
+					onMouseDown: this._handleMouseDown
 				};
 			}
 

@@ -108,6 +108,10 @@ class Slider extends GenericComponent {
 			percent: 0,
 			value: this._getValue()
 		};
+
+		this._handleMouseMove = this._handleMouseMove.bind(this);
+		this._handleMouseUp = this._handleMouseUp.bind(this);
+		this._handleMouseDown = this._handleMouseDown.bind(this);
 	}
 
 	componentDidMount() {
@@ -136,10 +140,8 @@ class Slider extends GenericComponent {
 
 	_handleMouseDown(e) {
 		this._updateVars();
-		this._handleMouseMoveBound = this._handleMouseMove.bind(this);
-		this._handleMouseUpBound = this._handleMouseUp.bind(this);
-		document.addEventListener('mousemove', this._handleMouseMoveBound, false);
-		document.addEventListener('mouseup', this._handleMouseUpBound, false);
+		document.addEventListener('mousemove', this._handleMouseMove, false);
+		document.addEventListener('mouseup', this._handleMouseUp, false);
 		this._update(e);
 	}
 
@@ -155,10 +157,8 @@ class Slider extends GenericComponent {
 	}
 
 	_handleMouseUp(e) {
-		document.removeEventListener('mousemove', this._handleMouseMoveBound, false);
-		document.removeEventListener('mouseup', this._handleMouseUpBound, false);
-		delete this._handleMouseMoveBound;
-		delete this._handleMouseUpBound;
+		document.removeEventListener('mousemove', this._handleMouseMove, false);
+		document.removeEventListener('mouseup', this._handleMouseUp, false);
 		this._update(e);
 	}
 
@@ -275,9 +275,8 @@ class Slider extends GenericComponent {
 
 		let handlers = {};
 		if (!this.props.disabled) {
-			this._handleMouseDownBound = this._handleMouseDown.bind(this);
 			handlers = {
-				onMouseDown: this._handleMouseDownBound
+				onMouseDown: this._handleMouseDown
 			}
 		}
 

@@ -124,5 +124,5 @@ Flow: component setState
 
 ReactDOM.render(
 	<Application />,
-	document.getElementById('content')
+	document.querySelector('#content')
 );
