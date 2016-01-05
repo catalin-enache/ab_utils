@@ -116,8 +116,6 @@ class Slider extends GenericComponent {
 
 	componentDidMount() {
 		this._log(`componentDidMount`);
-		this._log(`componentDidMount mounted: ${this.mounted}`);
-
 		this._updateVars();
 		let value = this._getValue();
 		let percent = this._valueToPercent(value);
