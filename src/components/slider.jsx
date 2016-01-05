@@ -135,6 +135,7 @@ class Slider extends GenericComponent {
 	// ============================= Handlers ========================================
 
 	_handleMouseDown(e) {
+		this._updateVars();
 		this._handleMouseMoveBound = this._handleMouseMove.bind(this);
 		this._handleMouseUpBound = this._handleMouseUp.bind(this);
 		document.addEventListener('mousemove', this._handleMouseMoveBound, false);
@@ -176,10 +177,10 @@ class Slider extends GenericComponent {
 
 	_eventToPercent(e) {
 		if (this.props.orientation == 'horizontal') {
-			let positionX = e.pageX - this._offsetLeft;
+			let positionX = e.clientX - this._offsetLeft;
 			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
 		} else {
-			let positionY = e.pageY - this._offsetTop;
+			let positionY = e.clientY - this._offsetTop;
 			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
 		}
 	}

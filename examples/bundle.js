@@ -78,7 +78,7 @@ var Application = _react2.default.createClass({
 							end: 2,
 							onChange: this.sliderOnChange,
 							style: { width: '100%', bgColor: '#003366' },
-							debug: true })
+							debug: false })
 					)
 				),
 				_react2.default.createElement(
@@ -94,7 +94,8 @@ var Application = _react2.default.createClass({
 							step: 1,
 							onChange: this.sliderOnChange,
 							orientation: 'vertical',
-							style: { height: '100%' } })
+							style: { height: '100%' },
+							debug: false })
 					),
 					_react2.default.createElement(
 						'div',
@@ -19386,6 +19387,7 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_handleMouseDown',
 		value: function _handleMouseDown(e) {
+			this._updateVars();
 			this._handleMouseMoveBound = this._handleMouseMove.bind(this);
 			this._handleMouseUpBound = this._handleMouseUp.bind(this);
 			document.addEventListener('mousemove', this._handleMouseMoveBound, false);
@@ -19434,10 +19436,10 @@ var Slider = (function (_GenericComponent) {
 		key: '_eventToPercent',
 		value: function _eventToPercent(e) {
 			if (this.props.orientation == 'horizontal') {
-				var positionX = e.pageX - this._offsetLeft;
+				var positionX = e.clientX - this._offsetLeft;
 				return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
 			} else {
-				var positionY = e.pageY - this._offsetTop;
+				var positionY = e.clientY - this._offsetTop;
 				return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
 			}
 		}

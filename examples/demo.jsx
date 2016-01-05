@@ -88,7 +88,7 @@ Flow: component setState
 									end={2}
 									onChange={this.sliderOnChange}
 									style={{width: '100%', bgColor: '#003366'}}
-									debug={true} />
+									debug={false} />
 						</div>
 					</div>
 					<div className="verticalSliders clearfix">
@@ -100,7 +100,8 @@ Flow: component setState
 									step={1}
 									onChange={this.sliderOnChange}
 									orientation="vertical"
-									style={{height: '100%'}} />
+									style={{height: '100%'}}
+									debug={false} />
 						</div>
 						<div className="verticalSliderWrapper">
 							<Slider name="slider_4"
