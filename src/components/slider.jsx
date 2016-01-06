@@ -6,6 +6,7 @@ import GenericDeco from '../decorators/generic_deco';
 
 /*
  TODO: make tests
+ TODO: must not allow to receive value and defaultValue
  */
 
 // ============================ Custom Validators =================================

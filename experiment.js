@@ -2,4 +2,8 @@
 
 import {Slider} from './src';
 
-console.log(Slider.defaultProps);
+class Experiment extends Slider {
+
+}
+
+console.log(Experiment.defaultProps);
