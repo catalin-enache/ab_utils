@@ -93,6 +93,18 @@ const defaultProps = {
 
 class Slider extends GenericComponent {
 
+	static get displayName() {
+		return displayName;
+	}
+
+	static get propTypes() {
+		return Object.assign({}, super.propTypes, propTypes);
+	}
+
+	static get defaultProps() {
+		return Object.assign({}, super.defaultProps, defaultProps);
+	}
+
 	// ======================= React APIs ===================================
 
 	constructor(props) {
@@ -163,7 +175,7 @@ class Slider extends GenericComponent {
 	// ============================ Helpers ===========================================
 
 	_updateVars() {
-		let boundingClientRect = this.refs.outer.getBoundingClientRect();
+		let boundingClientRect = this._getBoundingClientRect();
 
 		this._outerWidth = parseInt(boundingClientRect.width);
 		this._outerHeight = parseInt(boundingClientRect.height);
@@ -171,6 +183,10 @@ class Slider extends GenericComponent {
 		this._offsetTop = parseInt(boundingClientRect.top);
 
 		this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
+	}
+
+	_getBoundingClientRect() {
+		return this.refs.outer.getBoundingClientRect();
 	}
 
 	_eventToPercent(e) {
@@ -327,13 +343,6 @@ class Slider extends GenericComponent {
 		);
 	}
 }
-
-
-Slider.displayName = displayName;
-
-Slider.propTypes = propTypes;
-
-Slider.defaultProps = defaultProps;
 
 Slider = GenericDeco(Slider);
 

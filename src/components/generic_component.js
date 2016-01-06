@@ -8,7 +8,7 @@ const propTypes = {
 	name: React.PropTypes.string.isRequired,
 
 	// optional with defaults
-	debug: React.PropTypes.bool,
+	debug: React.PropTypes.bool
 };
 
 const defaultProps = {
@@ -16,6 +16,14 @@ const defaultProps = {
 };
 
 class GenericComponent extends React.Component {
+
+	static get propTypes() {
+		return propTypes;
+	}
+
+	static get defaultProps() {
+		return defaultProps;
+	}
 
 	_log(msg) {
 		this.props.debug && console.log(`${this.props.name} > ${msg}`);
@@ -33,10 +41,6 @@ class GenericComponent extends React.Component {
 		return this.__style[key] !== undefined ? this.__style[key] : _default;
 	}
 }
-
-GenericComponent.propTypes = propTypes;
-
-GenericComponent.defaultProps = defaultProps;
 
 export default GenericComponent;
 
