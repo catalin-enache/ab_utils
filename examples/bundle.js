@@ -78,7 +78,7 @@ var Application = _react2.default.createClass({
 							end: 2,
 							onChange: this.sliderOnChange,
 							style: { width: '100%', bgColor: '#003366' },
-							debug: false })
+							debug: true })
 					)
 				),
 				_react2.default.createElement(
@@ -652,15 +652,11 @@ module.exports = focusNode;
  * Same as document.activeElement but wraps in a try-catch block. In IE it is
  * not safe to call document.activeElement if there is nothing focused.
  *
- * The activeElement will be null only if the document or document body is not yet defined.
+ * The activeElement will be null only if the document body is not yet defined.
  */
-'use strict';
+"use strict";
 
 function getActiveElement() /*?DOMElement*/{
-  if (typeof document === 'undefined') {
-    return null;
-  }
-
   try {
     return document.activeElement || document.body;
   } catch (e) {
@@ -906,7 +902,7 @@ module.exports = hyphenateStyleName;
  * will remain to ensure logic does not differ in production.
  */
 
-var invariant = function (condition, format, a, b, c, d, e, f) {
+function invariant(condition, format, a, b, c, d, e, f) {
   if (process.env.NODE_ENV !== 'production') {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
@@ -920,15 +916,16 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
     } else {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
-      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+      error = new Error(format.replace(/%s/g, function () {
         return args[argIndex++];
       }));
+      error.name = 'Invariant Violation';
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
     throw error;
   }
-};
+}
 
 module.exports = invariant;
 }).call(this,require('_process'))
@@ -1193,18 +1190,23 @@ module.exports = performance || {};
 'use strict';
 
 var performance = require('./performance');
-var curPerformance = performance;
+
+var performanceNow;
 
 /**
  * Detect if we can use `window.performance.now()` and gracefully fallback to
  * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
  * because of Facebook's testing infrastructure.
  */
-if (!curPerformance || !curPerformance.now) {
-  curPerformance = Date;
+if (performance.now) {
+  performanceNow = function () {
+    return performance.now();
+  };
+} else {
+  performanceNow = function () {
+    return Date.now();
+  };
 }
-
-var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
 },{"./performance":24}],26:[function(require,module,exports){
@@ -4797,8 +4799,8 @@ var HTMLDOMPropertyConfig = {
      */
     // autoCapitalize and autoCorrect are supported in Mobile Safari for
     // keyboard hints.
-    autoCapitalize: null,
-    autoCorrect: null,
+    autoCapitalize: MUST_USE_ATTRIBUTE,
+    autoCorrect: MUST_USE_ATTRIBUTE,
     // autoSave allows WebKit/Blink to persist values of input fields on page reloads
     autoSave: null,
     // color is for Safari mask-icon link
@@ -4829,9 +4831,7 @@ var HTMLDOMPropertyConfig = {
     httpEquiv: 'http-equiv'
   },
   DOMPropertyNames: {
-    autoCapitalize: 'autocapitalize',
     autoComplete: 'autocomplete',
-    autoCorrect: 'autocorrect',
     autoFocus: 'autofocus',
     autoPlay: 'autoplay',
     autoSave: 'autosave',
@@ -9274,7 +9274,7 @@ function updateOptionsIfPendingUpdateAndMounted() {
     var value = LinkedValueUtils.getValue(props);
 
     if (value != null) {
-      updateOptions(this, props, value);
+      updateOptions(this, Boolean(props.multiple), value);
     }
   }
 }
@@ -10353,7 +10353,9 @@ var DOM_OPERATION_TYPES = {
   'setValueForProperty': 'update attribute',
   'setValueForAttribute': 'update attribute',
   'deleteValueForProperty': 'remove attribute',
-  'dangerouslyReplaceNodeWithMarkupByID': 'replace'
+  'setValueForStyles': 'update styles',
+  'replaceNodeWithMarkup': 'replace',
+  'updateTextContent': 'set textContent'
 };
 
 function getTotalTime(measurements) {
@@ -15401,7 +15403,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '0.14.3';
+module.exports = '0.14.5';
 },{}],115:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19204,14 +19206,20 @@ var GenericComponent = (function (_React$Component) {
 			}
 			return this.__style[key] !== undefined ? this.__style[key] : _default;
 		}
+	}], [{
+		key: 'propTypes',
+		get: function get() {
+			return propTypes;
+		}
+	}, {
+		key: 'defaultProps',
+		get: function get() {
+			return defaultProps;
+		}
 	}]);
 
 	return GenericComponent;
 })(_react2.default.Component);
-
-GenericComponent.propTypes = propTypes;
-
-GenericComponent.defaultProps = defaultProps;
 
 exports.default = GenericComponent;
 
@@ -19221,6 +19229,8 @@ exports.default = GenericComponent;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -19336,7 +19346,25 @@ var defaultProps = {
 var Slider = (function (_GenericComponent) {
 	_inherits(Slider, _GenericComponent);
 
-	// ======================= React APIs ===================================
+	_createClass(Slider, null, [{
+		key: 'displayName',
+		get: function get() {
+			return displayName;
+		}
+	}, {
+		key: 'propTypes',
+		get: function get() {
+			return Object.assign({}, _get(Object.getPrototypeOf(Slider), 'propTypes', this), propTypes);
+		}
+	}, {
+		key: 'defaultProps',
+		get: function get() {
+			return Object.assign({}, _get(Object.getPrototypeOf(Slider), 'defaultProps', this), defaultProps);
+		}
+
+		// ======================= React APIs ===================================
+
+	}]);
 
 	function Slider(props) {
 		_classCallCheck(this, Slider);
@@ -19364,8 +19392,6 @@ var Slider = (function (_GenericComponent) {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			this._log('componentDidMount');
-			this._log('componentDidMount mounted: ' + this.mounted);
-
 			this._updateVars();
 			var value = this._getValue();
 			var percent = this._valueToPercent(value);
@@ -19423,7 +19449,7 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_updateVars',
 		value: function _updateVars() {
-			var boundingClientRect = this.refs.outer.getBoundingClientRect();
+			var boundingClientRect = this._getBoundingClientRect();
 
 			this._outerWidth = parseInt(boundingClientRect.width);
 			this._outerHeight = parseInt(boundingClientRect.height);
@@ -19431,6 +19457,11 @@ var Slider = (function (_GenericComponent) {
 			this._offsetTop = parseInt(boundingClientRect.top);
 
 			this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
+		}
+	}, {
+		key: '_getBoundingClientRect',
+		value: function _getBoundingClientRect() {
+			return this.refs.outer.getBoundingClientRect();
 		}
 	}, {
 		key: '_eventToPercent',
@@ -19600,12 +19631,6 @@ var Slider = (function (_GenericComponent) {
 
 	return Slider;
 })(_generic_component2.default);
-
-Slider.displayName = displayName;
-
-Slider.propTypes = propTypes;
-
-Slider.defaultProps = defaultProps;
 
 Slider = (0, _generic_deco2.default)(Slider);
 
