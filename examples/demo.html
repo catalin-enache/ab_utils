@@ -6,15 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link rel="stylesheet" media="all" href="cssreset.css" />
     <style>
+
+		/* ============================ helpers ============================== */
+
         .clearfix:before, .clearfix:after { content: ""; display: table; }
         .clearfix:after { clear: both; }
         .clearfix { zoom: 1; }
 
-        #content {
-            width: 800px;
-            margin: 0px auto;
-            background-color: white;
-        }
+		/* ============================= general ============================== */
 
         h3 {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -27,21 +26,37 @@
             font-size: 12px;
             font-family: monospace;
         }
+
 		* {
 			-moz-user-select: none;
 			-webkit-user-select: none;
 			user-select: none;
 		}
 
-        /* ============================ Sliders ====================================*/
+		body {
+			background-color: White;
+			color: rgba(0, 0, 0, 0.87);
+		}
+
+		/* =================================== sections ===========================*/
+
+		#content {
+			width: 1000px;
+			margin: 0px auto;
+			padding: 0px 0px 20px 0px;
+		}
+
+		/* ============================ Sliders ====================================*/
 
         .sliders {
             height: 100px;
+			box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+			border-radius: 2px;
         }
         .sliders > .horizontalSliders,
         .sliders > .verticalSliders
         {
-            background-color: #eee;
+
             float: left;
             height: 100%;
             padding: 10px;
