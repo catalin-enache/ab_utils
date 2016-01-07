@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -13,109 +15,131 @@ var _src = require('../src');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Application = _react2.default.createClass({
-	displayName: 'Application',
-	getInitialState: function getInitialState() {
-		return {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Application = (function (_React$Component) {
+	_inherits(Application, _React$Component);
+
+	function Application() {
+		_classCallCheck(this, Application);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Application).call(this));
+
+		_this.state = {
 			sliderValue: 0
 		};
-	},
-	sliderOnChange: function sliderOnChange(value) {
-		this.setState({ sliderValue: value });
-	},
-	render: function render() {
-		return _react2.default.createElement(
-			'div',
-			null,
-			_react2.default.createElement(
-				'h3',
-				null,
-				'Info'
-			),
-			_react2.default.createElement(
-				'pre',
-				null,
-				'\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange\n    -> parent updates and pass new prop value\n    -> componentWillReceiveProps\n    -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState\n    -> component emit onChange\n    -> parent receives event\n    -> component ignores eventual defaultValue changes in componentWillReceiveProps\n                '
-			),
-			_react2.default.createElement(
-				'h3',
-				null,
-				'Sliders'
-			),
-			_react2.default.createElement(
-				'pre',
-				null,
-				'\n<Slider name="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange}\n\t\tstyle={{}} />\n<Slider name="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange}\n\tstyle={{width: \'100%\', bgColor: \'#003366\'}}\n\tdebug={false} />\n<Slider name="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tonChange={this.sliderOnChange}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}} />\n<Slider name="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange}\n\torientation="vertical"\n\tstyle={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false} />\n                    '
-			),
-			_react2.default.createElement(
-				'p',
-				null,
-				'value: ',
-				this.state.sliderValue
-			),
-			_react2.default.createElement(
+		return _this;
+	}
+
+	_createClass(Application, [{
+		key: 'sliderOnChange',
+		value: function sliderOnChange(value) {
+			this.setState({ sliderValue: value });
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
 				'div',
-				{ className: 'sliders clearfix' },
+				null,
 				_react2.default.createElement(
-					'div',
-					{ className: 'horizontalSliders' },
-					_react2.default.createElement(
-						'div',
-						{ className: 'horizontalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_1',
-							defaultValue: this.state.sliderValue,
-							start: -2,
-							end: 2,
-							onChange: this.sliderOnChange,
-							style: {} })
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'horizontalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_2',
-							value: this.state.sliderValue,
-							start: -2,
-							end: 2,
-							onChange: this.sliderOnChange,
-							style: { width: '100%', bgColor: '#003366' },
-							debug: true })
-					)
+					'h3',
+					null,
+					'Info'
+				),
+				_react2.default.createElement(
+					'pre',
+					null,
+					'\nControlled components (those having \'value\') update themselves through their parent via componentWillReceiveProps.\nFlow: component emits onChange\n    -> parent updates and pass new prop value\n    -> componentWillReceiveProps\n    -> component setState\n\nUncontrolled components (those having \'defaultValue\') update themselves by their own, then emit onChange.\nFlow: component setState\n    -> component emit onChange\n    -> parent receives event\n    -> component ignores eventual defaultValue changes in componentWillReceiveProps\n                '
+				),
+				_react2.default.createElement(
+					'h3',
+					null,
+					'Sliders'
+				),
+				_react2.default.createElement(
+					'pre',
+					null,
+					'\n<Slider name="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}} />\n<Slider name="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', bgColor: \'#003366\'}}\n\tdebug={false} />\n<Slider name="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider name="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false} />\n                    '
+				),
+				_react2.default.createElement(
+					'p',
+					null,
+					'value: ',
+					this.state.sliderValue
 				),
 				_react2.default.createElement(
 					'div',
-					{ className: 'verticalSliders clearfix' },
+					{ className: 'sliders clearfix' },
 					_react2.default.createElement(
 						'div',
-						{ className: 'verticalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_3',
-							defaultValue: this.state.sliderValue,
-							start: -2,
-							end: 2,
-							step: 1,
-							onChange: this.sliderOnChange,
-							orientation: 'vertical',
-							style: { height: '100%' },
-							debug: false })
+						{ className: 'horizontalSliders' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'horizontalSliderWrapper' },
+							_react2.default.createElement(_src.Slider, { name: 'slider_1',
+								defaultValue: this.state.sliderValue,
+								start: -2,
+								end: 2,
+								onChange: this.sliderOnChange.bind(this),
+								style: {} })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'horizontalSliderWrapper' },
+							_react2.default.createElement(_src.Slider, { name: 'slider_2',
+								value: this.state.sliderValue,
+								start: -2,
+								end: 2,
+								onChange: this.sliderOnChange.bind(this),
+								style: { width: '100%', bgColor: '#003366' },
+								debug: false })
+						)
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'verticalSliderWrapper' },
-						_react2.default.createElement(_src.Slider, { name: 'slider_4',
-							value: this.state.sliderValue,
-							start: -2,
-							end: 2,
-							step: 1,
-							disabled: true,
-							onChange: this.sliderOnChange,
-							orientation: 'vertical',
-							style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
-							debug: false })
+						{ className: 'verticalSliders clearfix' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'verticalSliderWrapper' },
+							_react2.default.createElement(_src.Slider, { name: 'slider_3',
+								defaultValue: this.state.sliderValue,
+								start: -2,
+								end: 2,
+								step: 1,
+								onChange: this.sliderOnChange.bind(this),
+								orientation: 'vertical',
+								style: { height: '100%' },
+								debug: false })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'verticalSliderWrapper' },
+							_react2.default.createElement(_src.Slider, { name: 'slider_4',
+								value: this.state.sliderValue,
+								start: -2,
+								end: 2,
+								step: 1,
+								disabled: true,
+								onChange: this.sliderOnChange.bind(this),
+								orientation: 'vertical',
+								style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
+								debug: false })
+						)
 					)
 				)
-			)
-		);
-	}
-});
+			);
+		}
+	}]);
+
+	return Application;
+})(_react2.default.Component);
+
+;
 
 _reactDom2.default.render(_react2.default.createElement(Application, null), document.querySelector('#content'));
 
@@ -19258,6 +19282,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /*
  TODO: make tests
+ TODO: must not allow to receive value and defaultValue
  */
 
 // ============================ Custom Validators =================================

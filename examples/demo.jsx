@@ -5,17 +5,18 @@ import ReactDOM from 'react-dom';
 
 import {Slider, TextField} from '../src';
 
-const Application = React.createClass({
+class Application extends React.Component {
 
-	getInitialState() {
-		return {
+	constructor() {
+		super();
+		this.state = {
 			sliderValue: 0
-		};
-	},
+		}
+	}
 
 	sliderOnChange(value) {
 		this.setState({sliderValue: value});
-	},
+	}
 
 	render() {
 		return (
@@ -41,13 +42,13 @@ Flow: component setState
 	defaultValue={this.state.sliderValue}
 	start={-2}
 	end={2}
-	onChange={this.sliderOnChange}
-		style={{}} />
+	onChange={this.sliderOnChange.bind(this)}
+	style={{}} />
 <Slider name="slider_2"
 	value={this.state.sliderValue}
 	start={-2}
 	end={2}
-	onChange={this.sliderOnChange}
+	onChange={this.sliderOnChange.bind(this)}
 	style={{width: '100%', bgColor: '#003366'}}
 	debug={false} />
 <Slider name="slider_3"
@@ -55,16 +56,17 @@ Flow: component setState
 	start={-2}
 	end={2}
 	step={1}
-	onChange={this.sliderOnChange}
+	onChange={this.sliderOnChange.bind(this)}
 	orientation="vertical"
-	style={{height: '100%'}} />
+	style={{height: '100%'}}
+	debug={false} />
 <Slider name="slider_4"
 	value={this.state.sliderValue}
 	start={-2}
 	end={2}
 	step={1}
 	disabled={true}
-	onChange={this.sliderOnChange}
+	onChange={this.sliderOnChange.bind(this)}
 	orientation="vertical"
 	style={{height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box'}}
 	debug={false} />
@@ -78,7 +80,7 @@ Flow: component setState
 									defaultValue={this.state.sliderValue}
 									start={-2}
 									end={2}
-									onChange={this.sliderOnChange}
+									onChange={this.sliderOnChange.bind(this)}
 									style={{}} />
 						</div>
 						<div className="horizontalSliderWrapper">
@@ -86,7 +88,7 @@ Flow: component setState
 									value={this.state.sliderValue}
 									start={-2}
 									end={2}
-									onChange={this.sliderOnChange}
+									onChange={this.sliderOnChange.bind(this)}
 									style={{width: '100%', bgColor: '#003366'}}
 									debug={false} />
 						</div>
@@ -98,7 +100,7 @@ Flow: component setState
 									start={-2}
 									end={2}
 									step={1}
-									onChange={this.sliderOnChange}
+									onChange={this.sliderOnChange.bind(this)}
 									orientation="vertical"
 									style={{height: '100%'}}
 									debug={false} />
@@ -110,7 +112,7 @@ Flow: component setState
 									end={2}
 									step={1}
 									disabled={true}
-									onChange={this.sliderOnChange}
+									onChange={this.sliderOnChange.bind(this)}
 									orientation="vertical"
 									style={{height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box'}}
 									debug={false} />
@@ -120,7 +122,7 @@ Flow: component setState
 			</div>
 		);
 	}
-});
+};
 
 ReactDOM.render(
 	<Application />,
