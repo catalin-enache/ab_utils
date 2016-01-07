@@ -136,7 +136,7 @@ var SlidersApp = (function (_React$Component) {
 
 exports.default = SlidersApp;
 
-},{"../../src":165,"react":160,"react-dom":31}],2:[function(require,module,exports){
+},{"../../src":166,"react":160,"react-dom":31}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19302,7 +19302,7 @@ var GenericComponent = (function (_React$Component) {
 
 exports.default = GenericComponent;
 
-},{"../style":166,"react":160}],162:[function(require,module,exports){
+},{"../style":167,"react":160}],162:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -19327,6 +19327,10 @@ var _generic_deco = require('../decorators/generic_deco');
 
 var _generic_deco2 = _interopRequireDefault(_generic_deco);
 
+var _mouse_wheel_delta = require('../helpers/mouse_wheel_delta');
+
+var _mouse_wheel_delta2 = _interopRequireDefault(_mouse_wheel_delta);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19336,8 +19340,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /*
- TODO: make tests
- TODO: must not allow to receive value and defaultValue
+ TODO: inverse behaviour of the vertical slider
+ TODO: must not allow receiving value along with defaultValue
+ TODO: further investigate chrome drag slider issue (currently fixed by forbidding * select in examples css)
+ TODO: make sure components do not depend on any style included in provided examples
+ TODO: finish tests
  */
 
 // ============================ Custom Validators =================================
@@ -19465,6 +19472,7 @@ var Slider = (function (_GenericComponent) {
 		_this._handleMouseMove = _this._handleMouseMove.bind(_this);
 		_this._handleMouseUp = _this._handleMouseUp.bind(_this);
 		_this._handleMouseDown = _this._handleMouseDown.bind(_this);
+		_this._handleMouseWheel = _this._handleMouseWheel.bind(_this);
 		return _this;
 	}
 
@@ -19523,6 +19531,17 @@ var Slider = (function (_GenericComponent) {
 			document.removeEventListener('mouseup', this._handleMouseUp, false);
 			this._update(e);
 		}
+	}, {
+		key: '_handleMouseWheel',
+		value: function _handleMouseWheel(e) {
+			e.preventDefault();
+			this._updateVars();
+			var delta = (0, _mouse_wheel_delta2.default)(e);
+			var pxValue = this._getPercentToPixelOffset();
+			pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+			var event = { clientX: pxValue, clientY: pxValue };
+			this._update(event);
+		}
 
 		// ============================ Helpers ===========================================
 
@@ -19569,6 +19588,26 @@ var Slider = (function (_GenericComponent) {
 		value: function _percentToValue(percent) {
 			var range = this.props.end - this.props.start;
 			return parseFloat((range * percent + this.props.start).toFixed(5));
+		}
+	}, {
+		key: '_getPercentToPixelOffset',
+		value: function _getPercentToPixelOffset() {
+			if (this.props.orientation == 'horizontal') {
+				return this._offsetLeft + this._outerWidth * this.state.percent;
+			} else {
+				return this._offsetTop + this._outerHeight * this.state.percent;
+			}
+		}
+	}, {
+		key: '_getStepToPixelRange',
+		value: function _getStepToPixelRange() {
+			var stepsNum = (this.props.end - this.props.start) / this.props.step;
+			var fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+			var range = fullRange / stepsNum;
+			if (range != parseInt(range)) {
+				console.warn(this.props.name + (': pixel step(' + range + ') does not fit in pixels range(' + fullRange + ')'));
+			}
+			return range;
 		}
 	}, {
 		key: '_getValue',
@@ -19657,7 +19696,8 @@ var Slider = (function (_GenericComponent) {
 			var handlers = {};
 			if (!this.props.disabled) {
 				handlers = {
-					onMouseDown: this._handleMouseDown
+					onMouseDown: this._handleMouseDown,
+					onWheel: this._handleMouseWheel
 				};
 			}
 
@@ -19716,7 +19756,7 @@ Slider = (0, _generic_deco2.default)(Slider);
 
 exports.default = Slider;
 
-},{"../decorators/generic_deco":164,"./generic_component":161,"react":160}],163:[function(require,module,exports){
+},{"../decorators/generic_deco":164,"../helpers/mouse_wheel_delta":165,"./generic_component":161,"react":160}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19801,6 +19841,22 @@ function GenericDeco(Component) {
 
 },{"react":160}],165:[function(require,module,exports){
 'use strict';
+/*
+* returns small multiples of +-1
+* */
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = getWheelDelta;
+function getWheelDelta(wheelEvent) {
+	var delta = wheelEvent.deltaY;
+	var res = Math.abs(delta / 100);
+	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
+}
+
+},{}],166:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -19820,7 +19876,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.Slider = _slider2.default;
 exports.TextField = _text_field2.default;
 
-},{"./components/slider.jsx":162,"./components/text_field.jsx":163}],166:[function(require,module,exports){
+},{"./components/slider.jsx":162,"./components/text_field.jsx":163}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

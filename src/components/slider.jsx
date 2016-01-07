@@ -3,10 +3,14 @@
 import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
+import getWheelDelta from '../helpers/mouse_wheel_delta';
 
 /*
- TODO: make tests
- TODO: must not allow to receive value and defaultValue
+ TODO: inverse behaviour of the vertical slider
+ TODO: must not allow receiving value along with defaultValue
+ TODO: further investigate chrome drag slider issue (currently fixed by forbidding * select in examples css)
+ TODO: make sure components do not depend on any style included in provided examples
+ TODO: finish tests
  */
 
 // ============================ Custom Validators =================================
@@ -125,6 +129,7 @@ class Slider extends GenericComponent {
 		this._handleMouseMove = this._handleMouseMove.bind(this);
 		this._handleMouseUp = this._handleMouseUp.bind(this);
 		this._handleMouseDown = this._handleMouseDown.bind(this);
+		this._handleMouseWheel = this._handleMouseWheel.bind(this);
 	}
 
 	componentDidMount() {
@@ -173,6 +178,16 @@ class Slider extends GenericComponent {
 		this._update(e);
 	}
 
+	_handleMouseWheel(e) {
+		e.preventDefault();
+		this._updateVars();
+		let delta = getWheelDelta(e);
+		let pxValue = this._getPercentToPixelOffset();
+		pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+		let event = {clientX: pxValue, clientY: pxValue};
+		this._update(event);
+	}
+
 	// ============================ Helpers ===========================================
 
 	_updateVars() {
@@ -210,6 +225,24 @@ class Slider extends GenericComponent {
 	_percentToValue(percent) {
 		let range = this.props.end - this.props.start;
 		return parseFloat((range * percent + this.props.start).toFixed(5));
+	}
+
+	_getPercentToPixelOffset() {
+		if (this.props.orientation == 'horizontal') {
+			return this._offsetLeft + this._outerWidth * this.state.percent;
+		} else {
+			return this._offsetTop + this._outerHeight * this.state.percent;
+		}
+	}
+
+	_getStepToPixelRange() {
+		let stepsNum = (this.props.end - this.props.start) / this.props.step;
+		let fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+		let range = fullRange/stepsNum;
+		if (range != parseInt(range)) {
+			console.warn(this.props.name + `: pixel step(${range}) does not fit in pixels range(${fullRange})`);
+		}
+		return range;
 	}
 
 	_getValue() {
@@ -291,7 +324,8 @@ class Slider extends GenericComponent {
 		let handlers = {};
 		if (!this.props.disabled) {
 			handlers = {
-				onMouseDown: this._handleMouseDown
+				onMouseDown: this._handleMouseDown,
+				onWheel: this._handleMouseWheel
 			}
 		}
 
