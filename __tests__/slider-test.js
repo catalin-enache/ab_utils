@@ -100,6 +100,7 @@ describe('Slider', () => {
 		});
 
 		describe('when has "value" prop - is controlled', () => {
+
 			it('setState after _emitValueChangeEvent', () => {
 
 				let SliderTest = class extends Slider {
@@ -147,6 +148,7 @@ describe('Slider', () => {
 		});
 
 		describe('when has "defaultValue" prop - is uncontrolled', () => {
+
 			it('setState before _emitValueChangeEvent then it does not setState anymore', () => {
 				let SliderTest = class extends Slider {
 					_getBoundingClientRect() {
@@ -195,42 +197,71 @@ describe('Slider', () => {
 	});
 
 	describe('_eventToPercent', () => {
-		it('calculate percent from passed event', () => {
-
+		it('calculates percent from passed event', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" />
+			);
+			slider._outerWidth = 100;
+			expect(slider._eventToPercent({clientX: 50})).toEqual(0.5);
 		});
 	});
 
 	describe('_valueToPercent', () => {
-		it('calculate percent from passed value', () => {
+		it('calculates percent from passed value', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" />
+			);
+			expect(slider._valueToPercent(0.1)).toEqual(0.55);
+		});
+	});
 
+	describe('_valueToPercent with stepping', () => {
+		it('calculates percent from passed value and applies stepping', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" step={1} />
+			);
+			expect(slider._valueToPercent(0.1)).toEqual(0.5);
 		});
 	});
 
 	describe('_percentToValue', () => {
-		it('calculate value from passed percent', () => {
-
+		it('calculates value from passed percent', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one"  />
+			);
+			expect(slider._percentToValue(0.1)).toEqual(-0.8);
 		});
 	});
 
-	describe('_update', () => {
-
+	describe('_stepping with step prop', () => {
+		it('receives a percent and returns a rounded percent depending on step prop', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" step={0.1}  />
+			);
+			expect(slider._stepping(0.06)).toEqual(0.05);
+			expect(slider._stepping(0.09)).toEqual(0.1);
+		});
 	});
 
-	describe('_emitValueChangeEvent', () => {
-
+	describe('_stepping without step prop', () => {
+		it('receives a percent and returns a rounded percent depending on step prop', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" />
+			);
+			expect(slider._stepping(0.06)).toEqual(0.06);
+			expect(slider._stepping(0.09)).toEqual(0.09);
+		});
 	});
 
-	describe('_setPercentValueState', () => {
+	xdescribe('_update', () => {});
 
-	});
+	xdescribe('_emitValueChangeEvent', () => {});
 
-	describe('_setPercentValueStateAndEmitValueChangedEvent', () => {
+	xdescribe('_setPercentValueState', () => {});
 
-	});
+	xdescribe('_setPercentValueStateAndEmitValueChangedEvent', () => {});
 
-	describe('render', () => {
-
-	});
+	xdescribe('render', () => {});
 });
 
 
