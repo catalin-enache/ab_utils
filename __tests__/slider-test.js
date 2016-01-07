@@ -206,7 +206,7 @@ describe('Slider', () => {
 		});
 	});
 
-	describe('_valueToPercent', () => {
+	describe('_valueToPercent without step prop', () => {
 		it('calculates percent from passed value', () => {
 			let slider = TestUtils.renderIntoDocument(
 				<Slider name="one" />
@@ -215,7 +215,7 @@ describe('Slider', () => {
 		});
 	});
 
-	describe('_valueToPercent with stepping', () => {
+	describe('_valueToPercent with step prop', () => {
 		it('calculates percent from passed value and applies stepping', () => {
 			let slider = TestUtils.renderIntoDocument(
 				<Slider name="one" step={1} />
@@ -252,6 +252,29 @@ describe('Slider', () => {
 			expect(slider._stepping(0.09)).toEqual(0.09);
 		});
 	});
+
+	describe('_getValue', () => {
+		it('returns defaultValue or value or start', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" />
+			);
+			expect(slider._getValue()).toEqual(-1);
+
+			slider = TestUtils.renderIntoDocument(
+				<Slider name="one" defaultValue={-0.5} />
+			);
+			expect(slider._getValue()).toEqual(-0.5);
+
+			slider = TestUtils.renderIntoDocument(
+				<Slider name="one" value={-0.5} />
+			);
+			expect(slider._getValue()).toEqual(-0.5);
+		});
+	});
+
+	xdescribe('_updateVars', () => {});
+
+	xdescribe('_getBoundingClientRect', () => {});
 
 	xdescribe('_update', () => {});
 
