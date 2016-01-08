@@ -19541,10 +19541,10 @@ var Slider = (function (_GenericComponent) {
 
 			switch (this.props.orientation) {
 				case 'horizontal':
-					pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+					pxValue += this.props.step === null ? delta : delta * this._getStepToPixelAmount();
 					break;
 				default:
-					pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelRange();
+					pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelAmount();
 			}
 
 			var event = { clientX: pxValue, clientY: pxValue };
@@ -19586,12 +19586,10 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_valueToPercent',
 		value: function _valueToPercent(value) {
-			var stepping = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
 			var range = this.props.end - this.props.start;
 			var position = value - this.props.start;
 			var percent = parseFloat((position / range).toFixed(5));
-			return stepping ? this._stepping(percent) : percent;
+			return this._stepping(percent);
 		}
 	}, {
 		key: '_percentToValue',
@@ -19610,11 +19608,10 @@ var Slider = (function (_GenericComponent) {
 			}
 		}
 	}, {
-		key: '_getStepToPixelRange',
-		value: function _getStepToPixelRange() {
+		key: '_getStepToPixelAmount',
+		value: function _getStepToPixelAmount() {
 			var stepsNum = (this.props.end - this.props.start) / this.props.step;
 			var fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
-			console.log(fullRange + '/' + stepsNum + ' = ' + fullRange / stepsNum);
 			var range = fullRange / stepsNum;
 			if (fullRange / range != parseInt(fullRange / range)) {
 				console.warn(this.props.name + (': pixel step(' + range + ') does not fit in pixels range(' + fullRange + ')'));
@@ -19634,11 +19631,12 @@ var Slider = (function (_GenericComponent) {
 			}
 
 			var stepsNum = (this.props.end - this.props.start) / this.props.step;
-			var stepUnit = 1 / stepsNum;
-			var steps = [];
-			for (var s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
-				steps.push(s);
+
+			var steps = [0];
+			for (var s = 1; s <= stepsNum; s++) {
+				steps.push(s / stepsNum);
 			}
+
 			var halfStep = steps[1] / 2;
 
 			for (var i = stepsNum; i > 0; i--) {

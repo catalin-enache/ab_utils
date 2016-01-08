@@ -186,10 +186,10 @@ class Slider extends GenericComponent {
 
 		switch (this.props.orientation) {
 			case 'horizontal':
-				pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+				pxValue += this.props.step === null ? delta : delta * this._getStepToPixelAmount();
 				break;
 			default:
-				pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelRange();
+				pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelAmount();
 		}
 
 		let event = {clientX: pxValue, clientY: pxValue};
@@ -225,11 +225,11 @@ class Slider extends GenericComponent {
 		}
 	}
 
-	_valueToPercent(value, stepping = true) {
+	_valueToPercent(value) {
 		let range = this.props.end - this.props.start;
 		let position = value - this.props.start;
 		let percent = parseFloat((position / range).toFixed(5));
-		return stepping ? this._stepping(percent) : percent;
+		return this._stepping(percent);
 	}
 
 	_percentToValue(percent) {
@@ -246,10 +246,9 @@ class Slider extends GenericComponent {
 		}
 	}
 
-	_getStepToPixelRange() {
+	_getStepToPixelAmount() {
 		let stepsNum = (this.props.end - this.props.start) / this.props.step;
 		let fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
-		console.log(`${fullRange}/${stepsNum} = ${fullRange/stepsNum}`)
 		let range = fullRange/stepsNum;
 		if (fullRange/range != parseInt(fullRange/range)) {
 			console.warn(this.props.name + `: pixel step(${range}) does not fit in pixels range(${fullRange})`);
@@ -272,11 +271,12 @@ class Slider extends GenericComponent {
 		}
 
 		let stepsNum = (this.props.end - this.props.start) / this.props.step;
-		let stepUnit = 1 / stepsNum;
-		let steps = [];
-		for (let s = 0; s <= 1; s = parseFloat((s + stepUnit).toFixed(5))) {
-			steps.push(s);
+
+		let steps = [0];
+		for (let s = 1; s <= stepsNum; s++) {
+			steps.push(s/stepsNum);
 		}
+
 		let halfStep = steps[1] / 2;
 
 		for (let i = stepsNum; i > 0; i--) {
