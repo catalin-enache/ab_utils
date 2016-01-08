@@ -79,7 +79,7 @@ var SlidersApp = (function (_React$Component) {
 							_react2.default.createElement(_src.Slider, { name: 'slider_1',
 								defaultValue: this.state.sliderValue,
 								start: -2,
-								end: 2,
+								end: 4,
 								onChange: this.sliderOnChange.bind(this),
 								style: {} })
 						),
@@ -89,7 +89,7 @@ var SlidersApp = (function (_React$Component) {
 							_react2.default.createElement(_src.Slider, { name: 'slider_2',
 								value: this.state.sliderValue,
 								start: -2,
-								end: 2,
+								end: 4,
 								onChange: this.sliderOnChange.bind(this),
 								style: { width: '100%', bgColor: '#003366' },
 								debug: false })
@@ -104,8 +104,8 @@ var SlidersApp = (function (_React$Component) {
 							_react2.default.createElement(_src.Slider, { name: 'slider_3',
 								defaultValue: this.state.sliderValue,
 								start: -2,
-								end: 2,
-								step: 1,
+								end: 4,
+								step: 2,
 								onChange: this.sliderOnChange.bind(this),
 								orientation: 'vertical',
 								style: { height: '100%' },
@@ -117,7 +117,7 @@ var SlidersApp = (function (_React$Component) {
 							_react2.default.createElement(_src.Slider, { name: 'slider_4',
 								value: this.state.sliderValue,
 								start: -2,
-								end: 2,
+								end: 4,
 								step: 1,
 								disabled: true,
 								onChange: this.sliderOnChange.bind(this),
@@ -19538,7 +19538,15 @@ var Slider = (function (_GenericComponent) {
 			this._updateVars();
 			var delta = (0, _mouse_wheel_delta2.default)(e);
 			var pxValue = this._getPercentToPixelOffset();
-			pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+
+			switch (this.props.orientation) {
+				case 'horizontal':
+					pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+					break;
+				default:
+					pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelRange();
+			}
+
 			var event = { clientX: pxValue, clientY: pxValue };
 			this._update(event);
 		}
@@ -19565,12 +19573,14 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_eventToPercent',
 		value: function _eventToPercent(e) {
-			if (this.props.orientation == 'horizontal') {
-				var positionX = e.clientX - this._offsetLeft;
-				return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
-			} else {
-				var positionY = e.clientY - this._offsetTop;
-				return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+			switch (this.props.orientation) {
+				case 'horizontal':
+					var positionX = e.clientX - this._offsetLeft;
+					return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+				default:
+					var positionY = this._outerHeight - (e.clientY - this._offsetTop);
+					return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+
 			}
 		}
 	}, {
@@ -19592,10 +19602,11 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_getPercentToPixelOffset',
 		value: function _getPercentToPixelOffset() {
-			if (this.props.orientation == 'horizontal') {
-				return this._offsetLeft + this._outerWidth * this.state.percent;
-			} else {
-				return this._offsetTop + this._outerHeight * this.state.percent;
+			switch (this.props.orientation) {
+				case 'horizontal':
+					return this._offsetLeft + this._outerWidth * this.state.percent;
+				default:
+					return this._offsetTop + this._outerHeight - this._outerHeight * this.state.percent;
 			}
 		}
 	}, {
@@ -19603,8 +19614,9 @@ var Slider = (function (_GenericComponent) {
 		value: function _getStepToPixelRange() {
 			var stepsNum = (this.props.end - this.props.start) / this.props.step;
 			var fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+			console.log(fullRange + '/' + stepsNum + ' = ' + fullRange / stepsNum);
 			var range = fullRange / stepsNum;
-			if (range != parseInt(range)) {
+			if (fullRange / range != parseInt(fullRange / range)) {
 				console.warn(this.props.name + (': pixel step(' + range + ') does not fit in pixels range(' + fullRange + ')'));
 			}
 			return range;
@@ -19711,8 +19723,10 @@ var Slider = (function (_GenericComponent) {
 				};
 
 				var foregroundStyle = {
-					width: innerWidth + 'px',
-					height: '100%'
+					top: '0px',
+					right: this._outerWidth - innerWidth + 'px',
+					bottom: '0px',
+					left: '0px'
 				};
 			} else {
 
@@ -19724,19 +19738,23 @@ var Slider = (function (_GenericComponent) {
 				};
 
 				var foregroundStyle = {
-					height: innerHeight + 'px',
-					width: '100%'
+					top: this._outerHeight - innerHeight + 'px',
+					right: '0px',
+					bottom: '0px',
+					left: '0px'
 				};
 			}
 
 			// also let props.style pass through
 			backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
+				position: 'relative',
 				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
 				opacity: this.props.disabled ? 0.5 : 1,
 				backgroundColor: this._style('bgColor')
 			});
 
 			foregroundStyle = Object.assign(foregroundStyle, {
+				position: 'absolute',
 				backgroundColor: this._style('fgColor')
 			});
 

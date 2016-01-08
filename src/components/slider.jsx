@@ -183,7 +183,15 @@ class Slider extends GenericComponent {
 		this._updateVars();
 		let delta = getWheelDelta(e);
 		let pxValue = this._getPercentToPixelOffset();
-		pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+
+		switch (this.props.orientation) {
+			case 'horizontal':
+				pxValue += this.props.step === null ? delta : delta * this._getStepToPixelRange();
+				break;
+			default:
+				pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelRange();
+		}
+
 		let event = {clientX: pxValue, clientY: pxValue};
 		this._update(event);
 	}
@@ -206,12 +214,14 @@ class Slider extends GenericComponent {
 	}
 
 	_eventToPercent(e) {
-		if (this.props.orientation == 'horizontal') {
-			let positionX = e.clientX - this._offsetLeft;
-			return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
-		} else {
-			let positionY = e.clientY - this._offsetTop;
-			return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+		switch (this.props.orientation) {
+			case 'horizontal':
+				let positionX = e.clientX - this._offsetLeft;
+				return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+			default:
+				let positionY = this._outerHeight - (e.clientY - this._offsetTop) ;
+				return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+
 		}
 	}
 
@@ -228,18 +238,20 @@ class Slider extends GenericComponent {
 	}
 
 	_getPercentToPixelOffset() {
-		if (this.props.orientation == 'horizontal') {
-			return this._offsetLeft + this._outerWidth * this.state.percent;
-		} else {
-			return this._offsetTop + this._outerHeight * this.state.percent;
+		switch (this.props.orientation) {
+			case 'horizontal':
+				return this._offsetLeft + this._outerWidth * this.state.percent;
+			default:
+				return this._offsetTop + this._outerHeight - this._outerHeight * this.state.percent;
 		}
 	}
 
 	_getStepToPixelRange() {
 		let stepsNum = (this.props.end - this.props.start) / this.props.step;
 		let fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+		console.log(`${fullRange}/${stepsNum} = ${fullRange/stepsNum}`)
 		let range = fullRange/stepsNum;
-		if (range != parseInt(range)) {
+		if (fullRange/range != parseInt(fullRange/range)) {
 			console.warn(this.props.name + `: pixel step(${range}) does not fit in pixels range(${fullRange})`);
 		}
 		return range;
@@ -339,8 +351,10 @@ class Slider extends GenericComponent {
 			};
 
 			var foregroundStyle = {
-				width: `${innerWidth}px`,
-				height: '100%'
+				top: '0px',
+				right: `${this._outerWidth - innerWidth}px`,
+				bottom: '0px',
+				left: '0px'
 			};
 
 		} else {
@@ -353,20 +367,24 @@ class Slider extends GenericComponent {
 			};
 
 			var foregroundStyle = {
-				height: `${innerHeight}px`,
-				width: '100%'
+				top: `${this._outerHeight - innerHeight}px`,
+				right: '0px',
+				bottom: '0px',
+				left: '0px'
 			};
 
 		}
 
 		// also let props.style pass through
 		backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
+			position: 'relative',
 			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
 			opacity: this.props.disabled ? 0.5 : 1,
 			backgroundColor: this._style('bgColor')
 		});
 
 		foregroundStyle = Object.assign(foregroundStyle, {
+			position: 'absolute',
 			backgroundColor: this._style('fgColor')
 		});
 

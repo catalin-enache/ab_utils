@@ -65,7 +65,7 @@ class SlidersApp extends React.Component {
 							<Slider name="slider_1"
 									defaultValue={this.state.sliderValue}
 									start={-2}
-									end={2}
+									end={4}
 									onChange={this.sliderOnChange.bind(this)}
 									style={{}} />
 						</div>
@@ -73,7 +73,7 @@ class SlidersApp extends React.Component {
 							<Slider name="slider_2"
 									value={this.state.sliderValue}
 									start={-2}
-									end={2}
+									end={4}
 									onChange={this.sliderOnChange.bind(this)}
 									style={{width: '100%', bgColor: '#003366'}}
 									debug={false} />
@@ -84,8 +84,8 @@ class SlidersApp extends React.Component {
 							<Slider name="slider_3"
 									defaultValue={this.state.sliderValue}
 									start={-2}
-									end={2}
-									step={1}
+									end={4}
+									step={2}
 									onChange={this.sliderOnChange.bind(this)}
 									orientation="vertical"
 									style={{height: '100%'}}
@@ -95,7 +95,7 @@ class SlidersApp extends React.Component {
 							<Slider name="slider_4"
 									value={this.state.sliderValue}
 									start={-2}
-									end={2}
+									end={4}
 									step={1}
 									disabled={true}
 									onChange={this.sliderOnChange.bind(this)}
