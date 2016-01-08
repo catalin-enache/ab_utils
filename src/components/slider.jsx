@@ -71,7 +71,7 @@ const propTypes = {
 	disabled: React.PropTypes.bool,
 
 	// optional no defaults
-	value: valueInRangePropType,
+	value: valueInRangePropType, // monitoring change
 	defaultValue: valueInRangePropType,
 	onChange: React.PropTypes.func
 };
@@ -113,13 +113,24 @@ class Slider extends GenericComponent {
 		this._outerHeight = 0;
 		this._offsetLeft = 0;
 		this._offsetTop = 0;
+		this._stepInPixels = 0;
+
 		this._dragRunning = false;
+
+		this._range = props.end - props.start;
+		this._stepsNum = this._range / props.step;
+
+		this._steps = [0];
+		for (let s = 1; s <= this._stepsNum; s++) {
+			this._steps.push(s/this._stepsNum);
+		}
 
 		this.state = {
 			percent: 0,
 			value: this._getValue()
 		};
 
+		this._handleMouseOver = this._handleMouseOver.bind(this);
 		this._handleMouseMove = this._handleMouseMove.bind(this);
 		this._handleMouseUp = this._handleMouseUp.bind(this);
 		this._handleMouseDown = this._handleMouseDown.bind(this);
@@ -139,6 +150,7 @@ class Slider extends GenericComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		// we are listening only for value change
 		if (this._isControlledComponent()) {
 			this._log(`componentWillReceiveProps => nextProps: ${JSON.stringify(nextProps)}`);
 			let percent = this._valueToPercent(nextProps.value);
@@ -148,17 +160,19 @@ class Slider extends GenericComponent {
 
 	// ============================= Handlers ========================================
 
-	_handleMouseDown(e) {
+	_handleMouseOver(e) {
 		this._updateVars();
+	}
+
+	_handleMouseDown(e) {
+		this._updateVars(); // for devices without mouse over
 		document.addEventListener('mousemove', this._handleMouseMove, false);
 		document.addEventListener('mouseup', this._handleMouseUp, false);
 		this._update(e);
 	}
 
 	_handleMouseMove(e) {
-		if (this._dragRunning) {
-			return;
-		}
+		if (this._dragRunning) { return; }
 		this._dragRunning = true;
 		requestAnimationFrame(() => {
 			this._update(e);
@@ -174,10 +188,9 @@ class Slider extends GenericComponent {
 
 	_handleMouseWheel(e) {
 		e.preventDefault();
-		this._updateVars();
 		let delta = getWheelDelta(e);
 		let pxValue = this._percentToPixelOffset();
-		let pxDelta = delta * this._stepToPixelAmount();
+		let pxDelta = delta * this._stepInPixels;
 		pxValue += this.props.orientation == 'horizontal' ? pxDelta : -pxDelta;
 		let event = {clientX: pxValue, clientY: pxValue};
 		this._update(event);
@@ -192,6 +205,8 @@ class Slider extends GenericComponent {
 		this._outerHeight = parseInt(boundingClientRect.height);
 		this._offsetLeft = parseInt(boundingClientRect.left);
 		this._offsetTop = parseInt(boundingClientRect.top);
+
+		this._stepInPixels = this._stepToPixelAmount();
 
 		this._log(`_updateVars: _outerWidth: ${this._outerWidth} _outerHeight: ${this._outerHeight} _offsetLeft: ${this._offsetLeft} _offsetTop: ${this._offsetTop} `)
 	}
@@ -215,23 +230,21 @@ class Slider extends GenericComponent {
 		switch (this.props.orientation) {
 			case 'horizontal':
 				let positionX = e.clientX - this._offsetLeft;
-				return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+				return this._stepping(positionX / this._outerWidth);
 			default:
 				let positionY = this._outerHeight - (e.clientY - this._offsetTop) ;
-				return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+				return this._stepping(positionY / this._outerHeight);
 		}
 	}
 
 	_valueToPercent(value) {
-		let range = this.props.end - this.props.start;
 		let position = value - this.props.start;
-		let percent = parseFloat((position / range).toFixed(5));
+		let percent = position / this._range;
 		return this._stepping(percent);
 	}
 
 	_percentToValue(percent) {
-		let range = this.props.end - this.props.start;
-		return parseFloat((range * percent + this.props.start).toFixed(5));
+		return parseFloat((this._range * percent + this.props.start).toFixed(5));
 	}
 
 	_percentToPixelOffset() {
@@ -244,13 +257,12 @@ class Slider extends GenericComponent {
 	}
 
 	_stepToPixelAmount() {
-		let stepsNum = (this.props.end - this.props.start) / this.props.step;
-		let fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
-		let range = fullRange/stepsNum;
-		if (fullRange/range != parseInt(fullRange/range)) {
-			console.warn(this.props.name + `: pixel step(${range}) does not fit in pixels range(${fullRange})`);
+		let pixelsRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+		let stepInPixels = pixelsRange/this._stepsNum;
+		if (pixelsRange/stepInPixels !== this._stepsNum) {
+			console.warn(this.props.name + `: pixel step(${stepInPixels}) does not fit in pixels range(${pixelsRange})`);
 		}
-		return range;
+		return stepInPixels;
 	}
 
 	// ---------------------------------------------
@@ -259,16 +271,11 @@ class Slider extends GenericComponent {
 		if (percent > 1) { return 1; }
 		else if (percent < 0) { return 0; }
 
-		let stepsNum = (this.props.end - this.props.start) / this.props.step;
-
-		let steps = [0];
-		for (let s = 1; s <= stepsNum; s++) {
-			steps.push(s/stepsNum);
-		}
+		let steps = this._steps;
 
 		let halfStep = steps[1] / 2;
 
-		for (let i = stepsNum; i > 0; i--) {
+		for (let i = this._stepsNum; i > 0; i--) {
 			if (percent >= steps[i] - halfStep) {
 				return steps[i];
 			} else if (percent > steps[i - 1]) {
@@ -320,6 +327,7 @@ class Slider extends GenericComponent {
 		let handlers = {};
 		if (!this.props.disabled) {
 			handlers = {
+				onMouseOver: this._handleMouseOver,
 				onMouseDown: this._handleMouseDown,
 				onWheel: this._handleMouseWheel
 			}

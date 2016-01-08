@@ -19456,13 +19456,24 @@ var Slider = (function (_GenericComponent) {
 		_this._outerHeight = 0;
 		_this._offsetLeft = 0;
 		_this._offsetTop = 0;
+		_this._stepInPixels = 0;
+
 		_this._dragRunning = false;
+
+		_this._range = props.end - props.start;
+		_this._stepsNum = _this._range / props.step;
+
+		_this._steps = [0];
+		for (var s = 1; s <= _this._stepsNum; s++) {
+			_this._steps.push(s / _this._stepsNum);
+		}
 
 		_this.state = {
 			percent: 0,
 			value: _this._getValue()
 		};
 
+		_this._handleMouseOver = _this._handleMouseOver.bind(_this);
 		_this._handleMouseMove = _this._handleMouseMove.bind(_this);
 		_this._handleMouseUp = _this._handleMouseUp.bind(_this);
 		_this._handleMouseDown = _this._handleMouseDown.bind(_this);
@@ -19474,7 +19485,9 @@ var Slider = (function (_GenericComponent) {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			this._log('componentDidMount');
+
 			this._updateVars();
+
 			var value = this._getValue();
 			var percent = this._valueToPercent(value);
 			this._setPercentValueState(percent, value);
@@ -19497,9 +19510,13 @@ var Slider = (function (_GenericComponent) {
 		// ============================= Handlers ========================================
 
 	}, {
+		key: '_handleMouseOver',
+		value: function _handleMouseOver(e) {
+			this._updateVars();
+		}
+	}, {
 		key: '_handleMouseDown',
 		value: function _handleMouseDown(e) {
-			this._updateVars();
 			document.addEventListener('mousemove', this._handleMouseMove, false);
 			document.addEventListener('mouseup', this._handleMouseUp, false);
 			this._update(e);
@@ -19529,10 +19546,9 @@ var Slider = (function (_GenericComponent) {
 		key: '_handleMouseWheel',
 		value: function _handleMouseWheel(e) {
 			e.preventDefault();
-			this._updateVars();
 			var delta = (0, _mouse_wheel_delta2.default)(e);
 			var pxValue = this._percentToPixelOffset();
-			var pxDelta = delta * this._stepToPixelAmount();
+			var pxDelta = delta * this._stepInPixels;
 			pxValue += this.props.orientation == 'horizontal' ? pxDelta : -pxDelta;
 			var event = { clientX: pxValue, clientY: pxValue };
 			this._update(event);
@@ -19549,6 +19565,8 @@ var Slider = (function (_GenericComponent) {
 			this._outerHeight = parseInt(boundingClientRect.height);
 			this._offsetLeft = parseInt(boundingClientRect.left);
 			this._offsetTop = parseInt(boundingClientRect.top);
+
+			this._stepInPixels = this._stepToPixelAmount();
 
 			this._log('_updateVars: _outerWidth: ' + this._outerWidth + ' _outerHeight: ' + this._outerHeight + ' _offsetLeft: ' + this._offsetLeft + ' _offsetTop: ' + this._offsetTop + ' ');
 		}
@@ -19571,25 +19589,23 @@ var Slider = (function (_GenericComponent) {
 			switch (this.props.orientation) {
 				case 'horizontal':
 					var positionX = e.clientX - this._offsetLeft;
-					return this._stepping(parseFloat((positionX / this._outerWidth).toFixed(5)));
+					return this._stepping(positionX / this._outerWidth);
 				default:
 					var positionY = this._outerHeight - (e.clientY - this._offsetTop);
-					return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
+					return this._stepping(positionY / this._outerHeight);
 			}
 		}
 	}, {
 		key: '_valueToPercent',
 		value: function _valueToPercent(value) {
-			var range = this.props.end - this.props.start;
 			var position = value - this.props.start;
-			var percent = parseFloat((position / range).toFixed(5));
+			var percent = position / this._range;
 			return this._stepping(percent);
 		}
 	}, {
 		key: '_percentToValue',
 		value: function _percentToValue(percent) {
-			var range = this.props.end - this.props.start;
-			return parseFloat((range * percent + this.props.start).toFixed(5));
+			return parseFloat((this._range * percent + this.props.start).toFixed(5));
 		}
 	}, {
 		key: '_percentToPixelOffset',
@@ -19604,13 +19620,12 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_stepToPixelAmount',
 		value: function _stepToPixelAmount() {
-			var stepsNum = (this.props.end - this.props.start) / this.props.step;
-			var fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
-			var range = fullRange / stepsNum;
-			if (fullRange / range != parseInt(fullRange / range)) {
-				console.warn(this.props.name + (': pixel step(' + range + ') does not fit in pixels range(' + fullRange + ')'));
+			var pixelsRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+			var stepInPixels = pixelsRange / this._stepsNum;
+			if (pixelsRange / stepInPixels !== this._stepsNum) {
+				console.warn(this.props.name + (': pixel step(' + stepInPixels + ') does not fit in pixels range(' + pixelsRange + ')'));
 			}
-			return range;
+			return stepInPixels;
 		}
 
 		// ---------------------------------------------
@@ -19624,16 +19639,11 @@ var Slider = (function (_GenericComponent) {
 				return 0;
 			}
 
-			var stepsNum = (this.props.end - this.props.start) / this.props.step;
-
-			var steps = [0];
-			for (var s = 1; s <= stepsNum; s++) {
-				steps.push(s / stepsNum);
-			}
+			var steps = this._steps;
 
 			var halfStep = steps[1] / 2;
 
-			for (var i = stepsNum; i > 0; i--) {
+			for (var i = this._stepsNum; i > 0; i--) {
 				if (percent >= steps[i] - halfStep) {
 					return steps[i];
 				} else if (percent > steps[i - 1]) {
@@ -19695,6 +19705,7 @@ var Slider = (function (_GenericComponent) {
 			var handlers = {};
 			if (!this.props.disabled) {
 				handlers = {
+					onMouseOver: this._handleMouseOver,
 					onMouseDown: this._handleMouseDown,
 					onWheel: this._handleMouseWheel
 				};
