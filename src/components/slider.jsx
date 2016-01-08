@@ -6,7 +6,6 @@ import GenericDeco from '../decorators/generic_deco';
 import getWheelDelta from '../helpers/mouse_wheel_delta';
 
 /*
- TODO: inverse behaviour of the vertical slider
  TODO: must not allow receiving value along with defaultValue
  TODO: further investigate chrome drag slider issue (currently fixed by forbidding * select in examples css)
  TODO: make sure components do not depend on any style included in provided examples
@@ -42,11 +41,6 @@ function stepPropType(props, propName, componentName) {
 	}
 
 	let value = props[propName];
-
-	if (value === null) {
-		return;
-	}
-
 	let range = props.end - props.start;
 	let stepsNum = range / value;
 
@@ -91,7 +85,7 @@ const propTypes = {
 const defaultProps = {
 	start: -1,
 	end: 1,
-	step: null,
+	step: 0.01,
 	orientation: 'horizontal',
 	disabled: false
 };
@@ -182,16 +176,9 @@ class Slider extends GenericComponent {
 		e.preventDefault();
 		this._updateVars();
 		let delta = getWheelDelta(e);
-		let pxValue = this._getPercentToPixelOffset();
-
-		switch (this.props.orientation) {
-			case 'horizontal':
-				pxValue += this.props.step === null ? delta : delta * this._getStepToPixelAmount();
-				break;
-			default:
-				pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelAmount();
-		}
-
+		let pxValue = this._percentToPixelOffset();
+		let pxDelta = delta * this._stepToPixelAmount();
+		pxValue += this.props.orientation == 'horizontal' ? pxDelta : -pxDelta;
 		let event = {clientX: pxValue, clientY: pxValue};
 		this._update(event);
 	}
@@ -213,6 +200,17 @@ class Slider extends GenericComponent {
 		return this.refs.outer.getBoundingClientRect();
 	}
 
+	_getValue() {
+		return (this.props.value !== undefined
+				? this.props.value
+				: this.props.defaultValue !== undefined
+				? this.props.defaultValue
+				: this.props.start
+		);
+	}
+
+	// ----------- converters ----------
+
 	_eventToPercent(e) {
 		switch (this.props.orientation) {
 			case 'horizontal':
@@ -221,7 +219,6 @@ class Slider extends GenericComponent {
 			default:
 				let positionY = this._outerHeight - (e.clientY - this._offsetTop) ;
 				return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
-
 		}
 	}
 
@@ -237,7 +234,7 @@ class Slider extends GenericComponent {
 		return parseFloat((range * percent + this.props.start).toFixed(5));
 	}
 
-	_getPercentToPixelOffset() {
+	_percentToPixelOffset() {
 		switch (this.props.orientation) {
 			case 'horizontal':
 				return this._offsetLeft + this._outerWidth * this.state.percent;
@@ -246,7 +243,7 @@ class Slider extends GenericComponent {
 		}
 	}
 
-	_getStepToPixelAmount() {
+	_stepToPixelAmount() {
 		let stepsNum = (this.props.end - this.props.start) / this.props.step;
 		let fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
 		let range = fullRange/stepsNum;
@@ -256,19 +253,11 @@ class Slider extends GenericComponent {
 		return range;
 	}
 
-	_getValue() {
-		return (this.props.value !== undefined
-				? this.props.value
-				: this.props.defaultValue !== undefined
-				? this.props.defaultValue
-				: this.props.start
-		);
-	}
+	// ---------------------------------------------
 
 	_stepping(percent) {
-		if (this.props.step === null || percent > 1 || percent < 0) {
-			return percent;
-		}
+		if (percent > 1) { return 1; }
+		else if (percent < 0) { return 0; }
 
 		let stepsNum = (this.props.end - this.props.start) / this.props.step;
 
@@ -292,11 +281,6 @@ class Slider extends GenericComponent {
 	_update(e) {
 		let percent = this._eventToPercent(e);
 		let value = this._percentToValue(percent);
-		let start = this.props.start;
-		let end = this.props.end;
-
-		value = value < start ? start : value > end ? end : value;
-		percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
 
 		if (this._isControlledComponent() && this.state.value !== value) {
 			this._emitValueChangeEvent(value);

@@ -19340,7 +19340,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /*
- TODO: inverse behaviour of the vertical slider
  TODO: must not allow receiving value along with defaultValue
  TODO: further investigate chrome drag slider issue (currently fixed by forbidding * select in examples css)
  TODO: make sure components do not depend on any style included in provided examples
@@ -19376,11 +19375,6 @@ function stepPropType(props, propName, componentName) {
 	}
 
 	var value = props[propName];
-
-	if (value === null) {
-		return;
-	}
-
 	var range = props.end - props.start;
 	var stepsNum = range / value;
 
@@ -19425,7 +19419,7 @@ var propTypes = {
 var defaultProps = {
 	start: -1,
 	end: 1,
-	step: null,
+	step: 0.01,
 	orientation: 'horizontal',
 	disabled: false
 };
@@ -19537,16 +19531,9 @@ var Slider = (function (_GenericComponent) {
 			e.preventDefault();
 			this._updateVars();
 			var delta = (0, _mouse_wheel_delta2.default)(e);
-			var pxValue = this._getPercentToPixelOffset();
-
-			switch (this.props.orientation) {
-				case 'horizontal':
-					pxValue += this.props.step === null ? delta : delta * this._getStepToPixelAmount();
-					break;
-				default:
-					pxValue -= this.props.step === null ? delta : delta * this._getStepToPixelAmount();
-			}
-
+			var pxValue = this._percentToPixelOffset();
+			var pxDelta = delta * this._stepToPixelAmount();
+			pxValue += this.props.orientation == 'horizontal' ? pxDelta : -pxDelta;
 			var event = { clientX: pxValue, clientY: pxValue };
 			this._update(event);
 		}
@@ -19571,6 +19558,14 @@ var Slider = (function (_GenericComponent) {
 			return this.refs.outer.getBoundingClientRect();
 		}
 	}, {
+		key: '_getValue',
+		value: function _getValue() {
+			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
+		}
+
+		// ----------- converters ----------
+
+	}, {
 		key: '_eventToPercent',
 		value: function _eventToPercent(e) {
 			switch (this.props.orientation) {
@@ -19580,7 +19575,6 @@ var Slider = (function (_GenericComponent) {
 				default:
 					var positionY = this._outerHeight - (e.clientY - this._offsetTop);
 					return this._stepping(parseFloat((positionY / this._outerHeight).toFixed(5)));
-
 			}
 		}
 	}, {
@@ -19598,8 +19592,8 @@ var Slider = (function (_GenericComponent) {
 			return parseFloat((range * percent + this.props.start).toFixed(5));
 		}
 	}, {
-		key: '_getPercentToPixelOffset',
-		value: function _getPercentToPixelOffset() {
+		key: '_percentToPixelOffset',
+		value: function _percentToPixelOffset() {
 			switch (this.props.orientation) {
 				case 'horizontal':
 					return this._offsetLeft + this._outerWidth * this.state.percent;
@@ -19608,8 +19602,8 @@ var Slider = (function (_GenericComponent) {
 			}
 		}
 	}, {
-		key: '_getStepToPixelAmount',
-		value: function _getStepToPixelAmount() {
+		key: '_stepToPixelAmount',
+		value: function _stepToPixelAmount() {
 			var stepsNum = (this.props.end - this.props.start) / this.props.step;
 			var fullRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
 			var range = fullRange / stepsNum;
@@ -19618,16 +19612,16 @@ var Slider = (function (_GenericComponent) {
 			}
 			return range;
 		}
-	}, {
-		key: '_getValue',
-		value: function _getValue() {
-			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
-		}
+
+		// ---------------------------------------------
+
 	}, {
 		key: '_stepping',
 		value: function _stepping(percent) {
-			if (this.props.step === null || percent > 1 || percent < 0) {
-				return percent;
+			if (percent > 1) {
+				return 1;
+			} else if (percent < 0) {
+				return 0;
 			}
 
 			var stepsNum = (this.props.end - this.props.start) / this.props.step;
@@ -19653,11 +19647,6 @@ var Slider = (function (_GenericComponent) {
 		value: function _update(e) {
 			var percent = this._eventToPercent(e);
 			var value = this._percentToValue(percent);
-			var start = this.props.start;
-			var end = this.props.end;
-
-			value = value < start ? start : value > end ? end : value;
-			percent = percent < 0 ? 0 : percent > 1 ? 1 : percent;
 
 			if (this._isControlledComponent() && this.state.value !== value) {
 				this._emitValueChangeEvent(value);
