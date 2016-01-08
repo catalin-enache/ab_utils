@@ -1,0 +1,18 @@
+
+.ab-slider {
+	background-color: gray;
+}
+
+.ab-slider .ab-slider-fg {
+	background-color: indianred;
+}
+
+.ab-slider-horizontal {
+	width: 100px;
+	height: 5px;
+}
+
+.ab-slider-vertical {
+	width: 5px;
+	height: 100px;
+}

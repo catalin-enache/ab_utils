@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import Style from '../style';
 
 const propTypes = {
 	// required
@@ -36,7 +35,7 @@ class GenericComponent extends React.Component {
 	// for Style[this.constructor.displayName] to work the child must specify its value
 	_style(key, _default) {
 		if (!this.__style) {
-			this.__style = Object.assign({}, Style[this.constructor.displayName], (this.props.style || {}));
+			this.__style = Object.assign({}, (this.props.style || {}));
 		}
 		return this.__style[key] !== undefined ? this.__style[key] : _default;
 	}

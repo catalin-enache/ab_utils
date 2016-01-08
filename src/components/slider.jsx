@@ -57,9 +57,6 @@ function valueInRange(value, props) {
 
 // =============================== Component =============================
 
-const DEFAULT_SIZE = '100px';
-const DEFAULT_THICKNESS = '5px';
-
 const displayName = 'Slider';
 
 const propTypes = {
@@ -334,55 +331,42 @@ class Slider extends GenericComponent {
 		}
 
 		if (this.props.orientation == 'horizontal') {
-
 			let innerWidth = this._outerWidth * this.state.percent;
-
-			var backgroundStyle = {
-				width: this._style('width', DEFAULT_SIZE),
-				height: this._style('height', DEFAULT_THICKNESS)
-			};
-
 			var foregroundStyle = {
 				top: '0px',
 				right: `${this._outerWidth - innerWidth}px`,
 				bottom: '0px',
 				left: '0px'
 			};
-
 		} else {
-
 			let innerHeight = this._outerHeight * this.state.percent;
-
-			var backgroundStyle = {
-				height: this._style('height', DEFAULT_SIZE),
-				width: this._style('width', DEFAULT_THICKNESS)
-			};
-
 			var foregroundStyle = {
 				top: `${this._outerHeight - innerHeight}px`,
 				right: '0px',
 				bottom: '0px',
 				left: '0px'
 			};
-
 		}
 
 		// also let props.style pass through
-		backgroundStyle = Object.assign((this.props.style || {}), backgroundStyle, {
+		let backgroundStyle = Object.assign((this.props.style || {}), {
 			position: 'relative',
 			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-			opacity: this.props.disabled ? 0.5 : 1,
-			backgroundColor: this._style('bgColor')
+			opacity: this.props.disabled ? 0.5 : 1
 		});
 
 		foregroundStyle = Object.assign(foregroundStyle, {
-			position: 'absolute',
-			backgroundColor: this._style('fgColor')
+			position: 'absolute'
 		});
 
+		this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));
+
 		return (
-			<div ref="outer" style={backgroundStyle} {...handlers}>
-				<div style={foregroundStyle}></div>
+			<div className={`${this.props.className ? this.props.className : ''} ab-slider ab-slider-${this.props.orientation}`}
+				 ref="outer"
+				 style={backgroundStyle}
+				 {...handlers}>
+				<div className="ab-slider-fg" style={foregroundStyle}></div>
 				<input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled}/>
 			</div>
 		);

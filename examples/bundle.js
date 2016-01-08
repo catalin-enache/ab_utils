@@ -81,7 +81,8 @@ var SlidersApp = (function (_React$Component) {
 								start: -2,
 								end: 4,
 								onChange: this.sliderOnChange.bind(this),
-								style: {} })
+								style: {},
+								debug: false })
 						),
 						_react2.default.createElement(
 							'div',
@@ -91,7 +92,7 @@ var SlidersApp = (function (_React$Component) {
 								start: -2,
 								end: 4,
 								onChange: this.sliderOnChange.bind(this),
-								style: { width: '100%', bgColor: '#003366' },
+								style: { width: '100%', backgroundColor: '#003366', foregroundColor: 'darkred' },
 								debug: false })
 						)
 					),
@@ -122,8 +123,9 @@ var SlidersApp = (function (_React$Component) {
 								disabled: true,
 								onChange: this.sliderOnChange.bind(this),
 								orientation: 'vertical',
-								style: { height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
-								debug: false })
+								style: { height: '75%', backgroundColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
+								debug: false,
+								className: 'slider-custom' })
 						)
 					)
 				)
@@ -19231,10 +19233,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _style2 = require('../style');
-
-var _style3 = _interopRequireDefault(_style2);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19281,7 +19279,7 @@ var GenericComponent = (function (_React$Component) {
 		key: '_style',
 		value: function _style(key, _default) {
 			if (!this.__style) {
-				this.__style = Object.assign({}, _style3.default[this.constructor.displayName], this.props.style || {});
+				this.__style = Object.assign({}, this.props.style || {});
 			}
 			return this.__style[key] !== undefined ? this.__style[key] : _default;
 		}
@@ -19302,7 +19300,7 @@ var GenericComponent = (function (_React$Component) {
 
 exports.default = GenericComponent;
 
-},{"../style":167,"react":160}],162:[function(require,module,exports){
+},{"react":160}],162:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -19391,9 +19389,6 @@ function valueInRange(value, props) {
 
 // =============================== Component =============================
 
-var DEFAULT_SIZE = '100px';
-var DEFAULT_THICKNESS = '5px';
-
 var displayName = 'Slider';
 
 var propTypes = {
@@ -19405,7 +19400,7 @@ var propTypes = {
 	disabled: _react2.default.PropTypes.bool,
 
 	// optional no defaults
-	value: valueInRangePropType,
+	value: valueInRangePropType, // monitoring change
 	defaultValue: valueInRangePropType,
 	onChange: _react2.default.PropTypes.func
 };
@@ -19485,9 +19480,7 @@ var Slider = (function (_GenericComponent) {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			this._log('componentDidMount');
-
 			this._updateVars();
-
 			var value = this._getValue();
 			var percent = this._valueToPercent(value);
 			this._setPercentValueState(percent, value);
@@ -19500,6 +19493,7 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
+			// we are listening only for value change
 			if (this._isControlledComponent()) {
 				this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
 				var percent = this._valueToPercent(nextProps.value);
@@ -19517,6 +19511,7 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_handleMouseDown',
 		value: function _handleMouseDown(e) {
+			this._updateVars(); // for devices without mouse over
 			document.addEventListener('mousemove', this._handleMouseMove, false);
 			document.addEventListener('mouseup', this._handleMouseUp, false);
 			this._update(e);
@@ -19712,14 +19707,7 @@ var Slider = (function (_GenericComponent) {
 			}
 
 			if (this.props.orientation == 'horizontal') {
-
 				var innerWidth = this._outerWidth * this.state.percent;
-
-				var backgroundStyle = {
-					width: this._style('width', DEFAULT_SIZE),
-					height: this._style('height', DEFAULT_THICKNESS)
-				};
-
 				var foregroundStyle = {
 					top: '0px',
 					right: this._outerWidth - innerWidth + 'px',
@@ -19727,14 +19715,7 @@ var Slider = (function (_GenericComponent) {
 					left: '0px'
 				};
 			} else {
-
 				var innerHeight = this._outerHeight * this.state.percent;
-
-				var backgroundStyle = {
-					height: this._style('height', DEFAULT_SIZE),
-					width: this._style('width', DEFAULT_THICKNESS)
-				};
-
 				var foregroundStyle = {
 					top: this._outerHeight - innerHeight + 'px',
 					right: '0px',
@@ -19744,22 +19725,25 @@ var Slider = (function (_GenericComponent) {
 			}
 
 			// also let props.style pass through
-			backgroundStyle = Object.assign(this.props.style || {}, backgroundStyle, {
+			var backgroundStyle = Object.assign(this.props.style || {}, {
 				position: 'relative',
 				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-				opacity: this.props.disabled ? 0.5 : 1,
-				backgroundColor: this._style('bgColor')
+				opacity: this.props.disabled ? 0.5 : 1
 			});
 
 			foregroundStyle = Object.assign(foregroundStyle, {
-				position: 'absolute',
-				backgroundColor: this._style('fgColor')
+				position: 'absolute'
 			});
+
+			this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));
 
 			return _react2.default.createElement(
 				'div',
-				_extends({ ref: 'outer', style: backgroundStyle }, handlers),
-				_react2.default.createElement('div', { style: foregroundStyle }),
+				_extends({ className: (this.props.className ? this.props.className : '') + ' ab-slider ab-slider-' + this.props.orientation,
+					ref: 'outer',
+					style: backgroundStyle
+				}, handlers),
+				_react2.default.createElement('div', { className: 'ab-slider-fg', style: foregroundStyle }),
 				_react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
 			);
 		}
@@ -19892,17 +19876,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.Slider = _slider2.default;
 exports.TextField = _text_field2.default;
 
-},{"./components/slider.jsx":162,"./components/text_field.jsx":163}],167:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    Slider: {
-        bgColor: 'gray',
-        fgColor: 'indianred'
-    }
-};
-
-},{}]},{},[2]);
+},{"./components/slider.jsx":162,"./components/text_field.jsx":163}]},{},[2]);

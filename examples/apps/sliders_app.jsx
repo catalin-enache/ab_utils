@@ -67,7 +67,8 @@ class SlidersApp extends React.Component {
 									start={-2}
 									end={4}
 									onChange={this.sliderOnChange.bind(this)}
-									style={{}} />
+									style={{}}
+									debug={false} />
 						</div>
 						<div className="horizontalSliderWrapper">
 							<Slider name="slider_2"
@@ -75,7 +76,7 @@ class SlidersApp extends React.Component {
 									start={-2}
 									end={4}
 									onChange={this.sliderOnChange.bind(this)}
-									style={{width: '100%', bgColor: '#003366'}}
+									style={{width: '100%', backgroundColor: '#003366', foregroundColor: 'darkred'}}
 									debug={false} />
 						</div>
 					</div>
@@ -100,8 +101,9 @@ class SlidersApp extends React.Component {
 									disabled={true}
 									onChange={this.sliderOnChange.bind(this)}
 									orientation="vertical"
-									style={{height: '75%', bgColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box'}}
-									debug={false} />
+									style={{height: '75%', backgroundColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box'}}
+									debug={false}
+									className="slider-custom"/>
 						</div>
 					</div>
 				</div>
