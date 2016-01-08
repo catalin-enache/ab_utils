@@ -75,7 +75,7 @@ const propTypes = {
 
 /*
  additional API:
- style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+ style: {foregroundColor: 'cssColorValue'}
  Any other style property is passed through when not intentionally overridden
  */
 
