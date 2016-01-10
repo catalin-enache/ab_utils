@@ -58,7 +58,7 @@ var SlidersApp = (function (_React$Component) {
 				_react2.default.createElement(
 					'pre',
 					null,
-					'\n<Slider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<Slider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom"/>\n                    '
+					'\n<Slider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<Slider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom" />\n                    '
 				),
 				_react2.default.createElement(
 					'p',
@@ -19732,11 +19732,19 @@ var Slider = (function (_GenericComponent) {
 			var backgroundStyle = Object.assign(this.props.style || {}, {
 				position: 'relative',
 				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-				opacity: this.props.disabled ? 0.5 : 1
+				opacity: this.props.disabled ? 0.5 : 1,
+
+				MozUserSelect: 'none',
+				WebkitUserSelect: 'none',
+				UserSelect: 'none'
 			});
 
 			foregroundStyle = Object.assign(foregroundStyle, {
-				position: 'absolute'
+				position: 'absolute',
+
+				MozUserSelect: 'none',
+				WebkitUserSelect: 'none',
+				UserSelect: 'none'
 			});
 
 			this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));

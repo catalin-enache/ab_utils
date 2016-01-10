@@ -352,11 +352,19 @@ class Slider extends GenericComponent {
 		let backgroundStyle = Object.assign((this.props.style || {}), {
 			position: 'relative',
 			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-			opacity: this.props.disabled ? 0.5 : 1
+			opacity: this.props.disabled ? 0.5 : 1,
+
+			MozUserSelect: 'none',
+			WebkitUserSelect: 'none',
+			UserSelect: 'none'
 		});
 
 		foregroundStyle = Object.assign(foregroundStyle, {
-			position: 'absolute'
+			position: 'absolute',
+
+			MozUserSelect: 'none',
+			WebkitUserSelect: 'none',
+			UserSelect: 'none'
 		});
 
 		this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));
