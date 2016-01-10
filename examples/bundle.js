@@ -19342,13 +19342,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /*
- TODO: must not allow receiving value along with defaultValue
- TODO: further investigate chrome drag slider issue (currently fixed by forbidding * select in examples css)
- TODO: make sure components do not depend on any style included in provided examples
  TODO: finish tests
  */
 
 // ============================ Custom Validators =================================
+
+function valueXorDefaultValue(props) {
+	if (props.value !== undefined && props.defaultValue !== undefined) {
+		return new Error('Component should have either value or defaultValue, not both.');
+	}
+}
 
 function startEndPropType(props, propName, componentName) {
 	var error = _react2.default.PropTypes.number(props, propName, componentName);
@@ -19363,6 +19366,12 @@ function startEndPropType(props, propName, componentName) {
 function valueInRangePropType(props, propName, componentName) {
 	var error = _react2.default.PropTypes.number(props, propName, componentName);
 	if (error !== null) return error;
+
+	var valueOrDefaultValueError = valueXorDefaultValue(props);
+
+	if (valueOrDefaultValueError) {
+		return valueOrDefaultValueError;
+	}
 
 	var value = props[propName];
 	if (value !== undefined && !valueInRange(value, props)) {
@@ -19728,7 +19737,6 @@ var Slider = (function (_GenericComponent) {
 				};
 			}
 
-			// fix drag bug
 			var fix_drag_bug = {
 				MozUserSelect: 'none',
 				WebkitUserSelect: 'none',

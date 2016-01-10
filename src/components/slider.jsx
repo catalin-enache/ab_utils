@@ -6,13 +6,16 @@ import GenericDeco from '../decorators/generic_deco';
 import getWheelDelta from '../helpers/mouse_wheel_delta';
 
 /*
- TODO: must not allow receiving value along with defaultValue
- TODO: further investigate chrome drag slider issue (currently fixed by forbidding * select in examples css)
- TODO: make sure components do not depend on any style included in provided examples
  TODO: finish tests
  */
 
 // ============================ Custom Validators =================================
+
+function valueXorDefaultValue(props) {
+	if (props.value !== undefined && props.defaultValue !== undefined) {
+		return new Error('Component should have either value or defaultValue, not both.');
+	}
+}
 
 function startEndPropType(props, propName, componentName) {
 	let error = React.PropTypes.number(props, propName, componentName);
@@ -27,6 +30,12 @@ function startEndPropType(props, propName, componentName) {
 function valueInRangePropType(props, propName, componentName) {
 	let error = React.PropTypes.number(props, propName, componentName);
 	if (error !== null) return error;
+
+	let valueOrDefaultValueError = valueXorDefaultValue(props);
+
+	if (valueOrDefaultValueError) {
+		return valueOrDefaultValueError;
+	}
 
 	let value = props[propName];
 	if (value !== undefined && !valueInRange(value, props)) {
