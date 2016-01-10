@@ -21,7 +21,7 @@ function startEndPropType(props, propName, componentName) {
 	let error = React.PropTypes.number(props, propName, componentName);
 	if (error !== null) return error;
 
-	if (props.start >= props.end) {
+	if (props.start >= props.end || props.end - props.start === 0) {
 		let errorMsg = (propName === 'start') ? 'start should be less than end' : 'end should be greater than start';
 		return new Error(errorMsg);
 	}
@@ -50,6 +50,11 @@ function stepPropType(props, propName, componentName) {
 	}
 
 	let value = props[propName];
+
+	if (value <= 0) {
+		return new Error(propName + ` must be greater than 0`);
+	}
+
 	let range = props.end - props.start;
 	let stepsNum = range / value;
 
@@ -264,6 +269,7 @@ class Slider extends GenericComponent {
 
 	_stepToPixelAmount() {
 		let pixelsRange = this.props.orientation == 'horizontal' ? this._outerWidth : this._outerHeight;
+		if (pixelsRange === 0) { return 0; }
 		let stepInPixels = pixelsRange/this._stepsNum;
 		if (pixelsRange/stepInPixels !== this._stepsNum) {
 			console.warn(this.props.name + `: pixel step(${stepInPixels}) does not fit in pixels range(${pixelsRange})`);

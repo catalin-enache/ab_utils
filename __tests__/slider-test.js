@@ -21,7 +21,7 @@ describe('Slider', () => {
 			debug: false,
 			start: -1,
 			end: 1,
-			step: null,
+			step: 0.01,
 			orientation: 'horizontal',
 			disabled: false
 		}));
@@ -34,7 +34,7 @@ describe('Slider', () => {
 	});
 
 	it('has an associated hidden form element ', () => {
-		let slider = TestUtils.renderIntoDocument(<Slider />);
+		let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
 		let sliderNode = ReactDOM.findDOMNode(slider);
 
 		expect(sliderNode.childNodes[1].nodeName).toEqual('INPUT');
@@ -44,7 +44,7 @@ describe('Slider', () => {
 	describe('componentDidMount', () => {
 
 		it('calls _updateVars and _setPercentValueState', () => {
-			let slider = TestUtils.renderIntoDocument(<Slider />);
+			let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
 
 			spyOn(slider, '_updateVars');
 			spyOn(slider, '_setPercentValueState');
@@ -63,7 +63,7 @@ describe('Slider', () => {
 	describe('onMouseDown', () => {
 
 		it('calls _updateVars and _update', () => {
-			let slider = TestUtils.renderIntoDocument(<Slider />);
+			let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
 			let sliderNode = ReactDOM.findDOMNode(slider);
 
 			spyOn(slider, '_updateVars');
