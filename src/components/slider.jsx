@@ -32,10 +32,7 @@ function valueInRangePropType(props, propName, componentName) {
 	if (error !== null) return error;
 
 	let valueOrDefaultValueError = valueXorDefaultValue(props);
-
-	if (valueOrDefaultValueError) {
-		return valueOrDefaultValueError;
-	}
+	if (valueOrDefaultValueError) return valueOrDefaultValueError;
 
 	let value = props[propName];
 	if (value !== undefined && !valueInRange(value, props)) {
