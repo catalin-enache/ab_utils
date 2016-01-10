@@ -19728,23 +19728,22 @@ var Slider = (function (_GenericComponent) {
 				};
 			}
 
+			// fix drag bug
+			var fix_drag_bug = {
+				MozUserSelect: 'none',
+				WebkitUserSelect: 'none',
+				UserSelect: 'none'
+			};
+
 			// also let props.style pass through
-			var backgroundStyle = Object.assign(this.props.style || {}, {
+			var backgroundStyle = Object.assign(this.props.style || {}, fix_drag_bug, {
 				position: 'relative',
 				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
-				opacity: this.props.disabled ? 0.5 : 1,
-
-				MozUserSelect: 'none',
-				WebkitUserSelect: 'none',
-				UserSelect: 'none'
+				opacity: this.props.disabled ? 0.5 : 1
 			});
 
-			foregroundStyle = Object.assign(foregroundStyle, {
-				position: 'absolute',
-
-				MozUserSelect: 'none',
-				WebkitUserSelect: 'none',
-				UserSelect: 'none'
+			foregroundStyle = Object.assign(foregroundStyle, fix_drag_bug, {
+				position: 'absolute'
 			});
 
 			this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));
