@@ -58,7 +58,7 @@ var SlidersApp = (function (_React$Component) {
 				_react2.default.createElement(
 					'pre',
 					null,
-					'\n<Slider name="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}} />\n<Slider name="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', bgColor: \'#003366\'}}\n\tdebug={false} />\n<Slider name="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider name="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={2}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', bgColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false} />\n                    '
+					'\n<Slider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<Slider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom"/>\n                    '
 				),
 				_react2.default.createElement(
 					'p',
@@ -76,7 +76,8 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'horizontalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, { name: 'slider_1',
+							_react2.default.createElement(_src.Slider, {
+								name: 'slider_1',
 								defaultValue: this.state.sliderValue,
 								start: -2,
 								end: 4,
@@ -87,7 +88,8 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'horizontalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, { name: 'slider_2',
+							_react2.default.createElement(_src.Slider, {
+								name: 'slider_2',
 								value: this.state.sliderValue,
 								start: -2,
 								end: 4,
@@ -102,7 +104,8 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'verticalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, { name: 'slider_3',
+							_react2.default.createElement(_src.Slider, {
+								name: 'slider_3',
 								defaultValue: this.state.sliderValue,
 								start: -2,
 								end: 4,
@@ -115,7 +118,8 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'verticalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, { name: 'slider_4',
+							_react2.default.createElement(_src.Slider, {
+								name: 'slider_4',
 								value: this.state.sliderValue,
 								start: -2,
 								end: 4,
@@ -19408,7 +19412,7 @@ var propTypes = {
 /*
  additional API:
  style: {foregroundColor: 'cssColorValue'}
- Any other style property is passed through when not intentionally overridden
+ Any other style property is passed through to main container when not intentionally overridden
  */
 
 var defaultProps = {

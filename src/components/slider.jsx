@@ -76,7 +76,7 @@ const propTypes = {
 /*
  additional API:
  style: {foregroundColor: 'cssColorValue'}
- Any other style property is passed through when not intentionally overridden
+ Any other style property is passed through to main container when not intentionally overridden
  */
 
 const defaultProps = {
