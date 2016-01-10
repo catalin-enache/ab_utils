@@ -138,7 +138,7 @@ var SlidersApp = (function (_React$Component) {
 
 exports.default = SlidersApp;
 
-},{"../../src":166,"react":160,"react-dom":31}],2:[function(require,module,exports){
+},{"../../src":165,"react":160,"react-dom":31}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19407,7 +19407,7 @@ var propTypes = {
 
 /*
  additional API:
- style: {bgColor: 'cssColorValue', fgColor: 'cssColorValue'}
+ style: {foregroundColor: 'cssColorValue'}
  Any other style property is passed through when not intentionally overridden
  */
 
@@ -19756,36 +19756,7 @@ Slider = (0, _generic_deco2.default)(Slider);
 
 exports.default = Slider;
 
-},{"../decorators/generic_deco":164,"../helpers/mouse_wheel_delta":165,"./generic_component":161,"react":160}],163:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var TextField = _react2.default.createClass({
-	displayName: 'TextField',
-
-	propTypes: {},
-
-	render: function render() {
-		return _react2.default.createElement(
-			'div',
-			null,
-			'TextField'
-		);
-	}
-});
-
-exports.default = TextField;
-
-},{"react":160}],164:[function(require,module,exports){
+},{"../decorators/generic_deco":163,"../helpers/mouse_wheel_delta":164,"./generic_component":161,"react":160}],163:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19839,7 +19810,7 @@ function GenericDeco(Component) {
 	return Decorated;
 }
 
-},{"react":160}],165:[function(require,module,exports){
+},{"react":160}],164:[function(require,module,exports){
 'use strict';
 /*
 * returns small multiples of +-1
@@ -19855,25 +19826,20 @@ function getWheelDelta(wheelEvent) {
 	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
 }
 
-},{}],166:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TextField = exports.Slider = undefined;
+exports.Slider = undefined;
 
 var _slider = require('./components/slider.jsx');
 
 var _slider2 = _interopRequireDefault(_slider);
 
-var _text_field = require('./components/text_field.jsx');
-
-var _text_field2 = _interopRequireDefault(_text_field);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.Slider = _slider2.default;
-exports.TextField = _text_field2.default;
 
-},{"./components/slider.jsx":162,"./components/text_field.jsx":163}]},{},[2]);
+},{"./components/slider.jsx":162}]},{},[2]);
