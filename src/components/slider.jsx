@@ -3,7 +3,7 @@
 import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
-import getWheelDelta from '../helpers/mouse_wheel_delta';
+import {getWheelDelta} from '../common/helpers';
 import {startEndPropType, valueInRangePropType} from '../common/validators';
 
 /*

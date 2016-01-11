@@ -121,7 +121,7 @@ var SlidersApp = (function (_React$Component) {
 							_react2.default.createElement(_src.Slider, {
 								name: 'slider_4',
 								value: this.state.sliderValue,
-								start: '-2',
+								start: -2,
 								end: 4,
 								step: 1,
 								disabled: true,
@@ -19227,6 +19227,23 @@ module.exports = require('./lib/React');
 },{"./lib/React":55}],161:[function(require,module,exports){
 'use strict';
 
+/*
+ * returns small multiples of +-1
+ * */
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.getWheelDelta = getWheelDelta;
+function getWheelDelta(wheelEvent) {
+	var delta = wheelEvent.deltaY;
+	var res = Math.abs(delta / 100);
+	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
+}
+
+},{}],162:[function(require,module,exports){
+'use strict';
+
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
@@ -19274,7 +19291,7 @@ function valueInRangePropType(props, propName, componentName, location) {
 	}
 }
 
-},{"react":160}],162:[function(require,module,exports){
+},{"react":160}],163:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19354,7 +19371,7 @@ var GenericComponent = (function (_React$Component) {
 
 exports.default = GenericComponent;
 
-},{"react":160}],163:[function(require,module,exports){
+},{"react":160}],164:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -19379,9 +19396,7 @@ var _generic_deco = require('../decorators/generic_deco');
 
 var _generic_deco2 = _interopRequireDefault(_generic_deco);
 
-var _mouse_wheel_delta = require('../helpers/mouse_wheel_delta');
-
-var _mouse_wheel_delta2 = _interopRequireDefault(_mouse_wheel_delta);
+var _helpers = require('../common/helpers');
 
 var _validators = require('../common/validators');
 
@@ -19573,7 +19588,7 @@ var Slider = (function (_GenericComponent) {
 		key: '_handleMouseWheel',
 		value: function _handleMouseWheel(e) {
 			e.preventDefault();
-			var delta = (0, _mouse_wheel_delta2.default)(e);
+			var delta = (0, _helpers.getWheelDelta)(e);
 			var pxValue = this._percentToPixelOffset();
 			var pxDelta = delta * this._stepInPixels;
 			pxValue += this.props.orientation == 'horizontal' ? pxDelta : -pxDelta;
@@ -19797,7 +19812,7 @@ Slider = (0, _generic_deco2.default)(Slider);
 
 exports.default = Slider;
 
-},{"../common/validators":161,"../decorators/generic_deco":164,"../helpers/mouse_wheel_delta":165,"./generic_component":162,"react":160}],164:[function(require,module,exports){
+},{"../common/helpers":161,"../common/validators":162,"../decorators/generic_deco":165,"./generic_component":163,"react":160}],165:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19851,23 +19866,7 @@ function GenericDeco(Component) {
 	return Decorated;
 }
 
-},{"react":160}],165:[function(require,module,exports){
-'use strict';
-/*
-* returns small multiples of +-1
-* */
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = getWheelDelta;
-function getWheelDelta(wheelEvent) {
-	var delta = wheelEvent.deltaY;
-	var res = Math.abs(delta / 100);
-	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
-}
-
-},{}],166:[function(require,module,exports){
+},{"react":160}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19883,4 +19882,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Slider = _slider2.default;
 
-},{"./components/slider.jsx":163}]},{},[2]);
+},{"./components/slider.jsx":164}]},{},[2]);
