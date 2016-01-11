@@ -4,41 +4,13 @@ import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
 import getWheelDelta from '../helpers/mouse_wheel_delta';
+import {startEndPropType, valueInRangePropType} from '../common/validators';
 
 /*
  TODO: finish tests
  */
 
-// ============================ Custom Validators =================================
-
-function valueXorDefaultValue(props) {
-	if (props.value !== undefined && props.defaultValue !== undefined) {
-		return new Error('Component should have either value or defaultValue, not both.');
-	}
-}
-
-function startEndPropType(props, propName, componentName) {
-	let error = React.PropTypes.number(props, propName, componentName);
-	if (error !== null) return error;
-
-	if (props.start >= props.end || props.end - props.start === 0) {
-		let errorMsg = (propName === 'start') ? 'start should be less than end' : 'end should be greater than start';
-		return new Error(errorMsg);
-	}
-}
-
-function valueInRangePropType(props, propName, componentName) {
-	let error = React.PropTypes.number(props, propName, componentName);
-	if (error !== null) return error;
-
-	let valueOrDefaultValueError = valueXorDefaultValue(props);
-	if (valueOrDefaultValueError) return valueOrDefaultValueError;
-
-	let value = props[propName];
-	if (value !== undefined && !valueInRange(value, props)) {
-		return new Error(propName + ' should be within the range specified by start and end');
-	}
-}
+// ============================ Validators =================================
 
 function stepPropType(props, propName, componentName) {
 	let error = React.PropTypes.number(props, propName, componentName);
@@ -58,12 +30,6 @@ function stepPropType(props, propName, componentName) {
 	if (stepsNum != parseInt(stepsNum)) {
 		return new Error(propName + ` (${value}) does not fit in range (${props.start}..${props.end})`);
 	}
-}
-
-// =============================== Helpers ===============================
-
-function valueInRange(value, props) {
-	return props.start <= value && value <= props.end;
 }
 
 // =============================== Component =============================

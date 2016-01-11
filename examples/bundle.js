@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -25,7 +25,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SlidersApp = function (_React$Component) {
+var SlidersApp = (function (_React$Component) {
 	_inherits(SlidersApp, _React$Component);
 
 	function SlidersApp() {
@@ -138,14 +138,14 @@ var SlidersApp = function (_React$Component) {
 	}]);
 
 	return SlidersApp;
-}(_react2.default.Component);
+})(_react2.default.Component);
 
 exports.default = SlidersApp;
 
-},{"../../src":165,"react":160,"react-dom":31}],2:[function(require,module,exports){
+},{"../../src":166,"react":160,"react-dom":31}],2:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _react = require('react');
 
@@ -167,7 +167,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Application = function (_React$Component) {
+var Application = (function (_React$Component) {
 	_inherits(Application, _React$Component);
 
 	function Application() {
@@ -198,7 +198,7 @@ var Application = function (_React$Component) {
 	}]);
 
 	return Application;
-}(_react2.default.Component);
+})(_react2.default.Component);
 
 ;
 
@@ -733,21 +733,15 @@ module.exports = focusNode;
  * @typechecks
  */
 
-/* eslint-disable fb-www/typeof-undefined */
-
 /**
  * Same as document.activeElement but wraps in a try-catch block. In IE it is
  * not safe to call document.activeElement if there is nothing focused.
  *
- * The activeElement will be null only if the document or document body is not
- * yet defined.
+ * The activeElement will be null only if the document body is not yet defined.
  */
-'use strict';
+"use strict";
 
 function getActiveElement() /*?DOMElement*/{
-  if (typeof document === 'undefined') {
-    return null;
-  }
   try {
     return document.activeElement || document.body;
   } catch (e) {
@@ -15494,7 +15488,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '0.14.6';
+module.exports = '0.14.5';
 },{}],116:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19233,7 +19227,57 @@ module.exports = require('./lib/React');
 },{"./lib/React":55}],161:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.valueXorDefaultValue = valueXorDefaultValue;
+exports.valueInRange = valueInRange;
+exports.startEndPropType = startEndPropType;
+exports.valueInRangePropType = valueInRangePropType;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function valueXorDefaultValue(props) {
+	if (props.value !== undefined && props.defaultValue !== undefined) {
+		return new Error('Component should have either value or defaultValue, not both.');
+	}
+}
+
+function valueInRange(value, props) {
+	return props.start <= value && value <= props.end;
+}
+
+function startEndPropType(props, propName, componentName) {
+	var error = _react2.default.PropTypes.number(props, propName, componentName);
+	if (error !== null) return error;
+
+	if (props.start >= props.end || props.end - props.start === 0) {
+		var errorMsg = propName === 'start' ? 'start should be less than end' : 'end should be greater than start';
+		return new Error(errorMsg);
+	}
+}
+
+function valueInRangePropType(props, propName, componentName) {
+	var error = _react2.default.PropTypes.number(props, propName, componentName);
+	if (error !== null) return error;
+
+	var valueOrDefaultValueError = valueXorDefaultValue(props);
+	if (valueOrDefaultValueError) return valueOrDefaultValueError;
+
+	var value = props[propName];
+	if (value !== undefined && !valueInRange(value, props)) {
+		return new Error(propName + ' should be within the range specified by start and end');
+	}
+}
+
+},{"react":160}],162:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -19263,7 +19307,7 @@ var defaultProps = {
 	debug: false
 };
 
-var GenericComponent = function (_React$Component) {
+var GenericComponent = (function (_React$Component) {
 	_inherits(GenericComponent, _React$Component);
 
 	function GenericComponent() {
@@ -19306,16 +19350,16 @@ var GenericComponent = function (_React$Component) {
 	}]);
 
 	return GenericComponent;
-}(_react2.default.Component);
+})(_react2.default.Component);
 
 exports.default = GenericComponent;
 
-},{"react":160}],162:[function(require,module,exports){
+},{"react":160}],163:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -19339,6 +19383,8 @@ var _mouse_wheel_delta = require('../helpers/mouse_wheel_delta');
 
 var _mouse_wheel_delta2 = _interopRequireDefault(_mouse_wheel_delta);
 
+var _validators = require('../common/validators');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19351,39 +19397,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  TODO: finish tests
  */
 
-// ============================ Custom Validators =================================
-
-function valueXorDefaultValue(props) {
-	if (props.value !== undefined && props.defaultValue !== undefined) {
-		return new Error('Component should have either value or defaultValue, not both.');
-	}
-}
-
-function startEndPropType(props, propName, componentName) {
-	var error = _react2.default.PropTypes.number(props, propName, componentName);
-	if (error !== null) return error;
-
-	if (props.start >= props.end || props.end - props.start === 0) {
-		var errorMsg = propName === 'start' ? 'start should be less than end' : 'end should be greater than start';
-		return new Error(errorMsg);
-	}
-}
-
-function valueInRangePropType(props, propName, componentName) {
-	var error = _react2.default.PropTypes.number(props, propName, componentName);
-	if (error !== null) return error;
-
-	var valueOrDefaultValueError = valueXorDefaultValue(props);
-
-	if (valueOrDefaultValueError) {
-		return valueOrDefaultValueError;
-	}
-
-	var value = props[propName];
-	if (value !== undefined && !valueInRange(value, props)) {
-		return new Error(propName + ' should be within the range specified by start and end');
-	}
-}
+// ============================ Validators =================================
 
 function stepPropType(props, propName, componentName) {
 	var error = _react2.default.PropTypes.number(props, propName, componentName);
@@ -19405,27 +19419,21 @@ function stepPropType(props, propName, componentName) {
 	}
 }
 
-// =============================== Helpers ===============================
-
-function valueInRange(value, props) {
-	return props.start <= value && value <= props.end;
-}
-
 // =============================== Component =============================
 
 var displayName = 'Slider';
 
 var propTypes = {
 	// optional with defaults
-	start: startEndPropType,
-	end: startEndPropType,
+	start: _validators.startEndPropType,
+	end: _validators.startEndPropType,
 	step: stepPropType,
 	orientation: _react2.default.PropTypes.string,
 	disabled: _react2.default.PropTypes.bool,
 
 	// optional no defaults
-	value: valueInRangePropType, // monitoring change
-	defaultValue: valueInRangePropType,
+	value: _validators.valueInRangePropType, // monitoring change
+	defaultValue: _validators.valueInRangePropType,
 	onChange: _react2.default.PropTypes.func
 };
 
@@ -19443,7 +19451,7 @@ var defaultProps = {
 	disabled: false
 };
 
-var Slider = function (_GenericComponent) {
+var Slider = (function (_GenericComponent) {
 	_inherits(Slider, _GenericComponent);
 
 	_createClass(Slider, null, [{
@@ -19783,16 +19791,16 @@ var Slider = function (_GenericComponent) {
 	}]);
 
 	return Slider;
-}(_generic_component2.default);
+})(_generic_component2.default);
 
 Slider = (0, _generic_deco2.default)(Slider);
 
 exports.default = Slider;
 
-},{"../decorators/generic_deco":163,"../helpers/mouse_wheel_delta":164,"./generic_component":161,"react":160}],163:[function(require,module,exports){
+},{"../common/validators":161,"../decorators/generic_deco":164,"../helpers/mouse_wheel_delta":165,"./generic_component":162,"react":160}],164:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -19814,7 +19822,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function GenericDeco(Component) {
-	var Decorated = function (_Component) {
+	var Decorated = (function (_Component) {
 		_inherits(Decorated, _Component);
 
 		function Decorated() {
@@ -19838,12 +19846,12 @@ function GenericDeco(Component) {
 		}]);
 
 		return Decorated;
-	}(Component);
+	})(Component);
 
 	return Decorated;
 }
 
-},{"react":160}],164:[function(require,module,exports){
+},{"react":160}],165:[function(require,module,exports){
 'use strict';
 /*
 * returns small multiples of +-1
@@ -19859,7 +19867,7 @@ function getWheelDelta(wheelEvent) {
 	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
 }
 
-},{}],165:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19875,4 +19883,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Slider = _slider2.default;
 
-},{"./components/slider.jsx":162}]},{},[2]);
+},{"./components/slider.jsx":163}]},{},[2]);
