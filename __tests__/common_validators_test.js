@@ -2,7 +2,7 @@
 
 jest.dontMock('../src/common/validators');
 
-let {startEndPropType, valueInRangePropType} = require('../src/common/validators');
+let {startEndPropType, valueInRangePropType, stepPropType} = require('../src/common/validators');
 
 describe('startEndPropType', () => {
 	it('expects start & end values to be of type number', () => {
@@ -40,5 +40,22 @@ describe('valueInRangePropType', () => {
 	it('expects value and defaultValue to be in range defined by start end props ', () => {
 		let result = valueInRangePropType({start: 0, end: 1, value: 1.1}, 'value', 'SomeComponent');
 		expect(result.message).toMatch('value should be within the range specified by start and end');
+	});
+});
+
+describe('stepPropType prop validator', () => {
+	it('expects step to be of type number', () => {
+		let result = stepPropType({step: '1'}, 'step', 'SomeComponent');
+		expect(result.message).toMatch('`step` of type `string` supplied to `SomeComponent`, expected `number`');
+	});
+
+	it('expects step to be greater than 0', () => {
+		let result = stepPropType({step: -1}, 'step', 'SomeComponent');
+		expect(result.message).toMatch('step must be greater than 0');
+	});
+
+	it('expects step to properly fit in range', () => {
+		let result = stepPropType({step: 0.3, start: 0, end: 1}, 'step', 'SomeComponent');
+		expect(result.message).toMatch('does not fit in range 1');
 	});
 });

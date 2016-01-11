@@ -19249,6 +19249,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.startEndPropType = startEndPropType;
 exports.valueInRangePropType = valueInRangePropType;
+exports.stepPropType = stepPropType;
 
 var _react = require('react');
 
@@ -19286,6 +19287,26 @@ function valueInRangePropType(props, propName, componentName, location) {
 	var value = props[propName];
 	if (value !== undefined && !valueInRange(value, props)) {
 		return new Error(propName + ' should be within the range specified by start and end');
+	}
+}
+
+function stepPropType(props, propName, componentName, location) {
+	var error = _react2.default.PropTypes.number(props, propName, componentName, location);
+	if (error !== null) {
+		return error;
+	}
+
+	var value = props[propName];
+
+	if (value <= 0) {
+		return new Error(propName + ' must be greater than 0');
+	}
+
+	var range = props.end - props.start;
+	var stepsNum = range / value;
+
+	if (range / stepsNum !== value) {
+		return new Error(propName + (' (' + value + ') does not fit in range (' + props.start + '..' + props.end + ')'));
 	}
 }
 
@@ -19410,28 +19431,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  TODO: finish tests
  */
 
-// ============================ Validators =================================
-
-function stepPropType(props, propName, componentName, location) {
-	var error = _react2.default.PropTypes.number(props, propName, componentName, location);
-	if (error !== null) {
-		return error;
-	}
-
-	var value = props[propName];
-
-	if (value <= 0) {
-		return new Error(propName + ' must be greater than 0');
-	}
-
-	var range = props.end - props.start;
-	var stepsNum = range / value;
-
-	if (stepsNum != parseInt(stepsNum)) {
-		return new Error(propName + (' (' + value + ') does not fit in range (' + props.start + '..' + props.end + ')'));
-	}
-}
-
 // =============================== Component =============================
 
 var displayName = 'Slider';
@@ -19440,7 +19439,7 @@ var propTypes = {
 	// optional with defaults
 	start: _validators.startEndPropType,
 	end: _validators.startEndPropType,
-	step: stepPropType,
+	step: _validators.stepPropType,
 	orientation: _react2.default.PropTypes.string,
 	disabled: _react2.default.PropTypes.bool,
 

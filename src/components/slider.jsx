@@ -4,33 +4,11 @@ import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
 import {getWheelDelta} from '../common/helpers';
-import {startEndPropType, valueInRangePropType} from '../common/validators';
+import {startEndPropType, valueInRangePropType, stepPropType} from '../common/validators';
 
 /*
  TODO: finish tests
  */
-
-// ============================ Validators =================================
-
-function stepPropType(props, propName, componentName, location) {
-	let error = React.PropTypes.number(props, propName, componentName, location);
-	if (error !== null) {
-		return error;
-	}
-
-	let value = props[propName];
-
-	if (value <= 0) {
-		return new Error(propName + ` must be greater than 0`);
-	}
-
-	let range = props.end - props.start;
-	let stepsNum = range / value;
-
-	if (stepsNum != parseInt(stepsNum)) {
-		return new Error(propName + ` (${value}) does not fit in range (${props.start}..${props.end})`);
-	}
-}
 
 // =============================== Component =============================
 

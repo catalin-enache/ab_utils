@@ -35,5 +35,26 @@ export function valueInRangePropType(props, propName, componentName, location) {
 	}
 }
 
+export function stepPropType(props, propName, componentName, location) {
+	let error = React.PropTypes.number(props, propName, componentName, location);
+	if (error !== null) {
+		return error;
+	}
+
+	let value = props[propName];
+
+	if (value <= 0) {
+		return new Error(propName + ` must be greater than 0`);
+	}
+
+	let range = props.end - props.start;
+	let stepsNum = range / value;
+	console.log(`${range} ${stepsNum} ${range/stepsNum} ${value}`)
+	if (stepsNum !== parseInt(stepsNum)) {
+		return new Error(propName + ` (${value}) does not fit in range ${range} between (${props.start}..${props.end})`);
+	}
+}
+
+
 
 
