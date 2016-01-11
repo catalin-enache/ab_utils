@@ -19247,8 +19247,6 @@ function getWheelDelta(wheelEvent) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.valueXorDefaultValue = valueXorDefaultValue;
-exports.valueInRange = valueInRange;
 exports.startEndPropType = startEndPropType;
 exports.valueInRangePropType = valueInRangePropType;
 

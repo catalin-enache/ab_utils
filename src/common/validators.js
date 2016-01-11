@@ -2,13 +2,13 @@
 
 import React from 'react';
 
-export function valueXorDefaultValue(props) {
+function valueXorDefaultValue(props) {
 	if (props.value !== undefined && props.defaultValue !== undefined) {
 		return new Error('Component should have either value or defaultValue, not both.');
 	}
 }
 
-export function valueInRange(value, props) {
+function valueInRange(value, props) {
 	return props.start <= value && value <= props.end;
 }
 
