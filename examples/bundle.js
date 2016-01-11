@@ -19305,8 +19305,8 @@ function stepPropType(props, propName, componentName, location) {
 	var range = props.end - props.start;
 	var stepsNum = range / value;
 
-	if (range / stepsNum !== value) {
-		return new Error(propName + (' (' + value + ') does not fit in range (' + props.start + '..' + props.end + ')'));
+	if (stepsNum !== parseInt(stepsNum)) {
+		return new Error(propName + (' (' + value + ') does not fit in range ' + range + ' between (' + props.start + '..' + props.end + ')'));
 	}
 }
 
@@ -19700,7 +19700,11 @@ var Slider = (function (_GenericComponent) {
 			var percent = this._eventToPercent(e);
 			var value = this._percentToValue(percent);
 
-			if (this._isControlledComponent() && this.state.value !== value) {
+			if (this.state.value === value) {
+				return;
+			}
+
+			if (this._isControlledComponent()) {
 				this._emitValueChangeEvent(value);
 			} else {
 				this._setPercentValueStateAndEmitValueChangedEvent(percent, value);

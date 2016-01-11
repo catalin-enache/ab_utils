@@ -49,7 +49,7 @@ export function stepPropType(props, propName, componentName, location) {
 
 	let range = props.end - props.start;
 	let stepsNum = range / value;
-	console.log(`${range} ${stepsNum} ${range/stepsNum} ${value}`)
+
 	if (stepsNum !== parseInt(stepsNum)) {
 		return new Error(propName + ` (${value}) does not fit in range ${range} between (${props.start}..${props.end})`);
 	}

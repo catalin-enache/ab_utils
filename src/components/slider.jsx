@@ -242,7 +242,11 @@ class Slider extends GenericComponent {
 		let percent = this._eventToPercent(e);
 		let value = this._percentToValue(percent);
 
-		if (this._isControlledComponent() && this.state.value !== value) {
+		if (this.state.value === value) {
+			return;
+		}
+
+		if (this._isControlledComponent()) {
 			this._emitValueChangeEvent(value);
 		} else {
 			this._setPercentValueStateAndEmitValueChangedEvent(percent, value);
