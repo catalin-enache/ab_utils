@@ -12,8 +12,8 @@ import {startEndPropType, valueInRangePropType} from '../common/validators';
 
 // ============================ Validators =================================
 
-function stepPropType(props, propName, componentName) {
-	let error = React.PropTypes.number(props, propName, componentName);
+function stepPropType(props, propName, componentName, location) {
+	let error = React.PropTypes.number(props, propName, componentName, location);
 	if (error !== null) {
 		return error;
 	}

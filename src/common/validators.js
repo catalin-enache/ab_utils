@@ -12,8 +12,8 @@ export function valueInRange(value, props) {
 	return props.start <= value && value <= props.end;
 }
 
-export function startEndPropType(props, propName, componentName) {
-	let error = React.PropTypes.number(props, propName, componentName);
+export function startEndPropType(props, propName, componentName, location) {
+	let error = React.PropTypes.number(props, propName, componentName, location);
 	if (error !== null) return error;
 
 	if (props.start >= props.end || props.end - props.start === 0) {
@@ -22,8 +22,8 @@ export function startEndPropType(props, propName, componentName) {
 	}
 }
 
-export function valueInRangePropType(props, propName, componentName) {
-	let error = React.PropTypes.number(props, propName, componentName);
+export function valueInRangePropType(props, propName, componentName, location) {
+	let error = React.PropTypes.number(props, propName, componentName, location);
 	if (error !== null) return error;
 
 	let valueOrDefaultValueError = valueXorDefaultValue(props);

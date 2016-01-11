@@ -121,7 +121,7 @@ var SlidersApp = (function (_React$Component) {
 							_react2.default.createElement(_src.Slider, {
 								name: 'slider_4',
 								value: this.state.sliderValue,
-								start: -2,
+								start: '-2',
 								end: 4,
 								step: 1,
 								disabled: true,
@@ -19251,8 +19251,8 @@ function valueInRange(value, props) {
 	return props.start <= value && value <= props.end;
 }
 
-function startEndPropType(props, propName, componentName) {
-	var error = _react2.default.PropTypes.number(props, propName, componentName);
+function startEndPropType(props, propName, componentName, location) {
+	var error = _react2.default.PropTypes.number(props, propName, componentName, location);
 	if (error !== null) return error;
 
 	if (props.start >= props.end || props.end - props.start === 0) {
@@ -19261,8 +19261,8 @@ function startEndPropType(props, propName, componentName) {
 	}
 }
 
-function valueInRangePropType(props, propName, componentName) {
-	var error = _react2.default.PropTypes.number(props, propName, componentName);
+function valueInRangePropType(props, propName, componentName, location) {
+	var error = _react2.default.PropTypes.number(props, propName, componentName, location);
 	if (error !== null) return error;
 
 	var valueOrDefaultValueError = valueXorDefaultValue(props);
@@ -19399,8 +19399,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 // ============================ Validators =================================
 
-function stepPropType(props, propName, componentName) {
-	var error = _react2.default.PropTypes.number(props, propName, componentName);
+function stepPropType(props, propName, componentName, location) {
+	var error = _react2.default.PropTypes.number(props, propName, componentName, location);
 	if (error !== null) {
 		return error;
 	}
