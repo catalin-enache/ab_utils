@@ -6,10 +6,6 @@ import GenericDeco from '../decorators/generic_deco';
 import {getWheelDelta} from '../common/helpers';
 import {startEndPropType, valueInRangePropType, stepPropType} from '../common/validators';
 
-/*
- TODO: finish tests
- */
-
 // =============================== Component =============================
 
 const displayName = 'Slider';
