@@ -1,6 +1,6 @@
 'use strict';
 
-import Slider from './components/slider.jsx';
-import Number from './components/number.jsx';
+import Slider from './components/slider';
+import Number from './components/number';
 
 export {Slider, Number};
