@@ -305,23 +305,26 @@ describe('Slider', () => {
 		});
 	});
 
-	describe('_valueToPercent without step prop', () => {
+	describe('_valueToPercent', () => {
 
-		it('calculates percent from passed value', () => {
-			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
-			);
-			expect(slider._valueToPercent(0.1)).toEqual(0.55);
+		describe('without step prop', () => {
+
+			it('calculates percent from passed value and applies default stepping', () => {
+				let slider = TestUtils.renderIntoDocument(
+					<Slider name="one" />
+				);
+				expect(slider._valueToPercent(0.1)).toEqual(0.55);
+			});
 		});
-	});
 
-	describe('_valueToPercent with step prop', () => {
+		describe('with step prop', () => {
 
-		it('calculates percent from passed value and applies stepping', () => {
-			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" step={1} />
-			);
-			expect(slider._valueToPercent(0.1)).toEqual(0.5);
+			it('calculates percent from passed value and applies custom stepping', () => {
+				let slider = TestUtils.renderIntoDocument(
+					<Slider name="one" step={1} />
+				);
+				expect(slider._valueToPercent(0.1)).toEqual(0.5);
+			});
 		});
 	});
 
@@ -341,14 +344,14 @@ describe('Slider', () => {
 			let slider = TestUtils.renderIntoDocument(
 				<Slider name="one" step={0.1}  />
 			);
-			expect(slider._stepping(0.06)).toEqual(0.05);
-			expect(slider._stepping(0.09)).toEqual(0.1);
+			expect(slider._stepping(0.061)).toEqual(0.05);
+			expect(slider._stepping(0.091)).toEqual(0.1);
 		});
 	});
 
 	describe('_stepping without step prop', () => {
 
-		it('receives a percent and returns a rounded percent depending on default step prop 0.01', () => {
+		it('receives a percent and returns a rounded percent depending on default step prop', () => {
 			let slider = TestUtils.renderIntoDocument(
 				<Slider name="one" />
 			);
@@ -462,6 +465,7 @@ describe('Slider', () => {
 		});
 
 		describe('when not _isControlledComponent', () => {
+
 			it('calls _setPercentValueStateAndEmitValueChangedEvent', () => {
 				let slider = TestUtils.renderIntoDocument(
 					<Slider defaultValue={-1} name="one" />
@@ -479,13 +483,142 @@ describe('Slider', () => {
 		});
 	});
 
-	xdescribe('_emitValueChangeEvent', () => {});
+	describe('_emitValueChangeEvent', () => {
 
-	xdescribe('_setPercentValueState', () => {});
+		it('calls prop.onChange', () => {
+			let handlersObj = {
+				handleOnChange: function(value){}
+			};
+			let spyOnHandleOnChange = spyOn(handlersObj, 'handleOnChange');
 
-	xdescribe('_setPercentValueStateAndEmitValueChangedEvent', () => {});
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" onChange={handlersObj.handleOnChange} />
+			);
 
-	xdescribe('render', () => {});
+			slider._emitValueChangeEvent(1);
+			expect(spyOnHandleOnChange).toHaveBeenCalledWith(1);
+		});
+	});
+
+	describe('_setPercentValueState', () => {
+
+		it('calls _setState', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" />
+			);
+			let cb = function(){};
+
+			spyOn(slider, 'setState');
+
+			slider._setPercentValueState(0.5, 0, cb);
+
+			expect(slider.setState).toHaveBeenCalledWith({percent: 0.5, value: 0}, cb);
+		});
+	});
+
+	describe('_setPercentValueStateAndEmitValueChangedEvent', () => {
+
+		it('calls _setPercentValueState', () => {
+			let slider = TestUtils.renderIntoDocument(
+				<Slider name="one" />
+			);
+
+			spyOn(slider, '_setPercentValueState');
+
+			slider._setPercentValueStateAndEmitValueChangedEvent(0.5, 0);
+
+			expect(slider._setPercentValueState).toHaveBeenCalledWith(0.5, 0, jasmine.any(Function));
+		});
+	});
+
+	describe('render', () => {
+
+		it('works with defaults', () => {
+			let renderer = TestUtils.createRenderer();
+			renderer.render(<Slider name="one" />);
+			let actualElement = renderer.getRenderOutput();
+			let expectedElement = <div
+				className={' ab-slider ab-slider-horizontal'}
+				ref="outer"
+				onMouseDown={jasmine.any(Function)}
+				onMouseOver={jasmine.any(Function)}
+				onWheel={jasmine.any(Function)}
+				style={{
+					MozUserSelect: 'none',
+					UserSelect: 'none',
+					WebkitUserSelect: 'none',
+					cursor: 'pointer',
+					opacity: 1,
+					position: 'relative'
+					}}  >
+				<div className="ab-slider-fg"
+					 style={{
+						MozUserSelect: 'none',
+						UserSelect: 'none',
+						WebkitUserSelect: 'none',
+						bottom: '0px',
+						left: '0px',
+						position: 'absolute',
+						right: '0px',
+						top: '0px'
+						}} >
+				</div>
+				<input type="hidden"
+					   disabled={false}
+					   name="one"
+					   value={-1} />
+			</div>;
+
+			expect(actualElement).toEqual(expectedElement);
+		});
+
+		it('concatenates className', () => {
+			let renderer = TestUtils.createRenderer();
+			renderer.render(<Slider className="custom" name="one" />);
+			let actualElement = renderer.getRenderOutput();
+
+			expect(actualElement.props.className).toEqual('custom ab-slider ab-slider-horizontal');
+		});
+
+		it('has ab-slider-horizontal class when orientation is vertical', () => {
+			let renderer = TestUtils.createRenderer();
+			renderer.render(<Slider orientation="vertical" name="one" />);
+			let actualElement = renderer.getRenderOutput();
+
+			expect(actualElement.props.className).toEqual(' ab-slider ab-slider-vertical');
+		});
+
+		it('passes through style prop', () => {
+			let renderer = TestUtils.createRenderer();
+			renderer.render(<Slider style={{border: '1px solid black'}} name="one" />);
+			let actualElement = renderer.getRenderOutput();
+
+			expect(actualElement.props.style.border).toEqual('1px solid black');
+		});
+
+		it('handles foregroundColor style property', () => {
+			let renderer = TestUtils.createRenderer();
+			renderer.render(<Slider style={{foregroundColor: 'red'}} name="one" />);
+			let actualElement = renderer.getRenderOutput();
+
+			expect(actualElement.props.children[0].props.style.backgroundColor).toEqual('red');
+		});
+
+		describe('when disabled', () => {
+
+			it('does not have event handlers', () => {
+				let renderer = TestUtils.createRenderer();
+				renderer.render(<Slider name="one" disabled={true} />);
+				let actualElement = renderer.getRenderOutput();
+
+				expect(actualElement.props.onMouseDown).toBeUndefined();
+				expect(actualElement.props.onMouseOver).toBeUndefined();
+				expect(actualElement.props.onWheel).toBeUndefined();
+				expect(actualElement.props.style.opacity).toEqual(0.5);
+				expect(actualElement.props.style.cursor).toEqual('not-allowed');
+			})
+		});
+	});
 
 });
 
