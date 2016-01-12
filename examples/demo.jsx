@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import SlidersApp from './apps/sliders_app';
+import NumbersApp from './apps/sliders_app';
 
 class Application extends React.Component {
 
@@ -26,6 +27,7 @@ Flow: component setState
 				`}</pre>
 
 				<SlidersApp />
+				<NumbersApp />
 
 				</div>
 		);
