@@ -6,12 +6,12 @@ export default function GenericDeco (Component) {
 	class Decorated extends Component {
 		componentDidMount() {
 			this.mounted = true;
-			super.componentDidMount();
+			super.componentDidMount && super.componentDidMount();
 		}
 
 		componentWillUnmount() {
 			this.mounted = false;
-			super.componentWillUnmount();
+			super.componentWillUnmount && super.componentWillUnmount();
 		}
 	}
 	return Decorated;

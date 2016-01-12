@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {Number} from '../../src';
+import {InputNumber} from '../../src';
 
 class NumbersApp extends React.Component {
 
@@ -14,20 +14,23 @@ class NumbersApp extends React.Component {
 		}
 	}
 
-	sliderOnChange(value) {
+	numberOnChange(value) {
 		this.setState({numberValue: value});
 	}
 
 	render() {
 		return (
 			<div>
-				<h3>Numbers</h3>
+				<h3>InputNumbers</h3>
                 <pre>{`
-<Number name="number_1" />
                 `}
                 </pre>
 				<br />
-				<Number name="number_1" />
+				<InputNumber name="number_1" onChange={this.numberOnChange.bind(this)} debug={true} />
+				<InputNumber name="number_2" value={this.state.numberValue} onChange={this.numberOnChange.bind(this)} debug={true} />
+				<InputNumber name="number_3" defaultValue={this.state.numberValue} onChange={this.numberOnChange.bind(this)} debug={false} />
+				<InputNumber name="number_4" start={-1} end={1} defaultValue={0.1} debug={false} />
+				<InputNumber name="number_5" disabled={true} />
 			</div>
 		);
 	}

@@ -40,8 +40,8 @@ var NumbersApp = (function (_React$Component) {
 	}
 
 	_createClass(NumbersApp, [{
-		key: 'sliderOnChange',
-		value: function sliderOnChange(value) {
+		key: 'numberOnChange',
+		value: function numberOnChange(value) {
 			this.setState({ numberValue: value });
 		}
 	}, {
@@ -53,15 +53,19 @@ var NumbersApp = (function (_React$Component) {
 				_react2.default.createElement(
 					'h3',
 					null,
-					'Numbers'
+					'InputNumbers'
 				),
 				_react2.default.createElement(
 					'pre',
 					null,
-					'\n<Number name="number_1" />\n                '
+					'\n                '
 				),
 				_react2.default.createElement('br', null),
-				_react2.default.createElement(_src.Number, { name: 'number_1' })
+				_react2.default.createElement(_src.InputNumber, { name: 'number_1', onChange: this.numberOnChange.bind(this), debug: true }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_2', value: this.state.numberValue, onChange: this.numberOnChange.bind(this), debug: true }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_3', defaultValue: this.state.numberValue, onChange: this.numberOnChange.bind(this), debug: false }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_4', start: -1, end: 1, defaultValue: 0.1, debug: false }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_5', disabled: true })
 			);
 		}
 	}]);
@@ -107,8 +111,14 @@ var SlidersApp = (function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SlidersApp).call(this));
 
 		_this.state = {
-			sliderValue: 0
+			sliderValue: 0,
+			disabled: false
 		};
+
+		setTimeout(function () {
+			console.log('now disabling');
+			_this.setState({ disabled: true });
+		}, 1000);
 		return _this;
 	}
 
@@ -131,7 +141,7 @@ var SlidersApp = (function (_React$Component) {
 				_react2.default.createElement(
 					'pre',
 					null,
-					'\n<Slider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<Slider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={true}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom" />\n                    '
+					'\n<Slider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<Slider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={this.state.disabled}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom" />\n                    '
 				),
 				_react2.default.createElement(
 					'p',
@@ -197,7 +207,7 @@ var SlidersApp = (function (_React$Component) {
 								start: -2,
 								end: 4,
 								step: 1,
-								disabled: true,
+								disabled: this.state.disabled,
 								onChange: this.sliderOnChange.bind(this),
 								orientation: 'vertical',
 								style: { height: '75%', backgroundColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
@@ -19471,6 +19481,8 @@ exports.default = GenericComponent;
 },{"react":161}],165:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -19511,6 +19523,7 @@ var propTypes = {
 	end: _validators.startEndPropType,
 	step: _validators.stepPropType,
 	disabled: _react2.default.PropTypes.bool,
+	readOnly: _react2.default.PropTypes.bool,
 
 	// optional no defaults
 	value: _validators.valueInRangePropType, // monitoring change
@@ -19519,16 +19532,17 @@ var propTypes = {
 };
 
 var defaultProps = {
-	start: -1,
+	start: 0,
 	end: 1,
 	step: 0.01,
-	disabled: false
+	disabled: false,
+	readOnly: false
 };
 
-var Number = (function (_GenericComponent) {
-	_inherits(Number, _GenericComponent);
+var InputNumber = (function (_GenericComponent) {
+	_inherits(InputNumber, _GenericComponent);
 
-	_createClass(Number, null, [{
+	_createClass(InputNumber, null, [{
 		key: 'displayName',
 		get: function get() {
 			return displayName;
@@ -19536,37 +19550,128 @@ var Number = (function (_GenericComponent) {
 	}, {
 		key: 'propTypes',
 		get: function get() {
-			return Object.assign({}, _get(Object.getPrototypeOf(Number), 'propTypes', this), propTypes);
+			return Object.assign({}, _get(Object.getPrototypeOf(InputNumber), 'propTypes', this), propTypes);
 		}
 	}, {
 		key: 'defaultProps',
 		get: function get() {
-			return Object.assign({}, _get(Object.getPrototypeOf(Number), 'defaultProps', this), defaultProps);
+			return Object.assign({}, _get(Object.getPrototypeOf(InputNumber), 'defaultProps', this), defaultProps);
 		}
 
 		// ======================= React APIs ===================================
 
 	}]);
 
-	function Number(props) {
-		_classCallCheck(this, Number);
+	function InputNumber(props) {
+		_classCallCheck(this, InputNumber);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Number).call(this, props));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputNumber).call(this, props));
+
+		_this.state = {
+			value: _this._getValue()
+		};
+
+		_this._handleOnChange = _this._handleOnChange.bind(_this);
+		return _this;
 	}
 
-	_createClass(Number, [{
+	_createClass(InputNumber, [{
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			// we are listening only for value change
+			if (this._isControlledComponent()) {
+				this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
+				this._setValueState(nextProps.value);
+			}
+		}
+
+		// ============================= Handlers ========================================
+
+	}, {
+		key: '_handleOnChange',
+		value: function _handleOnChange(e) {
+			this._log('_handleOnChange ' + e.target.value);
+			this._update(e);
+		}
+
+		// ============================ Helpers ===========================================
+
+	}, {
+		key: '_getValue',
+		value: function _getValue() {
+			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
+		}
+
+		// -----------------------------------------------------------------------------------
+
+	}, {
+		key: '_update',
+		value: function _update(e) {
+			var value = parseFloat(e.target.value);
+
+			if (this.state.value === value) return;
+
+			if (this._isControlledComponent()) {
+				this._emitValueChangeEvent(value);
+			} else {
+				this._setValueStateAndEmitValueChangedEvent(value);
+			}
+		}
+	}, {
+		key: '_emitValueChangeEvent',
+		value: function _emitValueChangeEvent(value) {
+			if (this.props.onChange === undefined) return;
+			this._log('_emitValueChangeEvent => value: ' + value);
+			this.props.onChange(value);
+		}
+	}, {
+		key: '_setValueState',
+		value: function _setValueState(value) {
+			var callback = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+			if (this.state.value === value) return;
+			this._log('_setValueState => from: ' + this.state.value + ' to: ' + value);
+			this.setState({ value: value }, callback);
+		}
+	}, {
+		key: '_setValueStateAndEmitValueChangedEvent',
+		value: function _setValueStateAndEmitValueChangedEvent(value) {
+			var _this2 = this;
+
+			this._setValueState(value, function () {
+				_this2._emitValueChangeEvent(value);
+			});
+		}
+
+		// ============================ Render =============================================
+
+	}, {
 		key: 'render',
 		value: function render() {
-			return _react2.default.createElement('input', { type: 'text', name: 'one', value: 9, disabled: this.props.disabled });
+
+			var handlers = {};
+			if (!this.props.disabled && !this.props.readonly) {
+				handlers = {
+					onChange: this._handleOnChange
+				};
+			}
+
+			return _react2.default.createElement('input', _extends({ type: 'text',
+				className: (this.props.className ? this.props.className : '') + ' input-number',
+				name: this.props.name,
+				value: this.state.value,
+				disabled: this.props.disabled,
+				readOnly: this.props.readOnly
+			}, handlers));
 		}
 	}]);
 
-	return Number;
+	return InputNumber;
 })(_generic_component2.default);
 
-Number = (0, _generic_deco2.default)(Number);
+InputNumber = (0, _generic_deco2.default)(InputNumber);
 
-exports.default = Number;
+exports.default = InputNumber;
 
 },{"../common/helpers":162,"../common/validators":163,"../decorators/generic_deco":167,"./generic_component":164,"react":161}],166:[function(require,module,exports){
 'use strict';
@@ -19702,11 +19807,6 @@ var Slider = (function (_GenericComponent) {
 			var value = this._getValue();
 			var percent = this._valueToPercent(value);
 			this._setPercentValueState(percent, value);
-		}
-	}, {
-		key: 'shouldComponentUpdate',
-		value: function shouldComponentUpdate(nextProps, nextState) {
-			return nextState.percent !== this.state.percent;
 		}
 	}, {
 		key: 'componentWillReceiveProps',
@@ -20025,13 +20125,13 @@ function GenericDeco(Component) {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.mounted = true;
-				_get(Object.getPrototypeOf(Decorated.prototype), 'componentDidMount', this).call(this);
+				_get(Object.getPrototypeOf(Decorated.prototype), 'componentDidMount', this) && _get(Object.getPrototypeOf(Decorated.prototype), 'componentDidMount', this).call(this);
 			}
 		}, {
 			key: 'componentWillUnmount',
 			value: function componentWillUnmount() {
 				this.mounted = false;
-				_get(Object.getPrototypeOf(Decorated.prototype), 'componentWillUnmount', this).call(this);
+				_get(Object.getPrototypeOf(Decorated.prototype), 'componentWillUnmount', this) && _get(Object.getPrototypeOf(Decorated.prototype), 'componentWillUnmount', this).call(this);
 			}
 		}]);
 
@@ -20047,19 +20147,19 @@ function GenericDeco(Component) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Number = exports.Slider = undefined;
+exports.InputNumber = exports.Slider = undefined;
 
 var _slider = require('./components/slider');
 
 var _slider2 = _interopRequireDefault(_slider);
 
-var _number = require('./components/number');
+var _input_number = require('./components/input_number');
 
-var _number2 = _interopRequireDefault(_number);
+var _input_number2 = _interopRequireDefault(_input_number);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.Slider = _slider2.default;
-exports.Number = _number2.default;
+exports.InputNumber = _input_number2.default;
 
-},{"./components/number":165,"./components/slider":166}]},{},[3]);
+},{"./components/input_number":165,"./components/slider":166}]},{},[3]);

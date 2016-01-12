@@ -3,15 +3,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {Slider, TextField} from '../../src';
+import {Slider} from '../../src';
 
 class SlidersApp extends React.Component {
 
 	constructor() {
 		super();
 		this.state = {
-			sliderValue: 0
+			sliderValue: 0,
+			disabled: false
 		}
+
+		setTimeout(() => {
+			console.log('now disabling')
+			this.setState({disabled: true});
+		}, 1000)
 	}
 
 	sliderOnChange(value) {
@@ -55,7 +61,7 @@ class SlidersApp extends React.Component {
 	start={-2}
 	end={4}
 	step={1}
-	disabled={true}
+	disabled={this.state.disabled}
 	onChange={this.sliderOnChange.bind(this)}
 	orientation="vertical"
 	style={{height: '75%', backgroundColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box'}}
@@ -108,7 +114,7 @@ class SlidersApp extends React.Component {
 								start={-2}
 								end={4}
 								step={1}
-								disabled={true}
+								disabled={this.state.disabled}
 								onChange={this.sliderOnChange.bind(this)}
 								orientation="vertical"
 								style={{height: '75%', backgroundColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box'}}

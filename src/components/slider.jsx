@@ -93,10 +93,6 @@ class Slider extends GenericComponent {
 		this._setPercentValueState(percent, value);
 	}
 
-	shouldComponentUpdate (nextProps, nextState) {
-		return nextState.percent !== this.state.percent;
-	}
-
 	componentWillReceiveProps(nextProps) {
 		// we are listening only for value change
 		if (this._isControlledComponent()) {
