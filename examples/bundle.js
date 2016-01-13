@@ -34,7 +34,7 @@ var NumbersApp = (function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NumbersApp).call(this));
 
 		_this.state = {
-			numberValue: 0
+			numberStringValue: '0'
 		};
 		return _this;
 	}
@@ -42,7 +42,7 @@ var NumbersApp = (function (_React$Component) {
 	_createClass(NumbersApp, [{
 		key: 'numberOnChange',
 		value: function numberOnChange(value) {
-			this.setState({ numberValue: value });
+			this.setState({ numberStringValue: value });
 		}
 	}, {
 		key: 'render',
@@ -61,11 +61,11 @@ var NumbersApp = (function (_React$Component) {
 					'\n                '
 				),
 				_react2.default.createElement('br', null),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_1', onChange: this.numberOnChange.bind(this), debug: true }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_2', value: this.state.numberValue, onChange: this.numberOnChange.bind(this), debug: true }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_3', defaultValue: this.state.numberValue, onChange: this.numberOnChange.bind(this), debug: false }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_4', start: -1, end: 1, defaultValue: 0.1, debug: false }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_5', disabled: true })
+				_react2.default.createElement(_src.InputNumber, { name: 'number_1', start: -1, onChange: this.numberOnChange.bind(this), debug: false }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_2', value: this.state.numberStringValue, start: -1, onChange: this.numberOnChange.bind(this), debug: true }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_3', defaultValue: '-1', start: -1, onChange: this.numberOnChange.bind(this), debug: false }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_4', start: -1, end: 2, debug: false }),
+				_react2.default.createElement(_src.InputNumber, { name: 'number_5', disabled: true, debug: false })
 			);
 		}
 	}]);
@@ -19323,10 +19323,18 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.getWheelDelta = getWheelDelta;
+exports.trim = trim;
 function getWheelDelta(wheelEvent) {
 	var delta = wheelEvent.deltaY;
 	var res = Math.abs(delta / 100);
 	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
+}
+
+function trim(str) {
+	var patternStart = arguments.length <= 1 || arguments[1] === undefined ? /^\s+/ : arguments[1];
+	var patternEnd = arguments.length <= 2 || arguments[2] === undefined ? /\s+$/ : arguments[2];
+
+	return str.replace(patternStart, '').replace(patternEnd, '');
 }
 
 },{}],163:[function(require,module,exports){
@@ -19335,15 +19343,22 @@ function getWheelDelta(wheelEvent) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.validateNumberString = validateNumberString;
 exports.startEndPropType = startEndPropType;
 exports.valueInRangePropType = valueInRangePropType;
 exports.stepPropType = stepPropType;
+exports.numberStringPropType = numberStringPropType;
+exports.numberStringAndValueInRangePropType = numberStringAndValueInRangePropType;
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _helpers = require('./helpers');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function valueXorDefaultValue(props) {
 	if (props.value !== undefined && props.defaultValue !== undefined) {
@@ -19354,6 +19369,12 @@ function valueXorDefaultValue(props) {
 function valueInRange(value, props) {
 	return props.start <= value && value <= props.end;
 }
+
+function validateNumberString(value) {
+	return validateNumberString.regex1.test(value) || validateNumberString.regex2.test(value);
+}
+validateNumberString.regex1 = /^[-+]?\d*\.?\d+$/;
+validateNumberString.regex2 = /^[-+]?\d+\.?\d*$/;
 
 function startEndPropType(props, propName, componentName, location) {
 	var error = _react2.default.PropTypes.number(props, propName, componentName, location);
@@ -19398,7 +19419,32 @@ function stepPropType(props, propName, componentName, location) {
 	}
 }
 
-},{"react":161}],164:[function(require,module,exports){
+function numberStringPropType(props, propName, componentName, location) {
+	var error = _react2.default.PropTypes.string(props, propName, componentName, location);
+	if (error !== null) return error;
+	var value = props[propName];
+	if (value === undefined) return;
+	value = (0, _helpers.trim)(value);
+	if (!validateNumberString(value)) {
+		return new Error(propName + (' (' + value + ') must be a valid number representation'));
+	}
+}
+
+function numberStringAndValueInRangePropType(props, propName, componentName, location) {
+	if (value === undefined) return;
+	var value = props[propName];
+	value = (0, _helpers.trim)(value);
+	if (['', '+', '-', '-.', '+.'].indexOf(value)) return;
+
+	var error = numberStringPropType(props, propName, componentName, location);
+	if (error) return error;
+
+	props = Object.assign({}, props, _defineProperty({}, '' + propName, parseFloat(value)));
+	error = valueInRangePropType(props, propName, componentName, location);
+	if (error) return error;
+}
+
+},{"./helpers":162,"react":161}],164:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19515,7 +19561,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var displayName = 'Number';
+var displayName = 'InputNumber';
 
 var propTypes = {
 	// optional with defaults
@@ -19526,8 +19572,8 @@ var propTypes = {
 	readOnly: _react2.default.PropTypes.bool,
 
 	// optional no defaults
-	value: _validators.valueInRangePropType, // monitoring change
-	defaultValue: _validators.valueInRangePropType,
+	value: _validators.numberStringAndValueInRangePropType, // monitoring change
+	defaultValue: _validators.numberStringAndValueInRangePropType,
 	onChange: _react2.default.PropTypes.func
 };
 
@@ -19581,7 +19627,7 @@ var InputNumber = (function (_GenericComponent) {
 			// we are listening only for value change
 			if (this._isControlledComponent()) {
 				this._log('componentWillReceiveProps => nextProps: ' + JSON.stringify(nextProps));
-				this._setValueState(nextProps.value);
+				this._setValueState(this._normalizeValue(nextProps.value));
 			}
 		}
 
@@ -19591,7 +19637,7 @@ var InputNumber = (function (_GenericComponent) {
 		key: '_handleOnChange',
 		value: function _handleOnChange(e) {
 			this._log('_handleOnChange ' + e.target.value);
-			this._update(e);
+			this._update(this._normalizeValue(e.target.value));
 		}
 
 		// ============================ Helpers ===========================================
@@ -19601,14 +19647,21 @@ var InputNumber = (function (_GenericComponent) {
 		value: function _getValue() {
 			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
 		}
+	}, {
+		key: '_normalizeValue',
+		value: function _normalizeValue(value) {
+			if (['', '+', '-', '-.', '+.'].indexOf(value) !== -1) return value;
+			if (!(0, _validators.validateNumberString)(value)) return this.state.value;
+			var valueNumber = parseFloat(value);
+			value = valueNumber < this.props.start ? this.props.start.toString() : valueNumber > this.props.end ? this.props.end.toString() : value;
+			return value;
+		}
 
 		// -----------------------------------------------------------------------------------
 
 	}, {
 		key: '_update',
-		value: function _update(e) {
-			var value = parseFloat(e.target.value);
-
+		value: function _update(value) {
 			if (this.state.value === value) return;
 
 			if (this._isControlledComponent()) {

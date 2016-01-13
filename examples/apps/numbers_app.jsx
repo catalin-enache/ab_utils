@@ -10,12 +10,12 @@ class NumbersApp extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			numberValue: 0
+			numberStringValue: '0'
 		}
 	}
 
 	numberOnChange(value) {
-		this.setState({numberValue: value});
+		this.setState({numberStringValue: value});
 	}
 
 	render() {
@@ -26,11 +26,11 @@ class NumbersApp extends React.Component {
                 `}
                 </pre>
 				<br />
-				<InputNumber name="number_1" onChange={this.numberOnChange.bind(this)} debug={true} />
-				<InputNumber name="number_2" value={this.state.numberValue} onChange={this.numberOnChange.bind(this)} debug={true} />
-				<InputNumber name="number_3" defaultValue={this.state.numberValue} onChange={this.numberOnChange.bind(this)} debug={false} />
-				<InputNumber name="number_4" start={-1} end={1} defaultValue={0.1} debug={false} />
-				<InputNumber name="number_5" disabled={true} />
+				<InputNumber name="number_1" start={-1} onChange={this.numberOnChange.bind(this)} debug={false} />
+				<InputNumber name="number_2" value={this.state.numberStringValue} start={-1} onChange={this.numberOnChange.bind(this)} debug={true} />
+				<InputNumber name="number_3" defaultValue={'-1'} start={-1} onChange={this.numberOnChange.bind(this)} debug={false} />
+				<InputNumber name="number_4" start={-1} end={2}  debug={false} />
+				<InputNumber name="number_5" disabled={true} debug={false} />
 			</div>
 		);
 	}

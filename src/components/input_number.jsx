@@ -4,9 +4,9 @@ import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
 import {getWheelDelta} from '../common/helpers';
-import {startEndPropType, valueInRangePropType, stepPropType} from '../common/validators';
+import {startEndPropType, stepPropType, numberStringAndValueInRangePropType, validateNumberString} from '../common/validators';
 
-const displayName = 'Number';
+const displayName = 'InputNumber';
 
 const propTypes = {
 	// optional with defaults
@@ -17,8 +17,8 @@ const propTypes = {
 	readOnly: React.PropTypes.bool,
 
 	// optional no defaults
-	value: valueInRangePropType, // monitoring change
-	defaultValue: valueInRangePropType,
+	value: numberStringAndValueInRangePropType, // monitoring change
+	defaultValue: numberStringAndValueInRangePropType,
 	onChange: React.PropTypes.func
 };
 
@@ -60,7 +60,7 @@ class InputNumber extends GenericComponent {
 		// we are listening only for value change
 		if (this._isControlledComponent()) {
 			this._log(`componentWillReceiveProps => nextProps: ${JSON.stringify(nextProps)}`);
-			this._setValueState(nextProps.value);
+			this._setValueState(this._normalizeValue(nextProps.value));
 		}
 	}
 
@@ -68,7 +68,7 @@ class InputNumber extends GenericComponent {
 
 	_handleOnChange(e) {
 		this._log(`_handleOnChange ${e.target.value}`);
-		this._update(e);
+		this._update(this._normalizeValue(e.target.value));
 	}
 
 	// ============================ Helpers ===========================================
@@ -82,11 +82,21 @@ class InputNumber extends GenericComponent {
 		);
 	}
 
+	_normalizeValue(value) {
+		if (['', '+', '-','-.','+.'].indexOf(value) !== -1) return value;
+		if (!validateNumberString(value)) return this.state.value;
+		let valueNumber = parseFloat(value);
+		value = valueNumber < this.props.start ?
+				this.props.start.toString() :
+				valueNumber > this.props.end ?
+					this.props.end.toString() :
+					value;
+		return value;
+	}
+
 	// -----------------------------------------------------------------------------------
 
-	_update(e) {
-		let value = parseFloat(e.target.value);
-
+	_update(value) {
 		if (this.state.value === value) return;
 
 		if (this._isControlledComponent()) {

@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import {trim} from './helpers';
 
 function valueXorDefaultValue(props) {
 	if (props.value !== undefined && props.defaultValue !== undefined) {
@@ -11,6 +12,12 @@ function valueXorDefaultValue(props) {
 function valueInRange(value, props) {
 	return props.start <= value && value <= props.end;
 }
+
+export function validateNumberString(value) {
+	return validateNumberString.regex1.test(value) || validateNumberString.regex2.test(value);
+}
+validateNumberString.regex1 = /^[-+]?\d*\.?\d+$/;
+validateNumberString.regex2 = /^[-+]?\d+\.?\d*$/;
 
 export function startEndPropType(props, propName, componentName, location) {
 	let error = React.PropTypes.number(props, propName, componentName, location);
@@ -53,6 +60,31 @@ export function stepPropType(props, propName, componentName, location) {
 	if (stepsNum !== parseInt(stepsNum)) {
 		return new Error(propName + ` (${value}) does not fit in range ${range} between (${props.start}..${props.end})`);
 	}
+}
+
+export function numberStringPropType(props, propName, componentName, location) {
+	let error = React.PropTypes.string(props, propName, componentName, location);
+	if (error !== null) return error;
+	let value = props[propName];
+	if (value === undefined) return;
+	value = trim(value);
+	if (!validateNumberString(value)) {
+		return new Error(propName + ` (${value}) must be a valid number representation`);
+	}
+}
+
+export function numberStringAndValueInRangePropType(props, propName, componentName, location) {
+	if (value === undefined) return;
+	let value = props[propName];
+	value = trim(value);
+	if (['', '+', '-','-.','+.'].indexOf(value)) return;
+
+	let error = numberStringPropType(props, propName, componentName, location);
+	if (error) return error;
+
+	props = Object.assign({}, props, {[`${propName}`]: parseFloat(value)});
+	error = valueInRangePropType(props, propName, componentName, location);
+	if (error) return error;
 }
 
 
