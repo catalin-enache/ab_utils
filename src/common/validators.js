@@ -74,10 +74,10 @@ export function numberStringPropType(props, propName, componentName, location) {
 }
 
 export function numberStringAndValueInRangePropType(props, propName, componentName, location) {
-	if (value === undefined) return;
 	let value = props[propName];
+	if (value === undefined) return;
 	value = trim(value);
-	if (['', '+', '-','-.','+.'].indexOf(value)) return;
+	if (numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return;
 
 	let error = numberStringPropType(props, propName, componentName, location);
 	if (error) return error;
@@ -86,6 +86,7 @@ export function numberStringAndValueInRangePropType(props, propName, componentNa
 	error = valueInRangePropType(props, propName, componentName, location);
 	if (error) return error;
 }
+numberStringAndValueInRangePropType.allowedStrings = ['', '+', '-','-.','+.'];
 
 
 

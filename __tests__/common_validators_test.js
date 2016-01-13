@@ -1,8 +1,13 @@
 'use strict';
 
 jest.dontMock('../src/common/validators');
+jest.dontMock('../src/common/helpers');
 
-let {startEndPropType, valueInRangePropType, stepPropType} = require('../src/common/validators');
+let {startEndPropType,
+	valueInRangePropType,
+	stepPropType,
+	validateNumberString,
+	numberStringAndValueInRangePropType} = require('../src/common/validators');
 
 describe('startEndPropType', () => {
 	it('expects start & end values to be of type number', () => {
@@ -57,5 +62,45 @@ describe('stepPropType prop validator', () => {
 	it('expects step to properly fit in range', () => {
 		let result = stepPropType({step: 0.3, start: 0, end: 1}, 'step', 'SomeComponent');
 		expect(result.message).toMatch('does not fit in range 1');
+	});
+});
+
+describe('validateNumberString', () => {
+	it('validates a string as a float number', () => {
+		let res1 = validateNumberString('.0');
+		let res2 = validateNumberString('0.');
+		let res3 = validateNumberString('0.0');
+		let res4 = validateNumberString('-.0');
+		let res5 = validateNumberString('-0.');
+		let res6 = validateNumberString('-0.0');
+
+		let res7 = validateNumberString('-');
+		let res8 = validateNumberString('.');
+
+		expect(res1).toEqual(true);
+		expect(res2).toEqual(true);
+		expect(res3).toEqual(true);
+		expect(res4).toEqual(true);
+		expect(res5).toEqual(true);
+		expect(res6).toEqual(true);
+
+		expect(res7).toEqual(false);
+		expect(res8).toEqual(false);
+	});
+});
+
+describe('numberStringAndValueInRangePropType', () => {
+	it('validates a string as a float number and check whether is in range', () => {
+		let res1 = numberStringAndValueInRangePropType({start: -1, end: 1, value: ' x '}, 'value', 'SomeComponent');
+		expect(res1).toMatch('must be a valid number representation');
+
+		let res2 = numberStringAndValueInRangePropType({start: -1, end: 1, value: ' -. '}, 'value', 'SomeComponent');
+		expect(res2).toBeUndefined();
+
+		let res3 = numberStringAndValueInRangePropType({start: -1, end: 1, value: ' 0.0 '}, 'value', 'SomeComponent');
+		expect(res3).toBeUndefined();
+
+		let res4 = numberStringAndValueInRangePropType({start: -1, end: 1, value: ' 1.1 '}, 'value', 'SomeComponent');
+		expect(res4.message).toMatch('value should be within the range specified by start and end');
 	});
 });

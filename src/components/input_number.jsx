@@ -83,7 +83,7 @@ class InputNumber extends GenericComponent {
 	}
 
 	_normalizeValue(value) {
-		if (['', '+', '-','-.','+.'].indexOf(value) !== -1) return value;
+		if (numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return value;
 		if (!validateNumberString(value)) return this.state.value;
 		let valueNumber = parseFloat(value);
 		value = valueNumber < this.props.start ?
