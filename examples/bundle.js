@@ -19334,7 +19334,6 @@ function trim(str) {
 	var patternStart = arguments.length <= 1 || arguments[1] === undefined ? /^\s+/ : arguments[1];
 	var patternEnd = arguments.length <= 2 || arguments[2] === undefined ? /\s+$/ : arguments[2];
 
-	console.log('*******' + str + ' ' + patternStart + ' ' + patternEnd);
 	return str.replace(patternStart, '').replace(patternEnd, '');
 }
 
@@ -19434,12 +19433,8 @@ function numberStringPropType(props, propName, componentName, location) {
 function numberStringAndValueInRangePropType(props, propName, componentName, location) {
 	var value = props[propName];
 	if (value === undefined) return;
-	console.log('=======' + value);
 	value = (0, _helpers.trim)(value);
-	console.log('=======' + value);
 	if (numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return;
-
-	console.log('=======' + value);
 
 	var error = numberStringPropType(props, propName, componentName, location);
 	if (error) return error;
