@@ -26,7 +26,9 @@
 
 	"babel-jest": "6.0.1",
 	"jest-cli": "0.8.2",
-	"react-addons-test-utils": "~0.14.5"
+	"react-addons-test-utils": "~0.14.5",
+
+	"http-server": "latest"
   },
 
   "jest": {
@@ -49,9 +51,12 @@
   },
 
   "scripts": {
-    "setup": "npm install",
-    "compile": "browserify --extension=.jsx -o examples/bundle.js examples/demo.jsx",
+    "setup": "npm install && bundle install",
+    "js": "browserify --extension=.jsx -o examples/bundle.js examples/demo.jsx",
+	"css": "bundle exec sass src/css/style.scss examples/style.css --sourcemap=none",
+	"compile": "npm run js && npm run css",
 	"experiment": "browserify -o ./_experiment.js ./experiment.js && node ./_experiment.js && rm -f ./_experiment.js",
+	"serve": "node node_modules/http-server/bin/http-server -a 0.0.0.0 -p 8001 -c-1",
 	"test": "jest"
   }
 }
