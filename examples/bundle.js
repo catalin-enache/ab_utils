@@ -19646,7 +19646,7 @@ var InputNumber = (function (_GenericComponent) {
 	}, {
 		key: '_getValue',
 		value: function _getValue() {
-			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start;
+			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start.toString();
 		}
 	}, {
 		key: '_normalizeValue',
@@ -19710,13 +19710,16 @@ var InputNumber = (function (_GenericComponent) {
 				};
 			}
 
-			return _react2.default.createElement('input', _extends({ type: 'text',
-				className: (this.props.className ? this.props.className : '') + ' input-number',
-				name: this.props.name,
-				value: this.state.value,
-				disabled: this.props.disabled,
-				readOnly: this.props.readOnly
-			}, handlers));
+			return _react2.default.createElement(
+				'div',
+				{ className: (this.props.className ? this.props.className : '') + ' ab-input-number' },
+				_react2.default.createElement('input', _extends({ type: 'text',
+					name: this.props.name,
+					value: this.state.value,
+					disabled: this.props.disabled,
+					readOnly: this.props.readOnly
+				}, handlers))
+			);
 		}
 	}]);
 

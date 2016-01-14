@@ -78,7 +78,7 @@ class InputNumber extends GenericComponent {
 				? this.props.value
 				: this.props.defaultValue !== undefined
 				? this.props.defaultValue
-				: this.props.start
+				: this.props.start.toString()
 		);
 	}
 
@@ -136,13 +136,15 @@ class InputNumber extends GenericComponent {
 		}
 
 		return (
-			<input type="text"
-				   className={`${this.props.className ? this.props.className : ''} input-number`}
-				   name={this.props.name}
-				   value={this.state.value}
-				   disabled={this.props.disabled}
-				   readOnly={this.props.readOnly}
-				   {...handlers} />
+			<div className={`${this.props.className ? this.props.className : ''} ab-input-number`}>
+				<input type="text"
+					   name={this.props.name}
+					   value={this.state.value}
+					   disabled={this.props.disabled}
+					   readOnly={this.props.readOnly}
+					{...handlers} />
+			</div>
+
 		);
 	}
 }
