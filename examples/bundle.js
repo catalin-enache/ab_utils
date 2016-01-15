@@ -61,11 +61,36 @@ var NumbersApp = (function (_React$Component) {
 					'\n                '
 				),
 				_react2.default.createElement('br', null),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_1', start: -1, onChange: this.numberOnChange.bind(this), debug: false }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_2', value: this.state.numberStringValue, start: -1, onChange: this.numberOnChange.bind(this), debug: true }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_3', defaultValue: '-1', start: -1, onChange: this.numberOnChange.bind(this), debug: false }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_4', start: -1, end: 2, debug: false }),
-				_react2.default.createElement(_src.InputNumber, { name: 'number_5', disabled: true, debug: false })
+				_react2.default.createElement(
+					'div',
+					{ className: 'examples' },
+					_react2.default.createElement(_src.InputNumber, { name: 'number_1',
+						start: -1,
+						onChange: this.numberOnChange.bind(this),
+						debug: false }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(_src.InputNumber, { name: 'number_2',
+						value: this.state.numberStringValue,
+						start: -1,
+						onChange: this.numberOnChange.bind(this),
+						debug: true }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(_src.InputNumber, { name: 'number_3',
+						defaultValue: '-1',
+						start: -1,
+						onChange: this.numberOnChange.bind(this),
+						debug: false }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(_src.InputNumber, { name: 'number_4',
+						start: -100000000099,
+						end: 100000000099,
+						debug: false }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(_src.InputNumber, { name: 'number_5',
+						disabled: true,
+						style: { width: '250px', height: '50px', fontSize: '30px', fontStyle: 'italic', fontWeight: 'bold' },
+						debug: false })
+				)
 			);
 		}
 	}]);
@@ -75,7 +100,7 @@ var NumbersApp = (function (_React$Component) {
 
 exports.default = NumbersApp;
 
-},{"../../src":168,"react":161,"react-dom":32}],2:[function(require,module,exports){
+},{"../../src":169,"react":161,"react-dom":32}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -141,7 +166,7 @@ var SlidersApp = (function (_React$Component) {
 				_react2.default.createElement(
 					'pre',
 					null,
-					'\n<Slider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<Slider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<Slider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={this.state.disabled}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom" />\n                    '
+					'\n<InputSlider\n\tname="slider_1"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{}}\n\tdebug={false} />\n<InputSlider\n\tname="slider_2"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tonChange={this.sliderOnChange.bind(this)}\n\tstyle={{width: \'100%\', backgroundColor: \'#003366\', foregroundColor: \'darkred\'}}\n\tdebug={false} />\n<InputSlider\n\tname="slider_3"\n\tdefaultValue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={2}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'100%\'}}\n\tdebug={false} />\n<InputSlider\n\tname="slider_4"\n\tvalue={this.state.sliderValue}\n\tstart={-2}\n\tend={4}\n\tstep={1}\n\tdisabled={this.state.disabled}\n\tonChange={this.sliderOnChange.bind(this)}\n\torientation="vertical"\n\tstyle={{height: \'75%\', backgroundColor: \'#003366\', width: \'8px\', border: \'1px solid black\', boxSizing: \'border-box\'}}\n\tdebug={false}\n\tclassName="slider-custom" />\n                    '
 				),
 				_react2.default.createElement(
 					'p',
@@ -152,14 +177,14 @@ var SlidersApp = (function (_React$Component) {
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
 					'div',
-					{ className: 'sliders clearfix' },
+					{ className: 'sliders examples clearfix' },
 					_react2.default.createElement(
 						'div',
 						{ className: 'horizontalSliders' },
 						_react2.default.createElement(
 							'div',
 							{ className: 'horizontalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, {
+							_react2.default.createElement(_src.InputSlider, {
 								name: 'slider_1',
 								defaultValue: this.state.sliderValue,
 								start: -2,
@@ -171,13 +196,13 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'horizontalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, {
+							_react2.default.createElement(_src.InputSlider, {
 								name: 'slider_2',
 								value: this.state.sliderValue,
 								start: -2,
 								end: 4,
 								onChange: this.sliderOnChange.bind(this),
-								style: { width: '100%', backgroundColor: '#003366', foregroundColor: 'darkred' },
+								style: { width: '100%', backgroundColor: 'rgb(0, 51, 102)', foregroundColor: 'darkorange' },
 								debug: false })
 						)
 					),
@@ -187,7 +212,7 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'verticalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, {
+							_react2.default.createElement(_src.InputSlider, {
 								name: 'slider_3',
 								defaultValue: this.state.sliderValue,
 								start: -2,
@@ -201,7 +226,7 @@ var SlidersApp = (function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'verticalSliderWrapper' },
-							_react2.default.createElement(_src.Slider, {
+							_react2.default.createElement(_src.InputSlider, {
 								name: 'slider_4',
 								value: this.state.sliderValue,
 								start: -2,
@@ -210,7 +235,7 @@ var SlidersApp = (function (_React$Component) {
 								disabled: this.state.disabled,
 								onChange: this.sliderOnChange.bind(this),
 								orientation: 'vertical',
-								style: { height: '75%', backgroundColor: '#003366', width: '8px', border: '1px solid black', boxSizing: 'border-box' },
+								style: { height: '75%', backgroundColor: '#003366', width: '5px', border: '1px solid black', boxSizing: 'border-box' },
 								debug: false,
 								className: 'slider-custom' })
 						)
@@ -225,7 +250,7 @@ var SlidersApp = (function (_React$Component) {
 
 exports.default = SlidersApp;
 
-},{"../../src":168,"react":161,"react-dom":32}],3:[function(require,module,exports){
+},{"../../src":169,"react":161,"react-dom":32}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19550,6 +19575,10 @@ var _generic_deco = require('../decorators/generic_deco');
 
 var _generic_deco2 = _interopRequireDefault(_generic_deco);
 
+var _selection_disableable_deco = require('../decorators/selection_disableable_deco');
+
+var _selection_disableable_deco2 = _interopRequireDefault(_selection_disableable_deco);
+
 var _helpers = require('../common/helpers');
 
 var _validators = require('../common/validators');
@@ -19585,6 +19614,8 @@ var defaultProps = {
 	disabled: false,
 	readOnly: false
 };
+
+var CONTROLLERS_WRAPPER_WIDTH = 16;
 
 var InputNumber = (function (_GenericComponent) {
 	_inherits(InputNumber, _GenericComponent);
@@ -19631,6 +19662,13 @@ var InputNumber = (function (_GenericComponent) {
 				this._setValueState(this._normalizeValue(nextProps.value));
 			}
 		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this._log('componentDidMount');
+			this._updateVars();
+			this.forceUpdate();
+		}
 
 		// ============================= Handlers ========================================
 
@@ -19643,6 +19681,15 @@ var InputNumber = (function (_GenericComponent) {
 
 		// ============================ Helpers ===========================================
 
+	}, {
+		key: '_updateVars',
+		value: function _updateVars() {
+			var wrapperComputedStyle = getComputedStyle(this.refs.wrapper);
+			var wrapperWidth = parseFloat(wrapperComputedStyle.width);
+			var wrapperBorderLRWidth = parseFloat(wrapperComputedStyle.borderLeftWidth) + parseFloat(wrapperComputedStyle.borderRightWidth);
+			this._inputWidth = wrapperWidth - wrapperBorderLRWidth - CONTROLLERS_WRAPPER_WIDTH;
+			this._log('_updateVars: _inputWidth: ' + this._inputWidth);
+		}
 	}, {
 		key: '_getValue',
 		value: function _getValue() {
@@ -19702,23 +19749,62 @@ var InputNumber = (function (_GenericComponent) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this3 = this;
 
-			var handlers = {};
+			var disableSelection = {
+				onMouseDown: this._disableSelection // from SelectionDisableableDeco
+			};
+			var inputHandlers = {};
 			if (!this.props.disabled && !this.props.readonly) {
-				handlers = {
+				inputHandlers = {
 					onChange: this._handleOnChange
 				};
 			}
 
+			// also let props.style pass through
+			var wrapperStyle = Object.assign(this.props.style || {}, {
+				position: 'relative',
+				display: 'inline-block',
+				opacity: this.props.disabled ? 0.5 : 1
+			});
+
+			var inputStyle = Object.assign({}, {
+				border: 'none',
+				cursor: this.props.disabled ? 'not-allowed' : 'text',
+				width: this._inputWidth,
+				height: '100%'
+			});
+
+			['fontSize', 'fontWeight', 'fontStyle'].forEach(function (prop) {
+				_this3._style(prop) && (inputStyle[prop] = _this3._style(prop));
+			});
+
+			var controlsWrapperStyle = Object.assign({}, {
+				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+				position: 'absolute',
+				top: '0px',
+				right: '0px',
+				width: CONTROLLERS_WRAPPER_WIDTH,
+				height: '100%',
+				borderLeft: '1px solid transparent'
+			});
+
 			return _react2.default.createElement(
 				'div',
-				{ className: (this.props.className ? this.props.className : '') + ' ab-input-number' },
+				{ className: (this.props.className ? this.props.className : '') + ' ab ab-input-number',
+					ref: 'wrapper',
+					style: wrapperStyle },
 				_react2.default.createElement('input', _extends({ type: 'text',
 					name: this.props.name,
 					value: this.state.value,
 					disabled: this.props.disabled,
-					readOnly: this.props.readOnly
-				}, handlers))
+					readOnly: this.props.readOnly,
+					style: inputStyle
+				}, inputHandlers)),
+				_react2.default.createElement('div', _extends({ ref: 'controls',
+					className: 'ab-input-number-controls',
+					style: controlsWrapperStyle
+				}, disableSelection))
 			);
 		}
 	}]);
@@ -19727,10 +19813,11 @@ var InputNumber = (function (_GenericComponent) {
 })(_generic_component2.default);
 
 InputNumber = (0, _generic_deco2.default)(InputNumber);
+InputNumber = (0, _selection_disableable_deco2.default)(InputNumber);
 
 exports.default = InputNumber;
 
-},{"../common/helpers":162,"../common/validators":163,"../decorators/generic_deco":167,"./generic_component":164,"react":161}],166:[function(require,module,exports){
+},{"../common/helpers":162,"../common/validators":163,"../decorators/generic_deco":167,"../decorators/selection_disableable_deco":168,"./generic_component":164,"react":161}],166:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -19755,6 +19842,10 @@ var _generic_deco = require('../decorators/generic_deco');
 
 var _generic_deco2 = _interopRequireDefault(_generic_deco);
 
+var _selection_disableable_deco = require('../decorators/selection_disableable_deco');
+
+var _selection_disableable_deco2 = _interopRequireDefault(_selection_disableable_deco);
+
 var _helpers = require('../common/helpers');
 
 var _validators = require('../common/validators');
@@ -19769,7 +19860,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 // =============================== Component =============================
 
-var displayName = 'Slider';
+var displayName = 'InputSlider';
 
 var propTypes = {
 	// optional with defaults
@@ -19799,10 +19890,10 @@ var defaultProps = {
 	disabled: false
 };
 
-var Slider = (function (_GenericComponent) {
-	_inherits(Slider, _GenericComponent);
+var InputSlider = (function (_GenericComponent) {
+	_inherits(InputSlider, _GenericComponent);
 
-	_createClass(Slider, null, [{
+	_createClass(InputSlider, null, [{
 		key: 'displayName',
 		get: function get() {
 			return displayName;
@@ -19810,22 +19901,22 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: 'propTypes',
 		get: function get() {
-			return Object.assign({}, _get(Object.getPrototypeOf(Slider), 'propTypes', this), propTypes);
+			return Object.assign({}, _get(Object.getPrototypeOf(InputSlider), 'propTypes', this), propTypes);
 		}
 	}, {
 		key: 'defaultProps',
 		get: function get() {
-			return Object.assign({}, _get(Object.getPrototypeOf(Slider), 'defaultProps', this), defaultProps);
+			return Object.assign({}, _get(Object.getPrototypeOf(InputSlider), 'defaultProps', this), defaultProps);
 		}
 
 		// ======================= React APIs ===================================
 
 	}]);
 
-	function Slider(props) {
-		_classCallCheck(this, Slider);
+	function InputSlider(props) {
+		_classCallCheck(this, InputSlider);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Slider).call(this, props));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputSlider).call(this, props));
 
 		_this._outerWidth = 0;
 		_this._outerHeight = 0;
@@ -19856,7 +19947,7 @@ var Slider = (function (_GenericComponent) {
 		return _this;
 	}
 
-	_createClass(Slider, [{
+	_createClass(InputSlider, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			this._log('componentDidMount');
@@ -19886,6 +19977,7 @@ var Slider = (function (_GenericComponent) {
 	}, {
 		key: '_handleMouseDown',
 		value: function _handleMouseDown(e) {
+			this._disableSelection(); // from SelectionDisableableDeco
 			this._updateVars(); // for devices without mouse over
 			document.addEventListener('mousemove', this._handleMouseMove, false);
 			document.addEventListener('mouseup', this._handleMouseUp, false);
@@ -20106,20 +20198,14 @@ var Slider = (function (_GenericComponent) {
 				};
 			}
 
-			var fix_drag_bug = {
-				MozUserSelect: 'none',
-				WebkitUserSelect: 'none',
-				UserSelect: 'none'
-			};
-
 			// also let props.style pass through
-			var backgroundStyle = Object.assign(this.props.style || {}, fix_drag_bug, {
+			var backgroundStyle = Object.assign(this.props.style || {}, {
 				position: 'relative',
 				cursor: this.props.disabled ? 'not-allowed' : 'pointer',
 				opacity: this.props.disabled ? 0.5 : 1
 			});
 
-			foregroundStyle = Object.assign(foregroundStyle, fix_drag_bug, {
+			foregroundStyle = Object.assign(foregroundStyle, {
 				position: 'absolute'
 			});
 
@@ -20127,24 +20213,26 @@ var Slider = (function (_GenericComponent) {
 
 			return _react2.default.createElement(
 				'div',
-				_extends({ className: (this.props.className ? this.props.className : '') + ' ab-slider ab-slider-' + this.props.orientation,
+				_extends({ className: (this.props.className ? this.props.className : '') + ' ab ab-input-slider ab-input-slider-' + this.props.orientation,
 					ref: 'outer',
 					style: backgroundStyle
 				}, handlers),
-				_react2.default.createElement('div', { className: 'ab-slider-fg', style: foregroundStyle }),
+				_react2.default.createElement('div', { className: 'ab-input-slider-fg',
+					style: foregroundStyle }),
 				_react2.default.createElement('input', { type: 'hidden', name: this.props.name, value: this.state.value, disabled: this.props.disabled })
 			);
 		}
 	}]);
 
-	return Slider;
+	return InputSlider;
 })(_generic_component2.default);
 
-Slider = (0, _generic_deco2.default)(Slider);
+InputSlider = (0, _generic_deco2.default)(InputSlider);
+InputSlider = (0, _selection_disableable_deco2.default)(InputSlider);
 
-exports.default = Slider;
+exports.default = InputSlider;
 
-},{"../common/helpers":162,"../common/validators":163,"../decorators/generic_deco":167,"./generic_component":164,"react":161}],167:[function(require,module,exports){
+},{"../common/helpers":162,"../common/validators":163,"../decorators/generic_deco":167,"../decorators/selection_disableable_deco":168,"./generic_component":164,"react":161}],167:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -20201,14 +20289,102 @@ function GenericDeco(Component) {
 },{"react":161}],168:[function(require,module,exports){
 'use strict';
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = SelectionDisableableDeco;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function SelectionDisableableDeco(Component) {
+	var Decorated = (function (_Component) {
+		_inherits(Decorated, _Component);
+
+		function Decorated(props) {
+			_classCallCheck(this, Decorated);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Decorated).call(this, props));
+
+			_this._disableSelection = _this._disableSelection.bind(_this);
+			_this._killSelection = _this._killSelection.bind(_this);
+			_this._enableSelection = _this._enableSelection.bind(_this);
+			return _this;
+		}
+
+		_createClass(Decorated, [{
+			key: '_disableSelection',
+			value: function _disableSelection() {
+				// first clear any current selection
+				window.getSelection && window.getSelection().removeAllRanges();
+
+				// then disable further selection
+
+				// 1. by style
+				document.body.style.MozUserSelect = "none";
+				document.body.style.WebkitUserSelect = "none";
+				document.body.style.userSelect = "none";
+
+				// 2. by adding event listeners: selectstart || mousemove
+				var evt = document.onselectstart !== undefined ? 'selectstart' : 'mousemove';
+				document.addEventListener(evt, this._killSelection, false);
+				document.addEventListener('mouseup', this._enableSelection, false);
+			}
+		}, {
+			key: '_killSelection',
+			value: function _killSelection(e) {
+				switch (e.type) {
+					case 'selectstart':
+						e.preventDefault();
+						break;
+					case 'mousemove':
+						window.getSelection && window.getSelection().removeAllRanges();
+						break;
+				}
+			}
+		}, {
+			key: '_enableSelection',
+			value: function _enableSelection() {
+				// 1. by style
+				document.body.style.MozUserSelect = null;
+				document.body.style.WebkitUserSelect = null;
+				document.body.style.userSelect = null;
+
+				// 2. by removing event listeners: selectstart || mousemove
+				var evt = document.onselectstart !== undefined ? 'selectstart' : 'mousemove';
+				document.removeEventListener(evt, this._killSelection, false);
+				document.removeEventListener('mouseup', this._enableSelection, false);
+			}
+		}]);
+
+		return Decorated;
+	})(Component);
+
+	return Decorated;
+}
+
+},{"react":161}],169:[function(require,module,exports){
+'use strict';
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.InputNumber = exports.Slider = undefined;
+exports.InputNumber = exports.InputSlider = undefined;
 
-var _slider = require('./components/slider');
+var _input_slider = require('./components/input_slider');
 
-var _slider2 = _interopRequireDefault(_slider);
+var _input_slider2 = _interopRequireDefault(_input_slider);
 
 var _input_number = require('./components/input_number');
 
@@ -20216,7 +20392,7 @@ var _input_number2 = _interopRequireDefault(_input_number);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.Slider = _slider2.default;
+exports.InputSlider = _input_slider2.default;
 exports.InputNumber = _input_number2.default;
 
-},{"./components/input_number":165,"./components/slider":166}]},{},[3]);
+},{"./components/input_number":165,"./components/input_slider":166}]},{},[3]);

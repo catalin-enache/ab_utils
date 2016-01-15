@@ -1,16 +1,42 @@
+/* apply a natural box layout model to all elements, but allowing components to change */
+.ab {
+  box-sizing: border-box; }
+
+.ab *, .ab *:before, .ab *:after {
+  box-sizing: inherit; }
+
+.ab *:focus {
+  outline: none; }
+
 /*==================== Slider ========================*/
-.ab-slider {
-  background-color: gray; }
+.ab-input-slider {
+  background-color: gray;
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.65); }
 
-.ab-slider .ab-slider-fg {
-  background-color: indianred; }
+.ab-input-slider .ab-input-slider-fg {
+  background-color: indianred;
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.65); }
 
-.ab-slider-horizontal {
+.ab-input-slider-horizontal {
   width: 100px;
-  height: 5px; }
+  height: 8px; }
 
-.ab-slider-vertical {
-  width: 5px;
+.ab-input-slider-vertical {
+  width: 8px;
   height: 100px; }
 
 /*==================== InputNumber ========================*/
+.ab-input-number {
+  width: 100px;
+  height: 24px;
+  border: 1px solid transparent; }
+
+.ab-input-number input {
+  padding: 0px 4px 0px 4px;
+  background-color: #e5e5e5;
+  color: black;
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75); }
+
+.ab-input-number .ab-input-number-controls {
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75);
+  background-color: #e5e5e5; }

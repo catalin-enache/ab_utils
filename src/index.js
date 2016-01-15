@@ -1,6 +1,6 @@
 'use strict';
 
-import Slider from './components/slider';
+import InputSlider from './components/input_slider';
 import InputNumber from './components/input_number';
 
-export {Slider, InputNumber};
+export {InputSlider, InputNumber};

@@ -3,6 +3,7 @@
 jest.dontMock('../src/common/helpers');
 jest.dontMock('../src/common/validators');
 jest.dontMock('../src/decorators/generic_deco');
+jest.dontMock('../src/decorators/selection_disableable_deco');
 jest.dontMock('../src/components/generic_component');
 jest.dontMock('../src/components/input_number');
 

@@ -3,6 +3,7 @@
 import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
+import SelectionDisableableDeco from '../decorators/selection_disableable_deco';
 import {getWheelDelta} from '../common/helpers';
 import {startEndPropType, stepPropType, numberStringAndValueInRangePropType, validateNumberString} from '../common/validators';
 
@@ -30,6 +31,8 @@ const defaultProps = {
 	readOnly: false
 };
 
+const CONTROLLERS_WRAPPER_WIDTH = 16;
+
 class InputNumber extends GenericComponent {
 
 	static get displayName() {
@@ -50,7 +53,7 @@ class InputNumber extends GenericComponent {
 		super(props);
 
 		this.state = {
-			value: this._getValue()
+			value: this._getValue(),
 		};
 
 		this._handleOnChange = this._handleOnChange.bind(this);
@@ -64,6 +67,12 @@ class InputNumber extends GenericComponent {
 		}
 	}
 
+	componentDidMount() {
+		this._log(`componentDidMount`);
+		this._updateVars();
+		this.forceUpdate();
+	}
+
 	// ============================= Handlers ========================================
 
 	_handleOnChange(e) {
@@ -72,6 +81,14 @@ class InputNumber extends GenericComponent {
 	}
 
 	// ============================ Helpers ===========================================
+
+	_updateVars() {
+		let wrapperComputedStyle = getComputedStyle(this.refs.wrapper);
+		let wrapperWidth = parseFloat(wrapperComputedStyle.width);
+		let wrapperBorderLRWidth = parseFloat(wrapperComputedStyle.borderLeftWidth) + parseFloat(wrapperComputedStyle.borderRightWidth);
+		this._inputWidth = wrapperWidth - wrapperBorderLRWidth - CONTROLLERS_WRAPPER_WIDTH;
+		this._log(`_updateVars: _inputWidth: ${this._inputWidth}`);
+	}
 
 	_getValue() {
 		return (this.props.value !== undefined
@@ -128,27 +145,65 @@ class InputNumber extends GenericComponent {
 
 	render() {
 
-		let handlers = {};
+		let disableSelection = {
+			onMouseDown: this._disableSelection // from SelectionDisableableDeco
+		};
+		let inputHandlers = {};
 		if (!this.props.disabled && !this.props.readonly) {
-			handlers = {
+			inputHandlers = {
 				onChange: this._handleOnChange
-			}
+			};
 		}
 
+		// also let props.style pass through
+		let wrapperStyle = Object.assign((this.props.style || {}), {
+			position: 'relative',
+			display: 'inline-block',
+			opacity: this.props.disabled ? 0.5 : 1,
+		});
+
+		let inputStyle = Object.assign({}, {
+			border: 'none',
+			cursor: this.props.disabled ? 'not-allowed' : 'text',
+			width: this._inputWidth,
+			height: '100%',
+		});
+
+		['fontSize', 'fontWeight', 'fontStyle'].forEach((prop) => {
+			this._style(prop) && (inputStyle[prop] = this._style(prop))
+		});
+
+		let controlsWrapperStyle = Object.assign({}, {
+			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
+			position: 'absolute',
+			top: '0px',
+			right: '0px',
+			width: CONTROLLERS_WRAPPER_WIDTH,
+			height: '100%',
+			borderLeft: '1px solid transparent',
+		});
+
 		return (
-			<div className={`${this.props.className ? this.props.className : ''} ab-input-number`}>
+			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-number`}
+				 ref="wrapper"
+				 style={wrapperStyle}>
 				<input type="text"
 					   name={this.props.name}
 					   value={this.state.value}
 					   disabled={this.props.disabled}
 					   readOnly={this.props.readOnly}
-					{...handlers} />
+					   style={inputStyle}
+					{...inputHandlers} />
+				<div ref="controls"
+					 className="ab-input-number-controls"
+					 style={controlsWrapperStyle}
+					{...disableSelection}></div>
 			</div>
-
 		);
 	}
 }
 
 InputNumber = GenericDeco(InputNumber);
+InputNumber = SelectionDisableableDeco(InputNumber);
 
 export default InputNumber;

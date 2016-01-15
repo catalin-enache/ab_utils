@@ -1,7 +1,23 @@
 
 /*==================== InputNumber ========================*/
 
-.ab-input-number input {
-
+.ab-input-number {
+  width: $input_text_span;
+  height: $input_text_thickness;
+  border: $input_text_border_width $input_text_border_style $input_text_border_color;
 }
+
+.ab-input-number input {
+  padding: $input_text_padding;
+  background-color: $input_text_background_color;
+  color: $input_text_color;
+  box-shadow: $input_text_box_shadow;
+}
+
+.ab-input-number .ab-input-number-controls {
+  box-shadow: $input_text_box_shadow;
+  background-color: $input_text_background_color;
+}
+
+
 

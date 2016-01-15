@@ -26,11 +26,35 @@ class NumbersApp extends React.Component {
                 `}
                 </pre>
 				<br />
-				<InputNumber name="number_1" start={-1} onChange={this.numberOnChange.bind(this)} debug={false} />
-				<InputNumber name="number_2" value={this.state.numberStringValue} start={-1} onChange={this.numberOnChange.bind(this)} debug={true} />
-				<InputNumber name="number_3" defaultValue={'-1'} start={-1} onChange={this.numberOnChange.bind(this)} debug={false} />
-				<InputNumber name="number_4" start={-1} end={2}  debug={false} />
-				<InputNumber name="number_5" disabled={true} debug={false} />
+				<div className="examples">
+					<InputNumber name="number_1"
+								 start={-1}
+								 onChange={this.numberOnChange.bind(this)}
+								 debug={false} />
+					<br />
+					<InputNumber name="number_2"
+								 value={this.state.numberStringValue}
+								 start={-1}
+								 onChange={this.numberOnChange.bind(this)}
+								 debug={true} />
+					<br />
+					<InputNumber name="number_3"
+								 defaultValue={'-1'}
+								 start={-1}
+								 onChange={this.numberOnChange.bind(this)}
+								 debug={false} />
+					<br />
+					<InputNumber name="number_4"
+								 start={-100000000099}
+								 end={100000000099}
+								 debug={false} />
+					<br />
+					<InputNumber name="number_5"
+								 disabled={true}
+								 style={{width: '250px', height: '50px', fontSize: '30px', fontStyle: 'italic', fontWeight: 'bold'}}
+								 debug={false} />
+				</div>
+
 			</div>
 		);
 	}

@@ -3,12 +3,13 @@
 import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
+import SelectionDisableableDeco from '../decorators/selection_disableable_deco';
 import {getWheelDelta} from '../common/helpers';
 import {startEndPropType, valueInRangePropType, stepPropType} from '../common/validators';
 
 // =============================== Component =============================
 
-const displayName = 'Slider';
+const displayName = 'InputSlider';
 
 const propTypes = {
 	// optional with defaults
@@ -38,7 +39,7 @@ const defaultProps = {
 	disabled: false
 };
 
-class Slider extends GenericComponent {
+class InputSlider extends GenericComponent {
 
 	static get displayName() {
 		return displayName;
@@ -109,6 +110,7 @@ class Slider extends GenericComponent {
 	}
 
 	_handleMouseDown(e) {
+		this._disableSelection(); // from SelectionDisableableDeco
 		this._updateVars(); // for devices without mouse over
 		document.addEventListener('mousemove', this._handleMouseMove, false);
 		document.addEventListener('mouseup', this._handleMouseUp, false);
@@ -300,37 +302,33 @@ class Slider extends GenericComponent {
 			};
 		}
 
-		let fix_drag_bug = {
-			MozUserSelect: 'none',
-			WebkitUserSelect: 'none',
-			UserSelect: 'none'
-		};
-
 		// also let props.style pass through
-		let backgroundStyle = Object.assign((this.props.style || {}), fix_drag_bug, {
+		let backgroundStyle = Object.assign((this.props.style || {}), {
 			position: 'relative',
 			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
 			opacity: this.props.disabled ? 0.5 : 1,
 		});
 
-		foregroundStyle = Object.assign(foregroundStyle, fix_drag_bug, {
+		foregroundStyle = Object.assign(foregroundStyle, {
 			position: 'absolute',
 		});
 
 		this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));
 
 		return (
-			<div className={`${this.props.className ? this.props.className : ''} ab-slider ab-slider-${this.props.orientation}`}
+			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-slider ab-input-slider-${this.props.orientation}`}
 				 ref="outer"
 				 style={backgroundStyle}
-				 {...handlers}>
-				<div className="ab-slider-fg" style={foregroundStyle}></div>
+				 {...handlers} >
+				<div className="ab-input-slider-fg"
+					 style={foregroundStyle}></div>
 				<input type="hidden" name={this.props.name} value={this.state.value} disabled={this.props.disabled}/>
 			</div>
 		);
 	}
 }
 
-Slider = GenericDeco(Slider);
+InputSlider = GenericDeco(InputSlider);
+InputSlider = SelectionDisableableDeco(InputSlider);
 
-export default Slider;
+export default InputSlider;

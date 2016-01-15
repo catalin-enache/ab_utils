@@ -2,20 +2,21 @@
 
 jest.dontMock('../src/common/helpers');
 jest.dontMock('../src/decorators/generic_deco');
+jest.dontMock('../src/decorators/selection_disableable_deco');
 jest.dontMock('../src/components/generic_component');
-jest.dontMock('../src/components/slider');
+jest.dontMock('../src/components/input_slider');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-const Slider = require('../src/components/slider').default;
+const InputSlider = require('../src/components/input_slider').default;
 
-describe('Slider', () => {
+describe('InputSlider', () => {
 
 	it('has defaultProps', () => {
 
-		let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
+		let slider = TestUtils.renderIntoDocument(<InputSlider name="one" />);
 
 		expect(slider.props).toEqual(jasmine.objectContaining({
 			name: 'one',
@@ -30,12 +31,12 @@ describe('Slider', () => {
 
 	it('requires "name" prop', () => {
 		spyOn(console, 'error');
-		TestUtils.renderIntoDocument(<Slider />);
-		expect(console.error).toHaveBeenCalledWith('Warning: Failed propType: Required prop `name` was not specified in `Slider`.');
+		TestUtils.renderIntoDocument(<InputSlider />);
+		expect(console.error).toHaveBeenCalledWith('Warning: Failed propType: Required prop `name` was not specified in `InputSlider`.');
 	});
 
 	it('has an associated hidden form element ', () => {
-		let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
+		let slider = TestUtils.renderIntoDocument(<InputSlider name="one" />);
 		let sliderNode = ReactDOM.findDOMNode(slider);
 
 		expect(sliderNode.childNodes[1].nodeName).toEqual('INPUT');
@@ -45,7 +46,7 @@ describe('Slider', () => {
 	describe('componentDidMount', () => {
 
 		it('calls _updateVars _setPercentValueState _getValue _valueToPercent', () => {
-			let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
+			let slider = TestUtils.renderIntoDocument(<InputSlider name="one" />);
 
 			spyOn(slider, '_updateVars');
 			spyOn(slider, '_setPercentValueState');
@@ -64,7 +65,7 @@ describe('Slider', () => {
 	describe('_handleMouseDown', () => {
 
 		it('calls _updateVars and _update', () => {
-			let slider = TestUtils.renderIntoDocument(<Slider name="one" />);
+			let slider = TestUtils.renderIntoDocument(<InputSlider name="one" />);
 			let sliderNode = ReactDOM.findDOMNode(slider);
 
 			spyOn(slider, '_updateVars');
@@ -77,14 +78,14 @@ describe('Slider', () => {
 		});
 
 		it('changes state value and percent', () => {
-			let SliderTest = class extends Slider {
+			let InputSliderTest = class extends InputSlider {
 				_getBoundingClientRect() {
 					return { bottom: 0, height: 100, left: 0, right: 0, top: 0, width: 100 };
 				}
 			};
 
 			let slider = TestUtils.renderIntoDocument(
-				<SliderTest name="one" start={-1} end={1} />
+				<InputSliderTest name="one" start={-1} end={1} />
 			);
 
 			let sliderNode = ReactDOM.findDOMNode(slider);
@@ -102,7 +103,7 @@ describe('Slider', () => {
 
 		it('adds two event listeners to document', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 			let sliderNode = ReactDOM.findDOMNode(slider);
 
@@ -110,13 +111,13 @@ describe('Slider', () => {
 
 			TestUtils.Simulate.mouseDown(sliderNode, {clientX: 0});
 
-			expect(document.addEventListener.calls.count()).toEqual(2);
+			expect(document.addEventListener.calls.count()).toEqual(4);
 		});
 
 		describe('when has "value" prop - is controlled', () => {
 
 			it('setState after _emitValueChangeEvent', () => {
-				let SliderTest = class extends Slider {
+				let InputSliderTest = class extends InputSlider {
 					_getBoundingClientRect() {
 						return { bottom: 0, height: 100, left: 0, right: 0, top: 0, width: 100 };
 					}
@@ -131,7 +132,7 @@ describe('Slider', () => {
 					_onChange() { this.setState({value: 0}); }
 
 					render() {
-						return (<SliderTest ref="slider" value={this.state.value} onChange={this._onChange.bind(this)} />);
+						return (<InputSliderTest ref="slider" value={this.state.value} onChange={this._onChange.bind(this)} />);
 					}
 				};
 
@@ -163,7 +164,7 @@ describe('Slider', () => {
 		describe('when has "defaultValue" prop - is uncontrolled', () => {
 
 			it('setState before _emitValueChangeEvent then it does not setState anymore', () => {
-				let SliderTest = class extends Slider {
+				let InputSliderTest = class extends InputSlider {
 					_getBoundingClientRect() {
 						return { bottom: 0, height: 100, left: 0, right: 0, top: 0, width: 100 };
 					}
@@ -178,7 +179,7 @@ describe('Slider', () => {
 					_onChange() { this.setState({value: 0}); }
 
 					render() {
-						return (<SliderTest ref="slider" defaultValue={this.state.value} onChange={this._onChange.bind(this)} />);
+						return (<InputSliderTest ref="slider" defaultValue={this.state.value} onChange={this._onChange.bind(this)} />);
 					}
 				};
 
@@ -213,7 +214,7 @@ describe('Slider', () => {
 
 		it('removes two event listeners from document and calls _update', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 
 			spyOn(document, 'removeEventListener');
@@ -235,7 +236,7 @@ describe('Slider', () => {
 			}
 
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 
 			spyOn(global, 'requestAnimationFrame').and.callThrough();
@@ -259,13 +260,13 @@ describe('Slider', () => {
 	describe('_handleMouseWheel', () => {
 
 		it('transform wheel delta into an event and calls _update', () => {
-			let SliderTest = class extends Slider {
+			let InputSliderTest = class extends InputSlider {
 				_getBoundingClientRect() {
 					return { bottom: 0, height: 100, left: 0, right: 0, top: 0, width: 100 };
 				}
 			};
 			let slider = TestUtils.renderIntoDocument(
-				<SliderTest name="one" step={1} />
+				<InputSliderTest name="one" step={1} />
 			);
 			let sliderNode = ReactDOM.findDOMNode(slider);
 
@@ -283,7 +284,7 @@ describe('Slider', () => {
 
 		it('calls _update', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 			let sliderNode = ReactDOM.findDOMNode(slider);
 			spyOn(slider, '_updateVars');
@@ -298,7 +299,7 @@ describe('Slider', () => {
 
 		it('calculates percent from passed event', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 			slider._outerWidth = 100;
 			expect(slider._eventToPercent({clientX: 50})).toEqual(0.5);
@@ -311,7 +312,7 @@ describe('Slider', () => {
 
 			it('calculates percent from passed value and applies default stepping', () => {
 				let slider = TestUtils.renderIntoDocument(
-					<Slider name="one" />
+					<InputSlider name="one" />
 				);
 				expect(slider._valueToPercent(0.1)).toEqual(0.55);
 			});
@@ -321,7 +322,7 @@ describe('Slider', () => {
 
 			it('calculates percent from passed value and applies custom stepping', () => {
 				let slider = TestUtils.renderIntoDocument(
-					<Slider name="one" step={1} />
+					<InputSlider name="one" step={1} />
 				);
 				expect(slider._valueToPercent(0.1)).toEqual(0.5);
 			});
@@ -332,7 +333,7 @@ describe('Slider', () => {
 
 		it('calculates value from passed percent', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one"  />
+				<InputSlider name="one"  />
 			);
 			expect(slider._percentToValue(0.1)).toEqual(-0.8);
 		});
@@ -342,7 +343,7 @@ describe('Slider', () => {
 
 		it('receives a percent and returns a rounded percent depending on step prop', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" step={0.1}  />
+				<InputSlider name="one" step={0.1}  />
 			);
 			expect(slider._stepping(0.061)).toEqual(0.05);
 			expect(slider._stepping(0.091)).toEqual(0.1);
@@ -353,7 +354,7 @@ describe('Slider', () => {
 
 		it('receives a percent and returns a rounded percent depending on default step prop', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 			expect(slider._stepping(0.061)).toEqual(0.06);
 			expect(slider._stepping(0.091)).toEqual(0.09);
@@ -364,17 +365,17 @@ describe('Slider', () => {
 
 		it('returns defaultValue or value or start', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 			expect(slider._getValue()).toEqual(-1);
 
 			slider = TestUtils.renderIntoDocument(
-				<Slider name="one" defaultValue={-0.5} />
+				<InputSlider name="one" defaultValue={-0.5} />
 			);
 			expect(slider._getValue()).toEqual(-0.5);
 
 			slider = TestUtils.renderIntoDocument(
-				<Slider name="one" value={-0.5} />
+				<InputSlider name="one" value={-0.5} />
 			);
 			expect(slider._getValue()).toEqual(-0.5);
 		});
@@ -383,7 +384,7 @@ describe('Slider', () => {
 	describe('_updateVars', () => {
 
 		it('updates some dimension variables', () => {
-			let SliderTest = class extends Slider {
+			let InputSliderTest = class extends InputSlider {
 				_getBoundingClientRect() {
 					return { bottom: 0, height: 100, left: 10, right: 0, top: 10, width: 100 };
 				}
@@ -391,7 +392,7 @@ describe('Slider', () => {
 			};
 
 			let slider = TestUtils.renderIntoDocument(
-				<SliderTest name="one" />
+				<InputSliderTest name="one" />
 			);
 
 			expect(slider._outerWidth).toEqual(0);
@@ -414,7 +415,7 @@ describe('Slider', () => {
 
 		it('returns refs.outer.getBoundingClientRect()', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 
 			spyOn(slider.refs.outer, 'getBoundingClientRect');
@@ -431,7 +432,7 @@ describe('Slider', () => {
 
 			it('it does not call any methods related to setting state or emitting value changed event', () => {
 				let slider = TestUtils.renderIntoDocument(
-					<Slider value={0} name="one" />
+					<InputSlider value={0} name="one" />
 				);
 
 				spyOn(slider, '_eventToPercent').and.returnValue(0.5);
@@ -450,7 +451,7 @@ describe('Slider', () => {
 
 			it('calls _emitValueChangeEvent', () => {
 				let slider = TestUtils.renderIntoDocument(
-					<Slider value={-1} name="one" />
+					<InputSlider value={-1} name="one" />
 				);
 				spyOn(slider, '_eventToPercent').and.returnValue(0.5);
 				spyOn(slider, '_percentToValue').and.returnValue(0);
@@ -468,7 +469,7 @@ describe('Slider', () => {
 
 			it('calls _setPercentValueStateAndEmitValueChangedEvent', () => {
 				let slider = TestUtils.renderIntoDocument(
-					<Slider defaultValue={-1} name="one" />
+					<InputSlider defaultValue={-1} name="one" />
 				);
 				spyOn(slider, '_eventToPercent').and.returnValue(0.5);
 				spyOn(slider, '_percentToValue').and.returnValue(0);
@@ -492,7 +493,7 @@ describe('Slider', () => {
 			let spyOnHandleOnChange = spyOn(handlersObj, 'handleOnChange');
 
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" onChange={handlersObj.handleOnChange} />
+				<InputSlider name="one" onChange={handlersObj.handleOnChange} />
 			);
 
 			slider._emitValueChangeEvent(1);
@@ -504,7 +505,7 @@ describe('Slider', () => {
 
 		it('calls _setState', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 			let cb = function(){};
 
@@ -520,7 +521,7 @@ describe('Slider', () => {
 
 		it('calls _setPercentValueState', () => {
 			let slider = TestUtils.renderIntoDocument(
-				<Slider name="one" />
+				<InputSlider name="one" />
 			);
 
 			spyOn(slider, '_setPercentValueState');
@@ -535,27 +536,21 @@ describe('Slider', () => {
 
 		it('works with defaults', () => {
 			let renderer = TestUtils.createRenderer();
-			renderer.render(<Slider name="one" />);
+			renderer.render(<InputSlider name="one" />);
 			let actualElement = renderer.getRenderOutput();
 			let expectedElement = <div
-				className={' ab-slider ab-slider-horizontal'}
+				className={' ab ab-input-slider ab-input-slider-horizontal'}
 				ref="outer"
 				onMouseDown={jasmine.any(Function)}
 				onMouseOver={jasmine.any(Function)}
 				onWheel={jasmine.any(Function)}
 				style={{
-					MozUserSelect: 'none',
-					UserSelect: 'none',
-					WebkitUserSelect: 'none',
 					cursor: 'pointer',
 					opacity: 1,
 					position: 'relative'
 					}}  >
-				<div className="ab-slider-fg"
+				<div className="ab-input-slider-fg"
 					 style={{
-						MozUserSelect: 'none',
-						UserSelect: 'none',
-						WebkitUserSelect: 'none',
 						bottom: '0px',
 						left: '0px',
 						position: 'absolute',
@@ -574,23 +569,23 @@ describe('Slider', () => {
 
 		it('concatenates className', () => {
 			let renderer = TestUtils.createRenderer();
-			renderer.render(<Slider className="custom" name="one" />);
+			renderer.render(<InputSlider className="custom" name="one" />);
 			let actualElement = renderer.getRenderOutput();
 
-			expect(actualElement.props.className).toEqual('custom ab-slider ab-slider-horizontal');
+			expect(actualElement.props.className).toEqual('custom ab ab-input-slider ab-input-slider-horizontal');
 		});
 
 		it('has ab-slider-horizontal class when orientation is vertical', () => {
 			let renderer = TestUtils.createRenderer();
-			renderer.render(<Slider orientation="vertical" name="one" />);
+			renderer.render(<InputSlider orientation="vertical" name="one" />);
 			let actualElement = renderer.getRenderOutput();
 
-			expect(actualElement.props.className).toEqual(' ab-slider ab-slider-vertical');
+			expect(actualElement.props.className).toEqual(' ab ab-input-slider ab-input-slider-vertical');
 		});
 
 		it('passes through style prop', () => {
 			let renderer = TestUtils.createRenderer();
-			renderer.render(<Slider style={{border: '1px solid black'}} name="one" />);
+			renderer.render(<InputSlider style={{border: '1px solid black'}} name="one" />);
 			let actualElement = renderer.getRenderOutput();
 
 			expect(actualElement.props.style.border).toEqual('1px solid black');
@@ -598,7 +593,7 @@ describe('Slider', () => {
 
 		it('handles foregroundColor style property', () => {
 			let renderer = TestUtils.createRenderer();
-			renderer.render(<Slider style={{foregroundColor: 'red'}} name="one" />);
+			renderer.render(<InputSlider style={{foregroundColor: 'red'}} name="one" />);
 			let actualElement = renderer.getRenderOutput();
 
 			expect(actualElement.props.children[0].props.style.backgroundColor).toEqual('red');
@@ -608,7 +603,7 @@ describe('Slider', () => {
 
 			it('does not have event handlers', () => {
 				let renderer = TestUtils.createRenderer();
-				renderer.render(<Slider name="one" disabled={true} />);
+				renderer.render(<InputSlider name="one" disabled={true} />);
 				let actualElement = renderer.getRenderOutput();
 
 				expect(actualElement.props.onMouseDown).toBeUndefined();

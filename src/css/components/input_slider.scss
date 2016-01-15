@@ -1,0 +1,22 @@
+
+/*==================== Slider ========================*/
+
+.ab-input-slider {
+  background-color: $input_slider_bg_color;
+  box-shadow: $input_slider_box_shadow;
+}
+
+.ab-input-slider .ab-input-slider-fg {
+  background-color: $input_slider_fg_color;
+  box-shadow: $input_slider_box_shadow;
+}
+
+.ab-input-slider-horizontal {
+  width: $input_slider_span;
+  height: $input_slider_thickness;
+}
+
+.ab-input-slider-vertical {
+  width: $input_slider_thickness;
+  height: $input_slider_span;
+}
