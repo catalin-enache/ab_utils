@@ -52,6 +52,9 @@ class InputNumber extends GenericComponent {
 	constructor(props) {
 		super(props);
 
+		this._wrapperHeight = 0;
+		this._inputWidth = 0;
+
 		this.state = {
 			value: this._getValue(),
 		};
@@ -99,7 +102,8 @@ class InputNumber extends GenericComponent {
 		let wrapperWidth = parseFloat(wrapperComputedStyle.width);
 		let wrapperBorderLRWidth = parseFloat(wrapperComputedStyle.borderLeftWidth) + parseFloat(wrapperComputedStyle.borderRightWidth);
 		this._inputWidth = wrapperWidth - wrapperBorderLRWidth - CONTROLLERS_WRAPPER_WIDTH;
-		this._log(`_updateVars: _inputWidth: ${this._inputWidth}`);
+		this._wrapperHeight = parseFloat(wrapperComputedStyle.height);
+		this._log(`_updateVars: _inputWidth: ${this._inputWidth}, _wrapperHeight: ${this._wrapperHeight}`);
 	}
 
 	_getValue() {
@@ -210,11 +214,17 @@ class InputNumber extends GenericComponent {
 				<div ref="controls"
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
-					{...disableSelection}></div>
+					{...disableSelection}>
+					<div style={{height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: (this._wrapperHeight/100) * 40/2 - 4/2}}><div className="arrow-up" style={{}}></div></div>
+					<div style={{height: '20%', backgroundColor: 'grey'}}></div>
+					<div style={{height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: (this._wrapperHeight/100) * 40/2 - 4/2 - 1}}><div className="arrow-down"></div></div>
+				</div>
 			</div>
 		);
 	}
 }
+
+// ▴ ▾
 
 InputNumber = GenericDeco(InputNumber);
 InputNumber = SelectionDisableableDeco(InputNumber);

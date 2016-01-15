@@ -19352,7 +19352,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.getWheelDelta = getWheelDelta;
 exports.trim = trim;
 function getWheelDelta(wheelEvent) {
-	console.log(wheelEvent);
 	var delta = wheelEvent.deltaY;
 	var res = Math.abs(delta / 100);
 	var multiplier = wheelEvent.ctrlKey && wheelEvent.altKey ? 100 : wheelEvent.ctrlKey ? 5 : wheelEvent.altKey ? 10 : 1;
@@ -19649,6 +19648,9 @@ var InputNumber = (function (_GenericComponent) {
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputNumber).call(this, props));
 
+		_this._wrapperHeight = 0;
+		_this._inputWidth = 0;
+
 		_this.state = {
 			value: _this._getValue()
 		};
@@ -19705,7 +19707,8 @@ var InputNumber = (function (_GenericComponent) {
 			var wrapperWidth = parseFloat(wrapperComputedStyle.width);
 			var wrapperBorderLRWidth = parseFloat(wrapperComputedStyle.borderLeftWidth) + parseFloat(wrapperComputedStyle.borderRightWidth);
 			this._inputWidth = wrapperWidth - wrapperBorderLRWidth - CONTROLLERS_WRAPPER_WIDTH;
-			this._log('_updateVars: _inputWidth: ' + this._inputWidth);
+			this._wrapperHeight = parseFloat(wrapperComputedStyle.height);
+			this._log('_updateVars: _inputWidth: ' + this._inputWidth + ', _wrapperHeight: ' + this._wrapperHeight);
 		}
 	}, {
 		key: '_getValue',
@@ -19819,16 +19822,32 @@ var InputNumber = (function (_GenericComponent) {
 					readOnly: this.props.readOnly,
 					style: inputStyle
 				}, inputHandlers)),
-				_react2.default.createElement('div', _extends({ ref: 'controls',
-					className: 'ab-input-number-controls',
-					style: controlsWrapperStyle
-				}, disableSelection))
+				_react2.default.createElement(
+					'div',
+					_extends({ ref: 'controls',
+						className: 'ab-input-number-controls',
+						style: controlsWrapperStyle
+					}, disableSelection),
+					_react2.default.createElement(
+						'div',
+						{ style: { height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: this._wrapperHeight / 100 * 40 / 2 - 4 / 2 } },
+						_react2.default.createElement('div', { className: 'arrow-up', style: {} })
+					),
+					_react2.default.createElement('div', { style: { height: '20%', backgroundColor: 'grey' } }),
+					_react2.default.createElement(
+						'div',
+						{ style: { height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: this._wrapperHeight / 100 * 40 / 2 - 4 / 2 - 1 } },
+						_react2.default.createElement('div', { className: 'arrow-down' })
+					)
+				)
 			);
 		}
 	}]);
 
 	return InputNumber;
 })(_generic_component2.default);
+
+// ▴ ▾
 
 InputNumber = (0, _generic_deco2.default)(InputNumber);
 InputNumber = (0, _selection_disableable_deco2.default)(InputNumber);
