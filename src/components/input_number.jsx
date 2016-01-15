@@ -57,6 +57,7 @@ class InputNumber extends GenericComponent {
 		};
 
 		this._handleOnChange = this._handleOnChange.bind(this);
+		this._handleMouseWheel = this._handleMouseWheel.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -78,6 +79,17 @@ class InputNumber extends GenericComponent {
 	_handleOnChange(e) {
 		this._log(`_handleOnChange ${e.target.value}`);
 		this._update(this._normalizeValue(e.target.value));
+	}
+
+	_handleMouseWheel(e) {
+		e.preventDefault();
+		let delta = getWheelDelta(e);
+		let value = parseFloat(this.state.value);
+		if (value !== value) value = this.props.start;
+		value += delta * this.props.step;
+
+		let fixed = this.props.step === 1 ? 0 : 2;
+		this._update(this._normalizeValue(value.toFixed(fixed)));
 	}
 
 	// ============================ Helpers ===========================================
@@ -151,7 +163,8 @@ class InputNumber extends GenericComponent {
 		let inputHandlers = {};
 		if (!this.props.disabled && !this.props.readonly) {
 			inputHandlers = {
-				onChange: this._handleOnChange
+				onChange: this._handleOnChange,
+				onWheel: this._handleMouseWheel
 			};
 		}
 

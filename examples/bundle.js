@@ -84,6 +84,8 @@ var NumbersApp = (function (_React$Component) {
 					_react2.default.createElement(_src.InputNumber, { name: 'number_4',
 						start: -100000000099,
 						end: 100000000099,
+						step: 1,
+						style: { width: '150px' },
 						debug: false }),
 					_react2.default.createElement('br', null),
 					_react2.default.createElement(_src.InputNumber, { name: 'number_5',
@@ -19350,9 +19352,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.getWheelDelta = getWheelDelta;
 exports.trim = trim;
 function getWheelDelta(wheelEvent) {
+	console.log(wheelEvent);
 	var delta = wheelEvent.deltaY;
 	var res = Math.abs(delta / 100);
-	return res < 1 ? -delta / 3 : -delta / 100; // res < 1 ? mozilla : chrome
+	var multiplier = wheelEvent.ctrlKey && wheelEvent.altKey ? 100 : wheelEvent.ctrlKey ? 5 : wheelEvent.altKey ? 10 : 1;
+	return multiplier * (res < 1 ? -delta / 3 : -delta / 100); // res < 1 ? mozilla : chrome
 }
 
 function trim(str) {
@@ -19650,6 +19654,7 @@ var InputNumber = (function (_GenericComponent) {
 		};
 
 		_this._handleOnChange = _this._handleOnChange.bind(_this);
+		_this._handleMouseWheel = _this._handleMouseWheel.bind(_this);
 		return _this;
 	}
 
@@ -19677,6 +19682,18 @@ var InputNumber = (function (_GenericComponent) {
 		value: function _handleOnChange(e) {
 			this._log('_handleOnChange ' + e.target.value);
 			this._update(this._normalizeValue(e.target.value));
+		}
+	}, {
+		key: '_handleMouseWheel',
+		value: function _handleMouseWheel(e) {
+			e.preventDefault();
+			var delta = (0, _helpers.getWheelDelta)(e);
+			var value = parseFloat(this.state.value);
+			if (value !== value) value = this.props.start;
+			value += delta * this.props.step;
+
+			var fixed = this.props.step === 1 ? 0 : 2;
+			this._update(this._normalizeValue(value.toFixed(fixed)));
 		}
 
 		// ============================ Helpers ===========================================
@@ -19757,7 +19774,8 @@ var InputNumber = (function (_GenericComponent) {
 			var inputHandlers = {};
 			if (!this.props.disabled && !this.props.readonly) {
 				inputHandlers = {
-					onChange: this._handleOnChange
+					onChange: this._handleOnChange,
+					onWheel: this._handleMouseWheel
 				};
 			}
 

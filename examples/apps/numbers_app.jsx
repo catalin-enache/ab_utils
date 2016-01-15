@@ -47,6 +47,8 @@ class NumbersApp extends React.Component {
 					<InputNumber name="number_4"
 								 start={-100000000099}
 								 end={100000000099}
+								 step={1}
+								 style={{width: '150px'}}
 								 debug={false} />
 					<br />
 					<InputNumber name="number_5"

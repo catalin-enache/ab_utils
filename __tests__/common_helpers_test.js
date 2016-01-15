@@ -35,6 +35,15 @@ describe('getWheelDelta', () => {
 
 		result = getWheelDelta({deltaY: -6});
 		expect(result).toEqual(2);
+
+		result = getWheelDelta({deltaY: -100, ctrlKey: true});
+		expect(result).toEqual(5);
+
+		result = getWheelDelta({deltaY: -100, altKey: true});
+		expect(result).toEqual(10);
+
+		result = getWheelDelta({deltaY: -100, ctrlKey: true, altKey: true});
+		expect(result).toEqual(100);
 	});
 });
 
