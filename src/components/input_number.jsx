@@ -211,6 +211,12 @@ class InputNumber extends GenericComponent {
 			borderLeft: '1px solid transparent',
 		});
 
+		// controls style
+		let controlsArrowDivHeightPercent = 40;
+		let controlsMiddleDivHeightPercent = 20;
+		let controlsArrowBorderWidth = 4; // hardcoded in utils.scss
+		let controlsArrowPaddingTop = (this._wrapperHeight/100) * controlsArrowDivHeightPercent/2 - controlsArrowBorderWidth/2;
+
 		return (
 			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-number`}
 				 ref="wrapper"
@@ -226,9 +232,9 @@ class InputNumber extends GenericComponent {
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
 					{...disableSelection}>
-					<div style={{height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: (this._wrapperHeight/100) * 40/2 - 4/2}}><div className="arrow-up" style={{}}></div></div>
-					<div style={{height: '20%', backgroundColor: 'grey'}}></div>
-					<div style={{height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: (this._wrapperHeight/100) * 40/2 - 4/2 - 1}}><div className="arrow-down"></div></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}><div className="arrow-up"></div></div>
+					<div style={{height: `${controlsMiddleDivHeightPercent}%`}} className="ab-input-number-middle-control"></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}}><div className="arrow-down"></div></div>
 				</div>
 			</div>
 		);

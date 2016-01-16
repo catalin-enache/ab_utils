@@ -70,10 +70,13 @@
   border: 1px solid transparent; }
 
 .ab-input-number input {
-  background-color: #e5e5e5;
   color: black;
-  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75); }
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75);
+  background-color: #e5e5e5; }
 
 .ab-input-number .ab-input-number-controls {
   box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75);
   background-color: #e5e5e5; }
+
+.ab-input-number .ab-input-number-controls .ab-input-number-middle-control {
+  background-color: gray; }

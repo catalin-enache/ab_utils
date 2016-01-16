@@ -8,14 +8,18 @@
 }
 
 .ab-input-number input {
-  background-color: $input_text_background_color;
   color: $input_text_color;
   box-shadow: $input_text_box_shadow;
+  background-color: $input_text_background_color;
 }
 
 .ab-input-number .ab-input-number-controls {
   box-shadow: $input_text_box_shadow;
   background-color: $input_text_background_color;
+}
+
+.ab-input-number .ab-input-number-controls .ab-input-number-middle-control {
+  background-color: $input_number_middle_control_color;
 }
 
 

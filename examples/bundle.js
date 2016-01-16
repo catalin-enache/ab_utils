@@ -19843,6 +19843,12 @@ var InputNumber = function (_GenericComponent) {
 				borderLeft: '1px solid transparent'
 			});
 
+			// controls style
+			var controlsArrowDivHeightPercent = 40;
+			var controlsMiddleDivHeightPercent = 20;
+			var controlsArrowBorderWidth = 4; // hardcoded in utils.scss
+			var controlsArrowPaddingTop = this._wrapperHeight / 100 * controlsArrowDivHeightPercent / 2 - controlsArrowBorderWidth / 2;
+
 			return _react2.default.createElement(
 				'div',
 				{ className: (this.props.className ? this.props.className : '') + ' ab ab-input-number',
@@ -19863,13 +19869,13 @@ var InputNumber = function (_GenericComponent) {
 					}, disableSelection),
 					_react2.default.createElement(
 						'div',
-						{ style: { height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: this._wrapperHeight / 100 * 40 / 2 - 4 / 2 } },
-						_react2.default.createElement('div', { className: 'arrow-up', style: {} })
+						{ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop } },
+						_react2.default.createElement('div', { className: 'arrow-up' })
 					),
-					_react2.default.createElement('div', { style: { height: '20%', backgroundColor: 'grey' } }),
+					_react2.default.createElement('div', { style: { height: controlsMiddleDivHeightPercent + '%' }, className: 'ab-input-number-middle-control' }),
 					_react2.default.createElement(
 						'div',
-						{ style: { height: '40%', backgroundColor: '', paddingLeft: '3px', paddingTop: this._wrapperHeight / 100 * 40 / 2 - 4 / 2 - 1 } },
+						{ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1 } },
 						_react2.default.createElement('div', { className: 'arrow-down' })
 					)
 				)
