@@ -73,23 +73,23 @@ describe('InputNumber', () => {
 		});
 	});
 
-	describe('_getValue', () => {
+	describe('_getInitialValue', () => {
 
 		it('returns defaultValue or value or start', () => {
 			let inputNumber = TestUtils.renderIntoDocument(
 				<InputNumber name="one"  />
 			);
-			expect(inputNumber._getValue()).toEqual('0');
+			expect(inputNumber._getInitialValue()).toEqual('0');
 
 			inputNumber = TestUtils.renderIntoDocument(
 				<InputNumber name="one" defaultValue={'0.5'} />
 			);
-			expect(inputNumber._getValue()).toEqual('0.5');
+			expect(inputNumber._getInitialValue()).toEqual('0.5');
 
 			inputNumber = TestUtils.renderIntoDocument(
 				<InputNumber name="one" value={'0.6'} />
 			);
-			expect(inputNumber._getValue()).toEqual('0.6');
+			expect(inputNumber._getInitialValue()).toEqual('0.6');
 		});
 	});
 

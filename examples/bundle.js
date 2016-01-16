@@ -19674,11 +19674,14 @@ var InputNumber = function (_GenericComponent) {
 		_this._inputWidth = 0;
 
 		_this.state = {
-			value: _this._getValue()
+			value: _this._getInitialValue()
 		};
 
 		_this._handleOnChange = _this._handleOnChange.bind(_this);
 		_this._handleMouseWheel = _this._handleMouseWheel.bind(_this);
+		_this._handleUpArrowClick = _this._handleUpArrowClick.bind(_this);
+		_this._handleDownArrowClick = _this._handleDownArrowClick.bind(_this);
+		_this._handleMiddleControlMouseDown = _this._handleMiddleControlMouseDown.bind(_this);
 		return _this;
 	}
 
@@ -19712,12 +19715,31 @@ var InputNumber = function (_GenericComponent) {
 		value: function _handleMouseWheel(e) {
 			e.preventDefault();
 			var delta = (0, _helpers.getWheelDelta)(e);
-			var value = parseFloat(this.state.value);
-			if (value !== value) value = this.props.start;
+			var value = this._getCurrentValueAsNumber();
 			value += delta * this.props.step;
-
 			var fixed = this.props.step === 1 ? 0 : 2;
 			this._update(this._normalizeValue(value.toFixed(fixed)));
+		}
+	}, {
+		key: '_handleUpArrowClick',
+		value: function _handleUpArrowClick(e) {
+			var value = this._getCurrentValueAsNumber();
+			value += this.props.step;
+			var fixed = this.props.step === 1 ? 0 : 2;
+			this._update(this._normalizeValue(value.toFixed(fixed)));
+		}
+	}, {
+		key: '_handleDownArrowClick',
+		value: function _handleDownArrowClick(e) {
+			var value = this._getCurrentValueAsNumber();
+			value -= this.props.step;
+			var fixed = this.props.step === 1 ? 0 : 2;
+			this._update(this._normalizeValue(value.toFixed(fixed)));
+		}
+	}, {
+		key: '_handleMiddleControlMouseDown',
+		value: function _handleMiddleControlMouseDown(e) {
+			console.log('middle mouse down');
 		}
 
 		// ============================ Helpers ===========================================
@@ -19733,9 +19755,16 @@ var InputNumber = function (_GenericComponent) {
 			this._log('_updateVars: _inputWidth: ' + this._inputWidth + ', _wrapperHeight: ' + this._wrapperHeight);
 		}
 	}, {
-		key: '_getValue',
-		value: function _getValue() {
+		key: '_getInitialValue',
+		value: function _getInitialValue() {
 			return this.props.value !== undefined ? this.props.value : this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.start.toString();
+		}
+	}, {
+		key: '_getCurrentValueAsNumber',
+		value: function _getCurrentValueAsNumber() {
+			var value = parseFloat(this.state.value);
+			if (value !== value) value = this.props.start;
+			return value;
 		}
 	}, {
 		key: '_normalizeValue',
@@ -19797,10 +19826,22 @@ var InputNumber = function (_GenericComponent) {
 				onMouseDown: this._disableSelection // from SelectionDisableableDeco
 			};
 			var inputHandlers = {};
+			var controlsUpArrowHandlers = {};
+			var controlsDownArrowHandlers = {};
+			var controlsMiddleControlHandlers = {};
 			if (!this.props.disabled && !this.props.readonly) {
 				inputHandlers = {
 					onChange: this._handleOnChange,
 					onWheel: this._handleMouseWheel
+				};
+				controlsUpArrowHandlers = {
+					onClick: this._handleUpArrowClick
+				};
+				controlsDownArrowHandlers = {
+					onClick: this._handleDownArrowClick
+				};
+				controlsMiddleControlHandlers = {
+					onMouseDown: this._handleMiddleControlMouseDown
 				};
 			}
 
@@ -19848,6 +19889,7 @@ var InputNumber = function (_GenericComponent) {
 			var controlsMiddleDivHeightPercent = 20;
 			var controlsArrowBorderWidth = 4; // hardcoded in utils.scss
 			var controlsArrowPaddingTop = this._wrapperHeight / 100 * controlsArrowDivHeightPercent / 2 - controlsArrowBorderWidth / 2;
+			var controlsMiddleDivCursor = this.props.disabled || this.props.readOnly ? 'inherit' : 'row-resize';
 
 			return _react2.default.createElement(
 				'div',
@@ -19869,13 +19911,13 @@ var InputNumber = function (_GenericComponent) {
 					}, disableSelection),
 					_react2.default.createElement(
 						'div',
-						{ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop } },
+						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop } }, controlsUpArrowHandlers),
 						_react2.default.createElement('div', { className: 'arrow-up' })
 					),
-					_react2.default.createElement('div', { style: { height: controlsMiddleDivHeightPercent + '%' }, className: 'ab-input-number-middle-control' }),
+					_react2.default.createElement('div', _extends({ style: { height: controlsMiddleDivHeightPercent + '%', cursor: controlsMiddleDivCursor }, className: 'ab-input-number-middle-control' }, controlsMiddleControlHandlers)),
 					_react2.default.createElement(
 						'div',
-						{ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1 } },
+						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1 } }, controlsDownArrowHandlers),
 						_react2.default.createElement('div', { className: 'arrow-down' })
 					)
 				)

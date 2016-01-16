@@ -56,11 +56,14 @@ class InputNumber extends GenericComponent {
 		this._inputWidth = 0;
 
 		this.state = {
-			value: this._getValue(),
+			value: this._getInitialValue(),
 		};
 
 		this._handleOnChange = this._handleOnChange.bind(this);
 		this._handleMouseWheel = this._handleMouseWheel.bind(this);
+		this._handleUpArrowClick = this._handleUpArrowClick.bind(this);
+		this._handleDownArrowClick = this._handleDownArrowClick.bind(this);
+		this._handleMiddleControlMouseDown = this._handleMiddleControlMouseDown.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -87,12 +90,28 @@ class InputNumber extends GenericComponent {
 	_handleMouseWheel(e) {
 		e.preventDefault();
 		let delta = getWheelDelta(e);
-		let value = parseFloat(this.state.value);
-		if (value !== value) value = this.props.start;
+		let value = this._getCurrentValueAsNumber();
 		value += delta * this.props.step;
-
 		let fixed = this.props.step === 1 ? 0 : 2;
 		this._update(this._normalizeValue(value.toFixed(fixed)));
+	}
+
+	_handleUpArrowClick(e) {
+		let value = this._getCurrentValueAsNumber();
+		value += this.props.step;
+		let fixed = this.props.step === 1 ? 0 : 2;
+		this._update(this._normalizeValue(value.toFixed(fixed)));
+	}
+
+	_handleDownArrowClick(e) {
+		let value = this._getCurrentValueAsNumber();
+		value -= this.props.step;
+		let fixed = this.props.step === 1 ? 0 : 2;
+		this._update(this._normalizeValue(value.toFixed(fixed)));
+	}
+
+	_handleMiddleControlMouseDown(e) {
+		console.log('middle mouse down');
 	}
 
 	// ============================ Helpers ===========================================
@@ -106,13 +125,19 @@ class InputNumber extends GenericComponent {
 		this._log(`_updateVars: _inputWidth: ${this._inputWidth}, _wrapperHeight: ${this._wrapperHeight}`);
 	}
 
-	_getValue() {
+	_getInitialValue() {
 		return (this.props.value !== undefined
 				? this.props.value
 				: this.props.defaultValue !== undefined
 				? this.props.defaultValue
 				: this.props.start.toString()
 		);
+	}
+
+	_getCurrentValueAsNumber() {
+		let value = parseFloat(this.state.value);
+		if (value !== value) value = this.props.start;
+		return value
 	}
 
 	_normalizeValue(value) {
@@ -165,10 +190,22 @@ class InputNumber extends GenericComponent {
 			onMouseDown: this._disableSelection // from SelectionDisableableDeco
 		};
 		let inputHandlers = {};
+		let controlsUpArrowHandlers = {};
+		let controlsDownArrowHandlers = {};
+		let controlsMiddleControlHandlers = {};
 		if (!this.props.disabled && !this.props.readonly) {
 			inputHandlers = {
 				onChange: this._handleOnChange,
 				onWheel: this._handleMouseWheel
+			};
+			controlsUpArrowHandlers = {
+				onClick: this._handleUpArrowClick
+			};
+			controlsDownArrowHandlers = {
+				onClick: this._handleDownArrowClick
+			};
+			controlsMiddleControlHandlers = {
+				onMouseDown: this._handleMiddleControlMouseDown
 			};
 		}
 
@@ -216,6 +253,7 @@ class InputNumber extends GenericComponent {
 		let controlsMiddleDivHeightPercent = 20;
 		let controlsArrowBorderWidth = 4; // hardcoded in utils.scss
 		let controlsArrowPaddingTop = (this._wrapperHeight/100) * controlsArrowDivHeightPercent/2 - controlsArrowBorderWidth/2;
+		let controlsMiddleDivCursor = this.props.disabled || this.props.readOnly ? 'inherit' : 'row-resize';
 
 		return (
 			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-number`}
@@ -232,9 +270,9 @@ class InputNumber extends GenericComponent {
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
 					{...disableSelection}>
-					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}><div className="arrow-up"></div></div>
-					<div style={{height: `${controlsMiddleDivHeightPercent}%`}} className="ab-input-number-middle-control"></div>
-					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}}><div className="arrow-down"></div></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className="arrow-up" /></div>
+					<div style={{height: `${controlsMiddleDivHeightPercent}%`, cursor: controlsMiddleDivCursor}} className="ab-input-number-middle-control"                  {...controlsMiddleControlHandlers}></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className="arrow-down" /></div>
 				</div>
 			</div>
 		);
