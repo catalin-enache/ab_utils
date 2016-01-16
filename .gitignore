@@ -36,3 +36,4 @@ npm-debug.log
 .sass-cache
 
 test.*
+.DS_Store

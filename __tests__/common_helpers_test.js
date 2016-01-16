@@ -31,10 +31,7 @@ describe('getWheelDelta', () => {
 		expect(result).toEqual(-1);
 
 		result = getWheelDelta({deltaY: -200});
-		expect(result).toEqual(2);
-
-		result = getWheelDelta({deltaY: -6});
-		expect(result).toEqual(2);
+		expect(result).toEqual(1);
 
 		result = getWheelDelta({deltaY: -100, ctrlKey: true});
 		expect(result).toEqual(5);
