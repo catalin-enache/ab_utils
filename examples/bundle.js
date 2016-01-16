@@ -19807,7 +19807,7 @@ var InputNumber = function (_GenericComponent) {
 			// also let props.style pass through
 			var wrapperStyle = Object.assign(this.props.style || {}, {
 				position: 'relative',
-				display: 'block',
+				display: 'block', // inline-block will add some default space
 				opacity: this.props.disabled ? 0.5 : 1
 			});
 
@@ -19821,13 +19821,14 @@ var InputNumber = function (_GenericComponent) {
 				position: 'absolute',
 				top: '0px',
 				left: '0px',
-				bottom: '0px',
+				height: '100%',
 				width: this._inputWidth,
 				border: 'none',
 				padding: '0px 4px 0px 4px',
 				cursor: this.props.disabled ? 'not-allowed' : 'text'
 			});
 
+			// delegate some css rules to input
 			['fontSize', 'fontWeight', 'fontStyle'].forEach(function (prop) {
 				_this3._style(prop) && (inputStyle[prop] = _this3._style(prop));
 			});

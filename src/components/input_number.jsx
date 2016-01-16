@@ -189,7 +189,7 @@ class InputNumber extends GenericComponent {
 			position: 'absolute',
 			top: '0px',
 			left: '0px',
-			bottom: '0px',
+			height: '100%',
 			width: this._inputWidth,
 			border: 'none',
 			padding: '0px 4px 0px 4px',
