@@ -64,34 +64,51 @@ var NumbersApp = function (_React$Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: 'examples' },
-					_react2.default.createElement(_src.InputNumber, { name: 'number_1',
-						start: -1,
-						onChange: this.numberOnChange.bind(this),
-						debug: false }),
-					_react2.default.createElement('br', null),
-					_react2.default.createElement(_src.InputNumber, { name: 'number_2',
-						value: this.state.numberStringValue,
-						start: -1,
-						onChange: this.numberOnChange.bind(this),
-						debug: true }),
-					_react2.default.createElement('br', null),
-					_react2.default.createElement(_src.InputNumber, { name: 'number_3',
-						defaultValue: '-1',
-						start: -1,
-						onChange: this.numberOnChange.bind(this),
-						debug: false }),
-					_react2.default.createElement('br', null),
-					_react2.default.createElement(_src.InputNumber, { name: 'number_4',
-						start: -100000000099,
-						end: 100000000099,
-						step: 1,
-						style: { width: '150px' },
-						debug: false }),
-					_react2.default.createElement('br', null),
-					_react2.default.createElement(_src.InputNumber, { name: 'number_5',
-						disabled: true,
-						style: { width: '250px', height: '50px', fontSize: '30px', fontStyle: 'italic', fontWeight: 'bold' },
-						debug: false })
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(_src.InputNumber, { name: 'number_1',
+							start: -1,
+							onChange: this.numberOnChange.bind(this),
+							debug: false })
+					),
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(_src.InputNumber, { name: 'number_2',
+							value: this.state.numberStringValue,
+							start: -1,
+							onChange: this.numberOnChange.bind(this),
+							debug: false })
+					),
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(_src.InputNumber, { name: 'number_3',
+							defaultValue: '-1',
+							start: -1,
+							onChange: this.numberOnChange.bind(this),
+							debug: false })
+					),
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(_src.InputNumber, { name: 'number_4',
+							start: -100000000099,
+							end: 100000000099,
+							step: 1,
+							disabled: false,
+							style: { width: '150px', height: '15px' },
+							debug: true })
+					),
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(_src.InputNumber, { name: 'number_5',
+							disabled: true,
+							style: { width: '250px', height: '60px', fontSize: '30px', fontStyle: 'italic', fontWeight: 'bold' },
+							debug: false })
+					)
 				)
 			);
 		}
@@ -19790,15 +19807,25 @@ var InputNumber = function (_GenericComponent) {
 			// also let props.style pass through
 			var wrapperStyle = Object.assign(this.props.style || {}, {
 				position: 'relative',
-				display: 'inline-block',
+				display: 'block',
 				opacity: this.props.disabled ? 0.5 : 1
 			});
 
+			// constrain height within 20..50 px range
+			if (this._style('height')) {
+				var height = parseFloat(this._style('height'));
+				wrapperStyle['height'] = height < 20 ? '20px' : height > 50 ? '50px' : this._style('height');
+			}
+
 			var inputStyle = Object.assign({}, {
-				border: 'none',
-				cursor: this.props.disabled ? 'not-allowed' : 'text',
+				position: 'absolute',
+				top: '0px',
+				left: '0px',
+				bottom: '0px',
 				width: this._inputWidth,
-				height: '100%'
+				border: 'none',
+				padding: '0px 4px 0px 4px',
+				cursor: this.props.disabled ? 'not-allowed' : 'text'
 			});
 
 			['fontSize', 'fontWeight', 'fontStyle'].forEach(function (prop) {

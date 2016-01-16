@@ -175,17 +175,28 @@ class InputNumber extends GenericComponent {
 		// also let props.style pass through
 		let wrapperStyle = Object.assign((this.props.style || {}), {
 			position: 'relative',
-			display: 'inline-block',
+			display: 'block', // inline-block will add some default space
 			opacity: this.props.disabled ? 0.5 : 1,
 		});
 
+		// constrain height within 20..50 px range
+		if (this._style('height')) {
+			let height = parseFloat(this._style('height'));
+			wrapperStyle['height'] = height < 20 ? '20px' : height > 50 ? '50px' : this._style('height');
+		}
+
 		let inputStyle = Object.assign({}, {
-			border: 'none',
-			cursor: this.props.disabled ? 'not-allowed' : 'text',
+			position: 'absolute',
+			top: '0px',
+			left: '0px',
+			bottom: '0px',
 			width: this._inputWidth,
-			height: '100%',
+			border: 'none',
+			padding: '0px 4px 0px 4px',
+			cursor: this.props.disabled ? 'not-allowed' : 'text',
 		});
 
+		// delegate some css rules to input
 		['fontSize', 'fontWeight', 'fontStyle'].forEach((prop) => {
 			this._style(prop) && (inputStyle[prop] = this._style(prop))
 		});
