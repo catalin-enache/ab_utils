@@ -19732,7 +19732,7 @@ var InputNumber = function (_GenericComponent) {
 	}, {
 		key: '_handleUpArrowMouseDown',
 		value: function _handleUpArrowMouseDown(e) {
-			this._controlsUpArrowStateClass = 'active';
+			this._controlsUpArrowStateClass = 'ab-active';
 			var value = this._getCurrentValueAsNumber();
 			value += this.props.step;
 			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
@@ -19740,7 +19740,7 @@ var InputNumber = function (_GenericComponent) {
 	}, {
 		key: '_handleDownArrowMouseDown',
 		value: function _handleDownArrowMouseDown(e) {
-			this._controlsDownArrowStateClass = 'active';
+			this._controlsDownArrowStateClass = 'ab-active';
 			var value = this._getCurrentValueAsNumber();
 			value -= this.props.step;
 			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
@@ -19973,13 +19973,13 @@ var InputNumber = function (_GenericComponent) {
 					_react2.default.createElement(
 						'div',
 						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop } }, controlsUpArrowHandlers),
-						_react2.default.createElement('div', { className: 'arrow-up ' + this._controlsUpArrowStateClass })
+						_react2.default.createElement('div', { className: 'ab-arrow-up ' + this._controlsUpArrowStateClass })
 					),
 					_react2.default.createElement('div', _extends({ style: { height: controlsMiddleDivHeightPercent + '%', cursor: controlsMiddleDivCursor }, className: 'ab-input-number-middle-control' }, controlsMiddleControlHandlers)),
 					_react2.default.createElement(
 						'div',
 						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1 } }, controlsDownArrowHandlers),
-						_react2.default.createElement('div', { className: 'arrow-down ' + this._controlsDownArrowStateClass })
+						_react2.default.createElement('div', { className: 'ab-arrow-down ' + this._controlsDownArrowStateClass })
 					)
 				)
 			);
@@ -20519,9 +20519,6 @@ function SelectionDisableableDeco(Component) {
 				var evt = document.onselectstart !== undefined ? 'selectstart' : 'mousemove';
 				document.addEventListener(evt, this._killSelection, false);
 				document.addEventListener('mouseup', this._enableSelection, false);
-				document.body.addEventListener('touchmove', function (ev) {
-					ev.preventDefault();
-				});
 			}
 		}, {
 			key: '_killSelection',

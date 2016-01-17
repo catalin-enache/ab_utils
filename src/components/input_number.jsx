@@ -107,14 +107,14 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleUpArrowMouseDown(e) {
-		this._controlsUpArrowStateClass = 'active';
+		this._controlsUpArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
 		value += this.props.step;
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
 	_handleDownArrowMouseDown(e) {
-		this._controlsDownArrowStateClass = 'active';
+		this._controlsDownArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
 		value -= this.props.step;
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
@@ -321,9 +321,9 @@ class InputNumber extends GenericComponent {
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
 					{...controlsWrapperHandlers}>
-					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className={`arrow-up ${this._controlsUpArrowStateClass}`} /></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className={`ab-arrow-up ${this._controlsUpArrowStateClass}`} /></div>
 					<div style={{height: `${controlsMiddleDivHeightPercent}%`, cursor: controlsMiddleDivCursor}} className="ab-input-number-middle-control"                  {...controlsMiddleControlHandlers}></div>
-					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className={`arrow-down ${this._controlsDownArrowStateClass}`} /></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className={`ab-arrow-down ${this._controlsDownArrowStateClass}`} /></div>
 				</div>
 			</div>
 		);

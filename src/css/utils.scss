@@ -4,46 +4,46 @@
 .clearfix { zoom: 1; }
 
 // 4px should stay unchanged as it is hardcoded in jsx
-.arrow-up {
+.ab-arrow-up {
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-bottom: 4px solid $arrow_triangle_base_color;
 }
-.arrow-up.active {
+.ab-arrow-up.ab-active {
   border-bottom-color: $arrow_triangle_active_color;
 }
 
-.arrow-down {
+.ab-arrow-down {
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid $arrow_triangle_base_color;
 }
-.arrow-down.active {
+.ab-arrow-down.ab-active {
   border-top-color: $arrow_triangle_active_color;
 }
 
-.arrow-right {
+.ab-arrow-right {
   width: 0;
   height: 0;
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   border-left: 4px solid $arrow_triangle_base_color;
 }
-.arrow-right.active {
+.ab-arrow-right.ab-active {
   border-left-color: $arrow_triangle_active_color;
 }
 
-.arrow-left {
+.ab-arrow-left {
   width: 0;
   height: 0;
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   border-right: 4px solid $arrow_triangle_base_color;
 }
-.arrow-left.active {
+.ab-arrow-left.ab-active {
   border-left-color: $arrow_triangle_active_color;
 }
