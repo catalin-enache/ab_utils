@@ -58,7 +58,7 @@ var NumbersApp = function (_React$Component) {
 				_react2.default.createElement(
 					'pre',
 					null,
-					'\n<InputNumber name="number_1"\n\t start={-1}\n\t onChange={this.numberOnChange.bind(this)}\n\t debug={false} />\n<InputNumber name="number_2"\n\t value={this.state.numberStringValue}\n\t start={-1}\n\t onChange={this.numberOnChange.bind(this)}\n\t debug={false} />\n<InputNumber name="number_3"\n\t defaultValue={\'-1\'}\n\t start={-1}\n\t onChange={this.numberOnChange.bind(this)}\n\t debug={false} />\n{/* height will be constrained to min 20 */}\n<InputNumber name="number_4"\n\t start={-100000000099}\n\t end={100000000099}\n\t step={1}\n\t disabled={false}\n\t style={{width: \'150px\', height: \'15px\'}}\n\t debug={true} />\n{/* height will be constrained to max 50 */}\n<InputNumber name="number_5"\n\t disabled={true}\n\t style={{width: \'250px\', height: \'60px\', fontSize: \'30px\', fontStyle: \'italic\', fontWeight: \'bold\'}}\n\t debug={false} />\n                '
+					'\n<InputNumber name="number_1"\n\t start={-1}\n\t onChange={this.numberOnChange.bind(this)}\n\t debug={false} />\n<InputNumber name="number_2"\n\t value={this.state.numberStringValue}\n\t start={-1}\n\t onChange={this.numberOnChange.bind(this)}\n\t debug={false} />\n<InputNumber name="number_3"\n\t defaultValue={\'-1\'}\n\t start={-1}\n\t onChange={this.numberOnChange.bind(this)}\n\t debug={false} />\n{/* height will be constrained to min 20 */}\n<InputNumber name="number_4"\n\t start={-100000000099}\n\t end={100000000099}\n\t step={1}\n\t disabled={false}\n\t style={{width: \'150px\', height: \'15px\'}}\n\t debug={false} />\n{/* height will be constrained to max 50 */}\n<InputNumber name="number_5"\n\t disabled={true}\n\t style={{width: \'250px\', height: \'60px\', fontSize: \'30px\', fontStyle: \'italic\', fontWeight: \'bold\'}}\n\t debug={false} />\n                '
 				),
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
@@ -99,7 +99,7 @@ var NumbersApp = function (_React$Component) {
 							step: 1,
 							disabled: false,
 							style: { width: '150px', height: '15px' },
-							debug: true })
+							debug: false })
 					),
 					_react2.default.createElement(
 						'div',

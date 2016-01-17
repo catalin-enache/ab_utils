@@ -44,7 +44,7 @@ class NumbersApp extends React.Component {
 	 step={1}
 	 disabled={false}
 	 style={{width: '150px', height: '15px'}}
-	 debug={true} />
+	 debug={false} />
 {/* height will be constrained to max 50 */}
 <InputNumber name="number_5"
 	 disabled={true}
@@ -82,7 +82,7 @@ class NumbersApp extends React.Component {
 									 step={1}
 									 disabled={false}
 									 style={{width: '150px', height: '15px'}}
-									 debug={true} />
+									 debug={false} />
 					</div>
 					<div>
 						{/* height will be constrained to max 50 */}
