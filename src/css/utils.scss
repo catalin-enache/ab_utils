@@ -11,6 +11,9 @@
   border-right: 4px solid transparent;
   border-bottom: 4px solid black;
 }
+.arrow-up.active {
+  border-bottom-color: white;
+}
 
 .arrow-down {
   width: 0;
@@ -18,6 +21,9 @@
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid black;
+}
+.arrow-down.active {
+  border-top-color: white;
 }
 
 .arrow-right {
@@ -27,6 +33,9 @@
   border-bottom: 4px solid transparent;
   border-left: 4px solid black;
 }
+.arrow-right.active {
+  border-left-color: white;
+}
 
 .arrow-left {
   width: 0;
@@ -34,4 +43,7 @@
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   border-right: 4px solid black;
+}
+.arrow-left.active {
+  border-left-color: white;
 }

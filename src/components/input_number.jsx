@@ -58,6 +58,9 @@ class InputNumber extends GenericComponent {
 		this._dragRunning = false; // animationFrame overlap control
 		this._valueOnDragStart = undefined; // dragStart state
 		this._yPosOnDragStart = undefined; // dragStart state
+		this._controlsUpArrowStateClass = '';
+		this._controlsDownArrowStateClass = '';
+
 
 		this.state = {
 			value: this._getInitialValue(),
@@ -65,8 +68,10 @@ class InputNumber extends GenericComponent {
 
 		this._handleOnChange = this._handleOnChange.bind(this);
 		this._handleMouseWheel = this._handleMouseWheel.bind(this);
-		this._handleUpArrowClick = this._handleUpArrowClick.bind(this);
-		this._handleDownArrowClick = this._handleDownArrowClick.bind(this);
+		this._handleUpArrowMouseDown = this._handleUpArrowMouseDown.bind(this);
+		this._handleDownArrowMouseDown = this._handleDownArrowMouseDown.bind(this);
+		this._handleUpArrowMouseUp = this._handleUpArrowMouseUp.bind(this);
+		this._handleDownArrowMouseUp = this._handleDownArrowMouseUp.bind(this);
 		this._handleMiddleControlMouseDown = this._handleMiddleControlMouseDown.bind(this);
 		this._handleMouseMove = this._handleMouseMove.bind(this);
 		this._handleMouseUp = this._handleMouseUp.bind(this);
@@ -101,16 +106,28 @@ class InputNumber extends GenericComponent {
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
-	_handleUpArrowClick(e) {
+	_handleUpArrowMouseDown(e) {
+		this._controlsUpArrowStateClass = 'active';
 		let value = this._getCurrentValueAsNumber();
 		value += this.props.step;
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
-	_handleDownArrowClick(e) {
+	_handleDownArrowMouseDown(e) {
+		this._controlsDownArrowStateClass = 'active';
 		let value = this._getCurrentValueAsNumber();
 		value -= this.props.step;
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+	}
+
+	_handleUpArrowMouseUp(e) {
+		this._controlsUpArrowStateClass = '';
+		this.forceUpdate();
+	}
+
+	_handleDownArrowMouseUp(e) {
+		this._controlsDownArrowStateClass = '';
+		this.forceUpdate();
 	}
 
 	_handleMiddleControlMouseDown(e) {
@@ -231,13 +248,15 @@ class InputNumber extends GenericComponent {
 				onWheel: this._handleMouseWheel
 			};
 			controlsUpArrowHandlers = {
-				onClick: this._handleUpArrowClick
+				onMouseDown: this._handleUpArrowMouseDown,
+				onMouseUp: this._handleUpArrowMouseUp
 			};
 			controlsDownArrowHandlers = {
-				onClick: this._handleDownArrowClick
+				onMouseDown: this._handleDownArrowMouseDown,
+				onMouseUp: this._handleDownArrowMouseUp,
 			};
 			controlsMiddleControlHandlers = {
-				onMouseDown: this._handleMiddleControlMouseDown
+				onMouseDown: this._handleMiddleControlMouseDown,
 			};
 		}
 
@@ -302,9 +321,9 @@ class InputNumber extends GenericComponent {
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
 					{...controlsWrapperHandlers}>
-					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className="arrow-up" /></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className={`arrow-up ${this._controlsUpArrowStateClass}`} /></div>
 					<div style={{height: `${controlsMiddleDivHeightPercent}%`, cursor: controlsMiddleDivCursor}} className="ab-input-number-middle-control"                  {...controlsMiddleControlHandlers}></div>
-					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className="arrow-down" /></div>
+					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className={`arrow-down ${this._controlsDownArrowStateClass}`} /></div>
 				</div>
 			</div>
 		);

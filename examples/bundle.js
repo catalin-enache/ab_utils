@@ -19676,6 +19676,8 @@ var InputNumber = function (_GenericComponent) {
 		_this._dragRunning = false; // animationFrame overlap control
 		_this._valueOnDragStart = undefined; // dragStart state
 		_this._yPosOnDragStart = undefined; // dragStart state
+		_this._controlsUpArrowStateClass = '';
+		_this._controlsDownArrowStateClass = '';
 
 		_this.state = {
 			value: _this._getInitialValue()
@@ -19683,8 +19685,10 @@ var InputNumber = function (_GenericComponent) {
 
 		_this._handleOnChange = _this._handleOnChange.bind(_this);
 		_this._handleMouseWheel = _this._handleMouseWheel.bind(_this);
-		_this._handleUpArrowClick = _this._handleUpArrowClick.bind(_this);
-		_this._handleDownArrowClick = _this._handleDownArrowClick.bind(_this);
+		_this._handleUpArrowMouseDown = _this._handleUpArrowMouseDown.bind(_this);
+		_this._handleDownArrowMouseDown = _this._handleDownArrowMouseDown.bind(_this);
+		_this._handleUpArrowMouseUp = _this._handleUpArrowMouseUp.bind(_this);
+		_this._handleDownArrowMouseUp = _this._handleDownArrowMouseUp.bind(_this);
 		_this._handleMiddleControlMouseDown = _this._handleMiddleControlMouseDown.bind(_this);
 		_this._handleMouseMove = _this._handleMouseMove.bind(_this);
 		_this._handleMouseUp = _this._handleMouseUp.bind(_this);
@@ -19726,18 +19730,32 @@ var InputNumber = function (_GenericComponent) {
 			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 		}
 	}, {
-		key: '_handleUpArrowClick',
-		value: function _handleUpArrowClick(e) {
+		key: '_handleUpArrowMouseDown',
+		value: function _handleUpArrowMouseDown(e) {
+			this._controlsUpArrowStateClass = 'active';
 			var value = this._getCurrentValueAsNumber();
 			value += this.props.step;
 			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 		}
 	}, {
-		key: '_handleDownArrowClick',
-		value: function _handleDownArrowClick(e) {
+		key: '_handleDownArrowMouseDown',
+		value: function _handleDownArrowMouseDown(e) {
+			this._controlsDownArrowStateClass = 'active';
 			var value = this._getCurrentValueAsNumber();
 			value -= this.props.step;
 			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+		}
+	}, {
+		key: '_handleUpArrowMouseUp',
+		value: function _handleUpArrowMouseUp(e) {
+			this._controlsUpArrowStateClass = '';
+			this.forceUpdate();
+		}
+	}, {
+		key: '_handleDownArrowMouseUp',
+		value: function _handleDownArrowMouseUp(e) {
+			this._controlsDownArrowStateClass = '';
+			this.forceUpdate();
 		}
 	}, {
 		key: '_handleMiddleControlMouseDown',
@@ -19876,10 +19894,12 @@ var InputNumber = function (_GenericComponent) {
 					onWheel: this._handleMouseWheel
 				};
 				controlsUpArrowHandlers = {
-					onClick: this._handleUpArrowClick
+					onMouseDown: this._handleUpArrowMouseDown,
+					onMouseUp: this._handleUpArrowMouseUp
 				};
 				controlsDownArrowHandlers = {
-					onClick: this._handleDownArrowClick
+					onMouseDown: this._handleDownArrowMouseDown,
+					onMouseUp: this._handleDownArrowMouseUp
 				};
 				controlsMiddleControlHandlers = {
 					onMouseDown: this._handleMiddleControlMouseDown
@@ -19953,13 +19973,13 @@ var InputNumber = function (_GenericComponent) {
 					_react2.default.createElement(
 						'div',
 						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop } }, controlsUpArrowHandlers),
-						_react2.default.createElement('div', { className: 'arrow-up' })
+						_react2.default.createElement('div', { className: 'arrow-up ' + this._controlsUpArrowStateClass })
 					),
 					_react2.default.createElement('div', _extends({ style: { height: controlsMiddleDivHeightPercent + '%', cursor: controlsMiddleDivCursor }, className: 'ab-input-number-middle-control' }, controlsMiddleControlHandlers)),
 					_react2.default.createElement(
 						'div',
 						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1 } }, controlsDownArrowHandlers),
-						_react2.default.createElement('div', { className: 'arrow-down' })
+						_react2.default.createElement('div', { className: 'arrow-down ' + this._controlsDownArrowStateClass })
 					)
 				)
 			);
@@ -20499,6 +20519,9 @@ function SelectionDisableableDeco(Component) {
 				var evt = document.onselectstart !== undefined ? 'selectstart' : 'mousemove';
 				document.addEventListener(evt, this._killSelection, false);
 				document.addEventListener('mouseup', this._enableSelection, false);
+				document.body.addEventListener('touchmove', function (ev) {
+					ev.preventDefault();
+				});
 			}
 		}, {
 			key: '_killSelection',
