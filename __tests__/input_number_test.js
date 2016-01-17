@@ -40,20 +40,20 @@ describe('InputNumber', () => {
 			let inputNumber = TestUtils.renderIntoDocument(<InputNumber name="one" start={-1} />);
 
 			// pass through as is
-			let res1 = inputNumber._normalizeValue('-');
+			let res1 = inputNumber._normalizeValue('-', true);
 			expect(res1).toEqual('-');
 
-			let res1_2 = inputNumber._normalizeValue('-.');
+			let res1_2 = inputNumber._normalizeValue('-.', true);
 			expect(res1_2).toEqual('-.');
 
-			let res3 = inputNumber._normalizeValue('');
+			let res3 = inputNumber._normalizeValue('', true);
 			expect(res3).toEqual('');
 
 			// force returning current state.value
-			let res4 = inputNumber._normalizeValue('x');
+			let res4 = inputNumber._normalizeValue('x', true);
 			expect(res4).toEqual('-1');
 
-			let res4_2 = inputNumber._normalizeValue('.');
+			let res4_2 = inputNumber._normalizeValue('.', true);
 			expect(res4_2).toEqual('-1');
 
 			// limit to min max

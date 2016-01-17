@@ -19672,6 +19672,10 @@ var InputNumber = function (_GenericComponent) {
 
 		_this._wrapperHeight = 0;
 		_this._inputWidth = 0;
+		_this._toFixed = props.step === 1 ? 0 : 2;
+		_this._dragRunning = false; // animationFrame overlap control
+		_this._valueOnDragStart = undefined; // dragStart state
+		_this._yPosOnDragStart = undefined; // dragStart state
 
 		_this.state = {
 			value: _this._getInitialValue()
@@ -19682,6 +19686,8 @@ var InputNumber = function (_GenericComponent) {
 		_this._handleUpArrowClick = _this._handleUpArrowClick.bind(_this);
 		_this._handleDownArrowClick = _this._handleDownArrowClick.bind(_this);
 		_this._handleMiddleControlMouseDown = _this._handleMiddleControlMouseDown.bind(_this);
+		_this._handleMouseMove = _this._handleMouseMove.bind(_this);
+		_this._handleMouseUp = _this._handleMouseUp.bind(_this);
 		return _this;
 	}
 
@@ -19708,7 +19714,7 @@ var InputNumber = function (_GenericComponent) {
 		key: '_handleOnChange',
 		value: function _handleOnChange(e) {
 			this._log('_handleOnChange ' + e.target.value);
-			this._update(this._normalizeValue(e.target.value));
+			this._update(this._normalizeValue(e.target.value), true); // direct user input is also validated
 		}
 	}, {
 		key: '_handleMouseWheel',
@@ -19717,32 +19723,61 @@ var InputNumber = function (_GenericComponent) {
 			var delta = (0, _helpers.getWheelDelta)(e);
 			var value = this._getCurrentValueAsNumber();
 			value += delta * this.props.step;
-			var fixed = this.props.step === 1 ? 0 : 2;
-			this._update(this._normalizeValue(value.toFixed(fixed)));
+			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 		}
 	}, {
 		key: '_handleUpArrowClick',
 		value: function _handleUpArrowClick(e) {
 			var value = this._getCurrentValueAsNumber();
 			value += this.props.step;
-			var fixed = this.props.step === 1 ? 0 : 2;
-			this._update(this._normalizeValue(value.toFixed(fixed)));
+			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 		}
 	}, {
 		key: '_handleDownArrowClick',
 		value: function _handleDownArrowClick(e) {
 			var value = this._getCurrentValueAsNumber();
 			value -= this.props.step;
-			var fixed = this.props.step === 1 ? 0 : 2;
-			this._update(this._normalizeValue(value.toFixed(fixed)));
+			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 		}
 	}, {
 		key: '_handleMiddleControlMouseDown',
 		value: function _handleMiddleControlMouseDown(e) {
-			console.log('middle mouse down');
+			// initialize dragStart state
+			this._valueOnDragStart = this._getCurrentValueAsNumber();
+			this._yPosOnDragStart = parseFloat(e.clientY);
+			document.addEventListener('mousemove', this._handleMouseMove, false);
+			document.addEventListener('mouseup', this._handleMouseUp, false);
+		}
+	}, {
+		key: '_handleMouseMove',
+		value: function _handleMouseMove(e) {
+			var _this2 = this;
+
+			if (this._dragRunning) {
+				return;
+			}
+			this._dragRunning = true;
+			requestAnimationFrame(function () {
+				// use dragStart state
+				var value = _this2._valueOnDragStart;
+				value += (_this2._yPosOnDragStart - parseFloat(e.clientY)) * _this2.props.step;
+				_this2._update(_this2._normalizeValue(value.toFixed(_this2._toFixed)));
+				_this2._dragRunning = false;
+			});
+		}
+	}, {
+		key: '_handleMouseUp',
+		value: function _handleMouseUp(e) {
+			document.removeEventListener('mousemove', this._handleMouseMove, false);
+			document.removeEventListener('mouseup', this._handleMouseUp, false);
+			// reset dragStart state
+			this._valueOnDragStart = undefined;
+			this._yPosOnDragStart = undefined;
 		}
 
 		// ============================ Helpers ===========================================
+
+		// determines _inputWidth, _wrapperHeight for proper render
 
 	}, {
 		key: '_updateVars',
@@ -19769,8 +19804,14 @@ var InputNumber = function (_GenericComponent) {
 	}, {
 		key: '_normalizeValue',
 		value: function _normalizeValue(value) {
-			if (_validators.numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return value;
-			if (!(0, _validators.validateNumberString)(value)) return this.state.value;
+			var validate = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+			// validate is to be used for direct user input
+			if (validate) {
+				if (_validators.numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return value;
+				if (!(0, _validators.validateNumberString)(value)) return this.state.value;
+			}
+			// apply start end limits
 			var valueNumber = parseFloat(value);
 			value = valueNumber < this.props.start ? this.props.start.toString() : valueNumber > this.props.end ? this.props.end.toString() : value;
 			return value;
@@ -19808,10 +19849,10 @@ var InputNumber = function (_GenericComponent) {
 	}, {
 		key: '_setValueStateAndEmitValueChangedEvent',
 		value: function _setValueStateAndEmitValueChangedEvent(value) {
-			var _this2 = this;
+			var _this3 = this;
 
 			this._setValueState(value, function () {
-				_this2._emitValueChangeEvent(value);
+				_this3._emitValueChangeEvent(value);
 			});
 		}
 
@@ -19820,9 +19861,9 @@ var InputNumber = function (_GenericComponent) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
-			var disableSelection = {
+			var controlsWrapperHandlers = {
 				onMouseDown: this._disableSelection // from SelectionDisableableDeco
 			};
 			var inputHandlers = {};
@@ -19871,7 +19912,7 @@ var InputNumber = function (_GenericComponent) {
 
 			// delegate some css rules to input
 			['fontSize', 'fontWeight', 'fontStyle'].forEach(function (prop) {
-				_this3._style(prop) && (inputStyle[prop] = _this3._style(prop));
+				_this4._style(prop) && (inputStyle[prop] = _this4._style(prop));
 			});
 
 			var controlsWrapperStyle = Object.assign({}, {
@@ -19908,7 +19949,7 @@ var InputNumber = function (_GenericComponent) {
 					_extends({ ref: 'controls',
 						className: 'ab-input-number-controls',
 						style: controlsWrapperStyle
-					}, disableSelection),
+					}, controlsWrapperHandlers),
 					_react2.default.createElement(
 						'div',
 						_extends({ style: { height: controlsArrowDivHeightPercent + '%', paddingLeft: '3px', paddingTop: controlsArrowPaddingTop } }, controlsUpArrowHandlers),

@@ -54,6 +54,10 @@ class InputNumber extends GenericComponent {
 
 		this._wrapperHeight = 0;
 		this._inputWidth = 0;
+		this._toFixed = props.step === 1 ? 0 : 2;
+		this._dragRunning = false; // animationFrame overlap control
+		this._valueOnDragStart = undefined; // dragStart state
+		this._yPosOnDragStart = undefined; // dragStart state
 
 		this.state = {
 			value: this._getInitialValue(),
@@ -64,6 +68,8 @@ class InputNumber extends GenericComponent {
 		this._handleUpArrowClick = this._handleUpArrowClick.bind(this);
 		this._handleDownArrowClick = this._handleDownArrowClick.bind(this);
 		this._handleMiddleControlMouseDown = this._handleMiddleControlMouseDown.bind(this);
+		this._handleMouseMove = this._handleMouseMove.bind(this);
+		this._handleMouseUp = this._handleMouseUp.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -84,7 +90,7 @@ class InputNumber extends GenericComponent {
 
 	_handleOnChange(e) {
 		this._log(`_handleOnChange ${e.target.value}`);
-		this._update(this._normalizeValue(e.target.value));
+		this._update(this._normalizeValue(e.target.value), true); // direct user input is also validated
 	}
 
 	_handleMouseWheel(e) {
@@ -92,30 +98,52 @@ class InputNumber extends GenericComponent {
 		let delta = getWheelDelta(e);
 		let value = this._getCurrentValueAsNumber();
 		value += delta * this.props.step;
-		let fixed = this.props.step === 1 ? 0 : 2;
-		this._update(this._normalizeValue(value.toFixed(fixed)));
+		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
 	_handleUpArrowClick(e) {
 		let value = this._getCurrentValueAsNumber();
 		value += this.props.step;
-		let fixed = this.props.step === 1 ? 0 : 2;
-		this._update(this._normalizeValue(value.toFixed(fixed)));
+		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
 	_handleDownArrowClick(e) {
 		let value = this._getCurrentValueAsNumber();
 		value -= this.props.step;
-		let fixed = this.props.step === 1 ? 0 : 2;
-		this._update(this._normalizeValue(value.toFixed(fixed)));
+		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
 	_handleMiddleControlMouseDown(e) {
-		console.log('middle mouse down');
+		// initialize dragStart state
+		this._valueOnDragStart = this._getCurrentValueAsNumber();
+		this._yPosOnDragStart = parseFloat(e.clientY);
+		document.addEventListener('mousemove', this._handleMouseMove, false);
+		document.addEventListener('mouseup', this._handleMouseUp, false);
+	}
+
+	_handleMouseMove(e) {
+		if (this._dragRunning) { return; }
+		this._dragRunning = true;
+		requestAnimationFrame(() => {
+			// use dragStart state
+			let value = this._valueOnDragStart;
+			value += (this._yPosOnDragStart - parseFloat(e.clientY)) * this.props.step;
+			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+			this._dragRunning = false;
+		});
+	}
+
+	_handleMouseUp(e) {
+		document.removeEventListener('mousemove', this._handleMouseMove, false);
+		document.removeEventListener('mouseup', this._handleMouseUp, false);
+		// reset dragStart state
+		this._valueOnDragStart = undefined;
+		this._yPosOnDragStart = undefined;
 	}
 
 	// ============================ Helpers ===========================================
 
+	// determines _inputWidth, _wrapperHeight for proper render
 	_updateVars() {
 		let wrapperComputedStyle = getComputedStyle(this.refs.wrapper);
 		let wrapperWidth = parseFloat(wrapperComputedStyle.width);
@@ -140,9 +168,13 @@ class InputNumber extends GenericComponent {
 		return value
 	}
 
-	_normalizeValue(value) {
-		if (numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return value;
-		if (!validateNumberString(value)) return this.state.value;
+	_normalizeValue(value, validate=false) {
+		// validate is to be used for direct user input
+		if (validate) {
+			if (numberStringAndValueInRangePropType.allowedStrings.indexOf(value) !== -1) return value;
+			if (!validateNumberString(value)) return this.state.value;
+		}
+		// apply start end limits
 		let valueNumber = parseFloat(value);
 		value = valueNumber < this.props.start ?
 				this.props.start.toString() :
@@ -186,7 +218,7 @@ class InputNumber extends GenericComponent {
 
 	render() {
 
-		let disableSelection = {
+		let controlsWrapperHandlers = {
 			onMouseDown: this._disableSelection // from SelectionDisableableDeco
 		};
 		let inputHandlers = {};
@@ -269,7 +301,7 @@ class InputNumber extends GenericComponent {
 				<div ref="controls"
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
-					{...disableSelection}>
+					{...controlsWrapperHandlers}>
 					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className="arrow-up" /></div>
 					<div style={{height: `${controlsMiddleDivHeightPercent}%`, cursor: controlsMiddleDivCursor}} className="ab-input-number-middle-control"                  {...controlsMiddleControlHandlers}></div>
 					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className="arrow-down" /></div>
