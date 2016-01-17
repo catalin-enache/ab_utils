@@ -1,7 +1,7 @@
 
-.clearfix:before, .clearfix:after { content: ""; display: table; }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; }
+.ab-clearfix:before, .clearfix:after { content: ""; display: table; }
+.ab-clearfix:after { clear: both; }
+.ab-clearfix { zoom: 1; }
 
 // 4px should stay unchanged as it is hardcoded in jsx
 .ab-arrow-up {

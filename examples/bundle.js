@@ -196,7 +196,7 @@ var SlidersApp = function (_React$Component) {
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
 					'div',
-					{ className: 'sliders examples clearfix' },
+					{ className: 'sliders examples ab-clearfix' },
 					_react2.default.createElement(
 						'div',
 						{ className: 'horizontalSliders' },
@@ -227,7 +227,7 @@ var SlidersApp = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'verticalSliders clearfix' },
+						{ className: 'verticalSliders ab-clearfix' },
 						_react2.default.createElement(
 							'div',
 							{ className: 'verticalSliderWrapper' },

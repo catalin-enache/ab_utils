@@ -71,7 +71,7 @@ class SlidersApp extends React.Component {
                 </pre>
 				<p>value: {this.state.sliderValue}</p>
 				<br />
-				<div className="sliders examples clearfix">
+				<div className="sliders examples ab-clearfix">
 					<div className="horizontalSliders">
 						<div className="horizontalSliderWrapper">
 							<InputSlider
@@ -94,7 +94,7 @@ class SlidersApp extends React.Component {
 								debug={false} />
 						</div>
 					</div>
-					<div className="verticalSliders clearfix">
+					<div className="verticalSliders ab-clearfix">
 						<div className="verticalSliderWrapper">
 							<InputSlider
 								name="slider_3"

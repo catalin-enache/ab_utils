@@ -8,14 +8,14 @@
 .ab *:focus {
   outline: none; }
 
-.clearfix:before, .clearfix:after {
+.ab-clearfix:before, .clearfix:after {
   content: "";
   display: table; }
 
-.clearfix:after {
+.ab-clearfix:after {
   clear: both; }
 
-.clearfix {
+.ab-clearfix {
   zoom: 1; }
 
 .ab-arrow-up {
