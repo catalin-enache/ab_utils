@@ -84,6 +84,9 @@ class InputSlider extends GenericComponent {
 		this._handleMouseUp = this._handleMouseUp.bind(this);
 		this._handleMouseDown = this._handleMouseDown.bind(this);
 		this._handleMouseWheel = this._handleMouseWheel.bind(this);
+		this._handleTouchStart = this._handleTouchStart.bind(this);
+		this._handleTouchMove = this._handleTouchMove.bind(this);
+		this._handleTouchEnd = this._handleTouchEnd.bind(this);
 	}
 
 	componentDidMount() {
@@ -117,6 +120,15 @@ class InputSlider extends GenericComponent {
 		this._update(e);
 	}
 
+	_handleTouchStart(e) {
+		e.preventDefault(); // prevent tap-highlight-color //  css equiv: -webkit-tap-highlight-color: rgba(0,0,0,0);
+		this._updateVars(); // for devices without mouse over
+		document.addEventListener('touchmove', this._handleTouchMove, false);
+		document.addEventListener('touchend', this._handleTouchEnd, false);
+		document.addEventListener('touchcancel', this._handleTouchEnd, false);
+		this._update(e.touches[0]);
+	}
+
 	_handleMouseMove(e) {
 		if (this._dragRunning) { return; }
 		this._dragRunning = true;
@@ -126,10 +138,25 @@ class InputSlider extends GenericComponent {
 		});
 	}
 
+	_handleTouchMove(e) {
+		e.preventDefault(); // prevent page scroll
+		if (this._dragRunning) { return; }
+		this._dragRunning = true;
+		requestAnimationFrame(() => {
+			this._update(e.touches[0]);
+			this._dragRunning = false;
+		});
+	}
+
 	_handleMouseUp(e) {
 		document.removeEventListener('mousemove', this._handleMouseMove, false);
 		document.removeEventListener('mouseup', this._handleMouseUp, false);
-		this._update(e);
+	}
+
+	_handleTouchEnd(e) {
+		document.removeEventListener('touchmove', this._handleTouchMove, false);
+		document.removeEventListener('touchend', this._handleTouchEnd, false);
+		document.removeEventListener('touchcancel', this._handleTouchEnd, false);
 	}
 
 	_handleMouseWheel(e) {
@@ -280,6 +307,7 @@ class InputSlider extends GenericComponent {
 			handlers = {
 				onMouseOver: this._handleMouseOver,
 				onMouseDown: this._handleMouseDown,
+				onTouchStart: this._handleTouchStart,
 				onWheel: this._handleMouseWheel
 			}
 		}
