@@ -212,7 +212,7 @@ describe('InputSlider', () => {
 
 	describe('_handleMouseUp', () => {
 
-		it('removes two event listeners from document and calls _update', () => {
+		it('removes two event listeners from document', () => {
 			let slider = TestUtils.renderIntoDocument(
 				<InputSlider name="one" />
 			);
@@ -223,7 +223,6 @@ describe('InputSlider', () => {
 			slider._handleMouseUp({clientX: 0});
 
 			expect(document.removeEventListener.calls.count()).toEqual(2);
-			expect(slider._update).toHaveBeenCalled();
 		})
 	});
 
@@ -539,10 +538,11 @@ describe('InputSlider', () => {
 			renderer.render(<InputSlider name="one" />);
 			let actualElement = renderer.getRenderOutput();
 			let expectedElement = <div
-				className={' ab ab-input-slider ab-input-slider-horizontal'}
+				className={' ab ab-input-slider ab-input-slider-horizontal ab-no-tap'}
 				ref="outer"
 				onMouseDown={jasmine.any(Function)}
 				onMouseOver={jasmine.any(Function)}
+				onTouchStart={jasmine.any(Function)}
 				onWheel={jasmine.any(Function)}
 				style={{
 					cursor: 'pointer',
@@ -572,7 +572,7 @@ describe('InputSlider', () => {
 			renderer.render(<InputSlider className="custom" name="one" />);
 			let actualElement = renderer.getRenderOutput();
 
-			expect(actualElement.props.className).toEqual('custom ab ab-input-slider ab-input-slider-horizontal');
+			expect(actualElement.props.className).toEqual('custom ab ab-input-slider ab-input-slider-horizontal ab-no-tap');
 		});
 
 		it('has ab-slider-horizontal class when orientation is vertical', () => {
@@ -580,7 +580,7 @@ describe('InputSlider', () => {
 			renderer.render(<InputSlider orientation="vertical" name="one" />);
 			let actualElement = renderer.getRenderOutput();
 
-			expect(actualElement.props.className).toEqual(' ab ab-input-slider ab-input-slider-vertical');
+			expect(actualElement.props.className).toEqual(' ab ab-input-slider ab-input-slider-vertical ab-no-tap');
 		});
 
 		it('passes through style prop', () => {
