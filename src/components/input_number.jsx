@@ -116,7 +116,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleUpArrowMouseDown(e) {
-		console.log('_handleUpArrowMouseDown');
 		this._controlsUpArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
 		value += this.props.step;
@@ -125,7 +124,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleUpArrowTouchStart(e) {
-		console.log('_handleUpArrowTouchStart');
 		e.preventDefault(); // tap-highlight related
 		this._controlsUpArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
@@ -136,7 +134,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDownArrowMouseDown(e) {
-		console.log('_handleDownArrowMouseDown');
 		this._controlsDownArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
 		value -= this.props.step;
@@ -145,7 +142,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDownArrowTouchStart(e) {
-		console.log('_handleDownArrowTouchStart');
 		e.preventDefault(); // tap-highlight related
 		this._controlsDownArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
@@ -156,14 +152,12 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleUpArrowMouseUp(e) {
-		console.log('_handleUpArrowMouseUp');
 		this._controlsUpArrowStateClass = '';
 		document.removeEventListener('mouseup', this._handleUpArrowMouseUp, false);
 		this.forceUpdate();
 	}
 
 	_handleUpArrowTouchEnd(e) {
-		console.log('_handleUpArrowTouchEnd');
 		e.preventDefault(); // prevent eventual mouse ghost events being fired
 		this._controlsUpArrowStateClass = '';
 		document.removeEventListener('touchend', this._handleUpArrowTouchEnd, false);
@@ -172,14 +166,12 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDownArrowMouseUp(e) {
-		console.log('_handleDownArrowMouseUp');
 		this._controlsDownArrowStateClass = '';
 		document.removeEventListener('mouseup', this._handleDownArrowMouseUp, false);
 		this.forceUpdate();
 	}
 
 	_handleDownArrowTouchEnd(e) {
-		console.log('_handleDownArrowTouchEnd');
 		e.preventDefault(); // prevent eventual mouse ghost events being fired
 		this._controlsDownArrowStateClass = '';
 		document.removeEventListener('touchend', this._handleDownArrowTouchEnd, false);
@@ -188,7 +180,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDraggableMouseDown(e) {
-		console.log('_handleDraggableMouseDown');
 		this._disableSelection(); // from SelectionDisableableDeco
 		// initialize dragStart state
 		this._valueOnDragStart = this._getCurrentValueAsNumber();
@@ -198,7 +189,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDraggableTouchStart(e) {
-		console.log('_handleDraggableTouchStart');
 		e.preventDefault(); // tap-highlight related
 		this._valueOnDragStart = this._getCurrentValueAsNumber();
 		this._yPosOnDragStart = parseFloat(e.touches[0].clientY);
@@ -208,7 +198,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDraggableMouseMove(e) {
-		console.log('_handleDraggableMouseMove');
 		if (this._dragRunning) { return; }
 		this._dragRunning = true;
 		requestAnimationFrame(() => {
@@ -223,7 +212,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDraggableTouchMove(e) {
-		console.log('_handleDraggableTouchMove');
 		e.preventDefault(); // prevent page scroll
 		if (this._dragRunning) { return; }
 		this._dragRunning = true;
@@ -236,7 +224,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDraggableMouseUp(e) {
-		console.log('_handleDraggableMouseUp');
 		document.removeEventListener('mousemove', this._handleDraggableMouseMove, false);
 		document.removeEventListener('mouseup', this._handleDraggableMouseUp, false);
 		// reset dragStart state
@@ -245,7 +232,6 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleDraggableTouchEnd(e) {
-		console.log('_handleDraggableTouchEnd');
 		e.preventDefault(); // prevent eventual mouse ghost events being fired
 		document.removeEventListener('touchmove', this._handleDraggableTouchMove, false);
 		document.removeEventListener('touchend', this._handleDraggableTouchEnd, false);

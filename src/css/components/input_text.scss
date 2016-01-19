@@ -1,0 +1,17 @@
+
+/*==================== InputNumber ========================*/
+
+.ab-input-text {
+  width: $input_text_span;
+  height: $input_text_thickness;
+  border: $input_text_border_width $input_text_border_style $input_text_border_color;
+}
+
+.ab-input-text input {
+  color: $input_text_color;
+  box-shadow: $input_text_box_shadow;
+  background-color: $input_text_background_color;
+}
+
+
+

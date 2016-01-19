@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 
 import SlidersApp from './apps/sliders_app';
 import NumbersApp from './apps/numbers_app';
+import InputTextApp from './apps/input_text_app';
 
 class Application extends React.Component {
 
@@ -28,6 +29,7 @@ Flow: component setState
 
 				<SlidersApp />
 				<NumbersApp />
+				<InputTextApp />
 
 				</div>
 		);
