@@ -24,6 +24,10 @@ class GenericComponent extends React.Component {
 		return defaultProps;
 	}
 
+	constructor(props) {
+		super(props);
+	}
+
 	_log(msg) {
 		this.props.debug && console.log(`${this.props.name} > ${msg}`);
 	}
