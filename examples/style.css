@@ -8,9 +8,9 @@
 .ab *:focus {
   outline: none; }
 
-* {
-  /*-webkit-tap-highlight-color: rgba(0,0,0,0);*/
-  /*-webkit-touch-callout: none;*/ }
+.ab-no-tap, .ab-no-tap * {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; }
 
 .ab-clearfix:before, .clearfix:after {
   content: "";

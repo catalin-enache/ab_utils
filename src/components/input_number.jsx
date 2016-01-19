@@ -307,7 +307,7 @@ class InputNumber extends GenericComponent {
 		let controlsMiddleDivCursor = this.props.disabled || this.props.readOnly ? 'inherit' : 'row-resize';
 
 		return (
-			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-number`}
+			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-number ab-no-tap`}
 				 ref="wrapper"
 				 style={wrapperStyle}>
 				<input type="text"

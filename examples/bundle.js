@@ -19948,7 +19948,7 @@ var InputNumber = (function (_GenericComponent) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: (this.props.className ? this.props.className : '') + ' ab ab-input-number',
+				{ className: (this.props.className ? this.props.className : '') + ' ab ab-input-number ab-no-tap',
 					ref: 'wrapper',
 					style: wrapperStyle },
 				_react2.default.createElement('input', _extends({ type: 'text',
@@ -20162,7 +20162,7 @@ var InputSlider = (function (_GenericComponent) {
 	}, {
 		key: '_handleTouchStart',
 		value: function _handleTouchStart(e) {
-			e.preventDefault(); // prevent tap-highlight-color //  css equiv: -webkit-tap-highlight-color: rgba(0,0,0,0);
+			e.preventDefault(); // prevent tap-highlight-color // css doubled: -webkit-tap-highlight-color: rgba(0,0,0,0);
 			this._updateVars(); // for devices without mouse over
 			document.addEventListener('touchmove', this._handleTouchMove, false);
 			document.addEventListener('touchend', this._handleTouchEnd, false);
@@ -20174,6 +20174,7 @@ var InputSlider = (function (_GenericComponent) {
 		value: function _handleMouseMove(e) {
 			var _this2 = this;
 
+			;
 			if (this._dragRunning) {
 				return;
 			}
@@ -20207,6 +20208,7 @@ var InputSlider = (function (_GenericComponent) {
 	}, {
 		key: '_handleTouchEnd',
 		value: function _handleTouchEnd(e) {
+			e.preventDefault(); // prevent eventual mouse events being fired
 			document.removeEventListener('touchmove', this._handleTouchMove, false);
 			document.removeEventListener('touchend', this._handleTouchEnd, false);
 			document.removeEventListener('touchcancel', this._handleTouchEnd, false);
@@ -20421,7 +20423,7 @@ var InputSlider = (function (_GenericComponent) {
 
 			return _react2.default.createElement(
 				'div',
-				_extends({ className: (this.props.className ? this.props.className : '') + ' ab ab-input-slider ab-input-slider-' + this.props.orientation,
+				_extends({ className: (this.props.className ? this.props.className : '') + ' ab ab-input-slider ab-input-slider-' + this.props.orientation + ' ab-no-tap',
 					ref: 'outer',
 					style: backgroundStyle
 				}, handlers),

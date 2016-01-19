@@ -121,7 +121,7 @@ class InputSlider extends GenericComponent {
 	}
 
 	_handleTouchStart(e) {
-		e.preventDefault(); // prevent tap-highlight-color //  css equiv: -webkit-tap-highlight-color: rgba(0,0,0,0);
+		e.preventDefault(); // prevent tap-highlight-color // css doubled: -webkit-tap-highlight-color: rgba(0,0,0,0);
 		this._updateVars(); // for devices without mouse over
 		document.addEventListener('touchmove', this._handleTouchMove, false);
 		document.addEventListener('touchend', this._handleTouchEnd, false);
@@ -129,7 +129,7 @@ class InputSlider extends GenericComponent {
 		this._update(e.touches[0]);
 	}
 
-	_handleMouseMove(e) {
+	_handleMouseMove(e) {;
 		if (this._dragRunning) { return; }
 		this._dragRunning = true;
 		requestAnimationFrame(() => {
@@ -154,6 +154,7 @@ class InputSlider extends GenericComponent {
 	}
 
 	_handleTouchEnd(e) {
+		e.preventDefault(); // prevent eventual mouse events being fired
 		document.removeEventListener('touchmove', this._handleTouchMove, false);
 		document.removeEventListener('touchend', this._handleTouchEnd, false);
 		document.removeEventListener('touchcancel', this._handleTouchEnd, false);
@@ -344,7 +345,7 @@ class InputSlider extends GenericComponent {
 		this._style('foregroundColor') && (foregroundStyle.backgroundColor = this._style('foregroundColor'));
 
 		return (
-			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-slider ab-input-slider-${this.props.orientation}`}
+			<div className={`${this.props.className ? this.props.className : ''} ab ab-input-slider ab-input-slider-${this.props.orientation} ab-no-tap`}
 				 ref="outer"
 				 style={backgroundStyle}
 				 {...handlers} >
