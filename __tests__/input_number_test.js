@@ -13,6 +13,8 @@ import TestUtils from 'react-addons-test-utils';
 
 const InputNumber = require('../src/components/input_number').default;
 
+// this test is incomplete so far
+
 describe('InputNumber', () => {
 
 	it('has defaultProps', () => {
@@ -93,21 +95,6 @@ describe('InputNumber', () => {
 		});
 	});
 
-
-	xdescribe('render', () => {
-
-		xit('works with defaults', () => {
-			let renderer = TestUtils.createRenderer();
-			renderer.render(<InputNumber name="one"/>);
-			let actualElement = renderer.getRenderOutput();
-			let expectedElement = <input type="text"
-										 disabled={false}
-										 name="one"
-										 value={9}/>
-
-			expect(actualElement).toEqual(expectedElement);
-		});
-	});
 });
 
 
