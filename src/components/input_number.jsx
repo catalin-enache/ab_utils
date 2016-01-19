@@ -68,13 +68,22 @@ class InputNumber extends GenericComponent {
 
 		this._handleOnChange = this._handleOnChange.bind(this);
 		this._handleMouseWheel = this._handleMouseWheel.bind(this);
+
 		this._handleUpArrowMouseDown = this._handleUpArrowMouseDown.bind(this);
-		this._handleDownArrowMouseDown = this._handleDownArrowMouseDown.bind(this);
 		this._handleUpArrowMouseUp = this._handleUpArrowMouseUp.bind(this);
+		this._handleDownArrowMouseDown = this._handleDownArrowMouseDown.bind(this);
 		this._handleDownArrowMouseUp = this._handleDownArrowMouseUp.bind(this);
-		this._handleMiddleControlMouseDown = this._handleMiddleControlMouseDown.bind(this);
-		this._handleMouseMove = this._handleMouseMove.bind(this);
-		this._handleMouseUp = this._handleMouseUp.bind(this);
+		this._handleDraggableMouseDown = this._handleDraggableMouseDown.bind(this);
+		this._handleDraggableMouseMove = this._handleDraggableMouseMove.bind(this);
+		this._handleDraggableMouseUp = this._handleDraggableMouseUp.bind(this);
+
+		this._handleUpArrowTouchStart = this._handleUpArrowTouchStart.bind(this);
+		this._handleUpArrowTouchEnd = this._handleUpArrowTouchEnd.bind(this);
+		this._handleDownArrowTouchStart = this._handleDownArrowTouchStart.bind(this);
+		this._handleDownArrowTouchEnd = this._handleDownArrowTouchEnd.bind(this);
+		this._handleDraggableTouchStart = this._handleDraggableTouchStart.bind(this);
+		this._handleDraggableTouchMove = this._handleDraggableTouchMove.bind(this);
+		this._handleDraggableTouchEnd = this._handleDraggableTouchEnd.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -107,53 +116,140 @@ class InputNumber extends GenericComponent {
 	}
 
 	_handleUpArrowMouseDown(e) {
+		console.log('_handleUpArrowMouseDown');
 		this._controlsUpArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
 		value += this.props.step;
+		document.addEventListener('mouseup', this._handleUpArrowMouseUp, false);
+		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+	}
+
+	_handleUpArrowTouchStart(e) {
+		console.log('_handleUpArrowTouchStart');
+		e.preventDefault(); // tap-highlight related
+		this._controlsUpArrowStateClass = 'ab-active';
+		let value = this._getCurrentValueAsNumber();
+		value += this.props.step;
+		document.addEventListener('touchend', this._handleUpArrowTouchEnd, false);
+		document.addEventListener('touchcancel', this._handleUpArrowTouchEnd, false);
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
 	_handleDownArrowMouseDown(e) {
+		console.log('_handleDownArrowMouseDown');
 		this._controlsDownArrowStateClass = 'ab-active';
 		let value = this._getCurrentValueAsNumber();
 		value -= this.props.step;
+		document.addEventListener('mouseup', this._handleDownArrowMouseUp, false);
+		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+	}
+
+	_handleDownArrowTouchStart(e) {
+		console.log('_handleDownArrowTouchStart');
+		e.preventDefault(); // tap-highlight related
+		this._controlsDownArrowStateClass = 'ab-active';
+		let value = this._getCurrentValueAsNumber();
+		value -= this.props.step;
+		document.addEventListener('touchend', this._handleDownArrowTouchEnd, false);
+		document.addEventListener('touchcancel', this._handleDownArrowTouchEnd, false);
 		this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 	}
 
 	_handleUpArrowMouseUp(e) {
+		console.log('_handleUpArrowMouseUp');
 		this._controlsUpArrowStateClass = '';
+		document.removeEventListener('mouseup', this._handleUpArrowMouseUp, false);
+		this.forceUpdate();
+	}
+
+	_handleUpArrowTouchEnd(e) {
+		console.log('_handleUpArrowTouchEnd');
+		e.preventDefault(); // prevent eventual mouse ghost events being fired
+		this._controlsUpArrowStateClass = '';
+		document.removeEventListener('touchend', this._handleUpArrowTouchEnd, false);
+		document.removeEventListener('touchcancel', this._handleUpArrowTouchEnd, false);
 		this.forceUpdate();
 	}
 
 	_handleDownArrowMouseUp(e) {
+		console.log('_handleDownArrowMouseUp');
 		this._controlsDownArrowStateClass = '';
+		document.removeEventListener('mouseup', this._handleDownArrowMouseUp, false);
 		this.forceUpdate();
 	}
 
-	_handleMiddleControlMouseDown(e) {
+	_handleDownArrowTouchEnd(e) {
+		console.log('_handleDownArrowTouchEnd');
+		e.preventDefault(); // prevent eventual mouse ghost events being fired
+		this._controlsDownArrowStateClass = '';
+		document.removeEventListener('touchend', this._handleDownArrowTouchEnd, false);
+		document.removeEventListener('touchcancel', this._handleDownArrowTouchEnd, false);
+		this.forceUpdate();
+	}
+
+	_handleDraggableMouseDown(e) {
+		console.log('_handleDraggableMouseDown');
+		this._disableSelection(); // from SelectionDisableableDeco
 		// initialize dragStart state
 		this._valueOnDragStart = this._getCurrentValueAsNumber();
 		this._yPosOnDragStart = parseFloat(e.clientY);
-		document.addEventListener('mousemove', this._handleMouseMove, false);
-		document.addEventListener('mouseup', this._handleMouseUp, false);
+		document.addEventListener('mousemove', this._handleDraggableMouseMove, false);
+		document.addEventListener('mouseup', this._handleDraggableMouseUp, false);
 	}
 
-	_handleMouseMove(e) {
+	_handleDraggableTouchStart(e) {
+		console.log('_handleDraggableTouchStart');
+		e.preventDefault(); // tap-highlight related
+		this._valueOnDragStart = this._getCurrentValueAsNumber();
+		this._yPosOnDragStart = parseFloat(e.touches[0].clientY);
+		document.addEventListener('touchmove', this._handleDraggableTouchMove, false);
+		document.addEventListener('touchend', this._handleDraggableTouchEnd, false);
+		document.addEventListener('touchcancel', this._handleDraggableTouchEnd, false);
+	}
+
+	_handleDraggableMouseMove(e) {
+		console.log('_handleDraggableMouseMove');
 		if (this._dragRunning) { return; }
 		this._dragRunning = true;
 		requestAnimationFrame(() => {
 			// use dragStart state
 			let value = this._valueOnDragStart;
 			value += (this._yPosOnDragStart - parseFloat(e.clientY)) * this.props.step;
-			this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+			// value === value guards against NaN
+			// which eventually happens when mouseup was triggered before last animationFrame callback
+			value === value && this._update(this._normalizeValue(value.toFixed(this._toFixed)));
 			this._dragRunning = false;
 		});
 	}
 
-	_handleMouseUp(e) {
-		document.removeEventListener('mousemove', this._handleMouseMove, false);
-		document.removeEventListener('mouseup', this._handleMouseUp, false);
+	_handleDraggableTouchMove(e) {
+		console.log('_handleDraggableTouchMove');
+		e.preventDefault(); // prevent page scroll
+		if (this._dragRunning) { return; }
+		this._dragRunning = true;
+		requestAnimationFrame(() => {
+			let value = this._valueOnDragStart;
+			value += (this._yPosOnDragStart - parseFloat(e.touches[0].clientY)) * this.props.step;
+			value === value && this._update(this._normalizeValue(value.toFixed(this._toFixed)));
+			this._dragRunning = false;
+		});
+	}
+
+	_handleDraggableMouseUp(e) {
+		console.log('_handleDraggableMouseUp');
+		document.removeEventListener('mousemove', this._handleDraggableMouseMove, false);
+		document.removeEventListener('mouseup', this._handleDraggableMouseUp, false);
 		// reset dragStart state
+		this._valueOnDragStart = undefined;
+		this._yPosOnDragStart = undefined;
+	}
+
+	_handleDraggableTouchEnd(e) {
+		console.log('_handleDraggableTouchEnd');
+		e.preventDefault(); // prevent eventual mouse ghost events being fired
+		document.removeEventListener('touchmove', this._handleDraggableTouchMove, false);
+		document.removeEventListener('touchend', this._handleDraggableTouchEnd, false);
+		document.removeEventListener('touchcancel', this._handleDraggableTouchEnd, false);
 		this._valueOnDragStart = undefined;
 		this._yPosOnDragStart = undefined;
 	}
@@ -234,14 +330,10 @@ class InputNumber extends GenericComponent {
 	// ============================ Render =============================================
 
 	render() {
-
-		let controlsWrapperHandlers = {
-			onMouseDown: this._disableSelection // from SelectionDisableableDeco
-		};
 		let inputHandlers = {};
 		let controlsUpArrowHandlers = {};
 		let controlsDownArrowHandlers = {};
-		let controlsMiddleControlHandlers = {};
+		let controlsDragHandlers = {};
 		if (!this.props.disabled && !this.props.readonly) {
 			inputHandlers = {
 				onChange: this._handleOnChange,
@@ -249,14 +341,15 @@ class InputNumber extends GenericComponent {
 			};
 			controlsUpArrowHandlers = {
 				onMouseDown: this._handleUpArrowMouseDown,
-				onMouseUp: this._handleUpArrowMouseUp
+				onTouchStart: this._handleUpArrowTouchStart,
 			};
 			controlsDownArrowHandlers = {
 				onMouseDown: this._handleDownArrowMouseDown,
-				onMouseUp: this._handleDownArrowMouseUp,
+				onTouchStart: this._handleDownArrowTouchStart,
 			};
-			controlsMiddleControlHandlers = {
-				onMouseDown: this._handleMiddleControlMouseDown,
+			controlsDragHandlers = {
+				onMouseDown: this._handleDraggableMouseDown,
+				onTouchStart: this._handleDraggableTouchStart,
 			};
 		}
 
@@ -320,9 +413,9 @@ class InputNumber extends GenericComponent {
 				<div ref="controls"
 					 className="ab-input-number-controls"
 					 style={controlsWrapperStyle}
-					{...controlsWrapperHandlers}>
+					{...controlsDragHandlers}>
 					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop}}     {...controlsUpArrowHandlers}  ><div className={`ab-arrow-up ${this._controlsUpArrowStateClass}`} /></div>
-					<div style={{height: `${controlsMiddleDivHeightPercent}%`, cursor: controlsMiddleDivCursor}} className="ab-input-number-middle-control"                  {...controlsMiddleControlHandlers}></div>
+					<div style={{height: `${controlsMiddleDivHeightPercent}%`, cursor: controlsMiddleDivCursor}} className="ab-input-number-middle-control"               ></div>
 					<div style={{height: `${controlsArrowDivHeightPercent}%`, paddingLeft: '3px', paddingTop: controlsArrowPaddingTop - 1}} {...controlsDownArrowHandlers}><div className={`ab-arrow-down ${this._controlsDownArrowStateClass}`} /></div>
 				</div>
 			</div>
