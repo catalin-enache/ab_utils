@@ -42,3 +42,7 @@ ReactDOM.render(
 	<Application />,
 	document.querySelector('#content')
 );
+
+/*
+TODO: create a Dragger component and enhance InputTextarea with it
+*/
