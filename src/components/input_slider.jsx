@@ -4,6 +4,7 @@ import React from 'react';
 import GenericComponent from './generic_component';
 import GenericDeco from '../decorators/generic_deco';
 import SelectionDisableableDeco from '../decorators/selection_disableable_deco';
+import DoubleRendering from '../decorators/double_rendering_deco';
 import {getWheelDelta} from '../common/helpers';
 import {startEndPropType, valueInRangePropType, stepPropType} from '../common/validators';
 
@@ -75,7 +76,7 @@ class InputSlider extends GenericComponent {
 		}
 
 		this.state = {
-			percent: 0,
+			percent: this._valueToPercent(this._getValue()),
 			value: this._getValue()
 		};
 
@@ -104,6 +105,11 @@ class InputSlider extends GenericComponent {
 			let percent = this._valueToPercent(nextProps.value);
 			this._setPercentValueState(percent, nextProps.value);
 		}
+	}
+
+	_afterRender() {
+		this._updateVars();
+		this.forceUpdate();
 	}
 
 	// ============================= Handlers ========================================
@@ -172,6 +178,7 @@ class InputSlider extends GenericComponent {
 
 	// ============================ Helpers ===========================================
 
+	// extract DOM measurements
 	_updateVars() {
 		let boundingClientRect = this._getBoundingClientRect();
 
@@ -318,6 +325,7 @@ class InputSlider extends GenericComponent {
 			var foregroundStyle = {
 				top: '0px',
 				right: `${this._outerWidth - innerWidth}px`,
+				//width: `${this.state.percent * 100}%`, // alternative for right
 				bottom: '0px',
 				left: '0px'
 			};
@@ -325,6 +333,7 @@ class InputSlider extends GenericComponent {
 			let innerHeight = this._outerHeight * this.state.percent;
 			var foregroundStyle = {
 				top: `${this._outerHeight - innerHeight}px`,
+				//height: `${this.state.percent * 100}%`, // alternative for top
 				right: '0px',
 				bottom: '0px',
 				left: '0px'
@@ -333,7 +342,7 @@ class InputSlider extends GenericComponent {
 
 		// also let props.style pass through
 		let backgroundStyle = Object.assign((this.props.style || {}), {
-			position: 'relative',
+			position: ['absolute', 'relative'].indexOf(this._style('position')) !== -1 ? this._style('position') : 'relative',
 			cursor: this.props.disabled ? 'not-allowed' : 'pointer',
 			opacity: this.props.disabled ? 0.5 : 1,
 		});
@@ -359,5 +368,6 @@ class InputSlider extends GenericComponent {
 
 InputSlider = GenericDeco(InputSlider);
 InputSlider = SelectionDisableableDeco(InputSlider);
+InputSlider = DoubleRendering(InputSlider);
 
 export default InputSlider;

@@ -1,0 +1,35 @@
+
+/*==================== InputTextarea ========================*/
+
+.ab-input-textarea {
+  width: $input_textarea_width;
+  height: $input_textarea_height;
+  background-color: $input_text_background_color;
+  border: $input_text_border_width $input_text_border_style $input_text_border_color;
+}
+
+.ab-input-textarea:after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  box-shadow: $input_text_box_shadow;
+}
+
+.ab-input-textarea textarea {
+  color: $input_text_color;
+}
+
+.ab-input-textarea .ab-input-slider {
+  background-color: $input_textarea_slider_background_color;
+}
+
+.ab-input-textarea .ab-input-slider-fg {
+  background-color: $input_textarea_slider_foreground_color;
+}
+
+
+

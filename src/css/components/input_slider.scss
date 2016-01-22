@@ -1,5 +1,5 @@
 
-/*==================== Slider ========================*/
+/*==================== InputSlider ========================*/
 
 .ab-input-slider {
   background-color: $input_slider_bg_color;
@@ -8,7 +8,7 @@
 
 .ab-input-slider .ab-input-slider-fg {
   background-color: $input_slider_fg_color;
-  box-shadow: $input_slider_box_shadow;
+  box-shadow: inherit;
 }
 
 .ab-input-slider-horizontal {

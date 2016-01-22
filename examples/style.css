@@ -62,14 +62,14 @@
 .ab-arrow-left.ab-active {
   border-left-color: white; }
 
-/*==================== Slider ========================*/
+/*==================== InputSlider ========================*/
 .ab-input-slider {
   background-color: gray;
   box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.65); }
 
 .ab-input-slider .ab-input-slider-fg {
   background-color: indianred;
-  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.65); }
+  box-shadow: inherit; }
 
 .ab-input-slider-horizontal {
   width: 100px;
@@ -107,3 +107,29 @@
   color: black;
   box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75);
   background-color: #e5e5e5; }
+
+/*==================== InputTextarea ========================*/
+.ab-input-textarea {
+  width: 300px;
+  height: 150px;
+  background-color: #e5e5e5;
+  border: 1px solid transparent; }
+
+.ab-input-textarea:after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.75); }
+
+.ab-input-textarea textarea {
+  color: black; }
+
+.ab-input-textarea .ab-input-slider {
+  background-color: rgba(0, 0, 0, 0.2); }
+
+.ab-input-textarea .ab-input-slider-fg {
+  background-color: rgba(0, 0, 0, 0.2); }
