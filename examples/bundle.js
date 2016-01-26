@@ -568,6 +568,10 @@ var Application = (function (_React$Component) {
 
 _reactDom2.default.render(_react2.default.createElement(Application, null), document.querySelector('#content'));
 
+/*
+TODO: create a Dragger component and enhance InputTextarea with it
+*/
+
 },{"./apps/input_text_app":1,"./apps/input_textarea_app":2,"./apps/numbers_app":3,"./apps/sliders_app":4,"react":163,"react-dom":34}],6:[function(require,module,exports){
 (function (process){
 /**
@@ -21361,7 +21365,7 @@ var InputTextarea = (function (_GenericComponent) {
 
 			// also let props.style pass through
 			var wrapperStyle = Object.assign(this.props.style || {}, {
-				position: 'relative',
+				position: ['absolute', 'relative'].indexOf(this._style('position')) !== -1 ? this._style('position') : 'relative',
 				display: 'block', // inline-block will add some default space
 				opacity: this.props.disabled ? 0.5 : 1,
 				cursor: this.props.disabled ? 'not-allowed' : 'text'
@@ -21439,7 +21443,6 @@ var InputTextarea = (function (_GenericComponent) {
 			var VSlider = _react2.default.createElement('span', null);
 			var HSlider = _react2.default.createElement('span', null);
 
-			//if (this.mounted) {
 			if (this.state.textareaScrollableHeight) {
 				VSlider = _react2.default.createElement(_input_slider2.default, _extends({
 					name: this.props.name + '_vertical_slider',
@@ -21463,7 +21466,6 @@ var InputTextarea = (function (_GenericComponent) {
 					disabled: this.props.disabled || this.props.readOnly
 				}, horizontalSliderHandlers));
 			}
-			//}
 
 			return _react2.default.createElement(
 				'div',
